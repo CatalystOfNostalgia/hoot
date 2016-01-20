@@ -8,9 +8,9 @@ install:
 
 # Start the mysql server
 # And other things 
-run: 
+run: install 
 	/usr/local/bin/mysql.server restart
-
+	mysql -u root < sql/hoot.sql
 # Deactivate virtualenv and delete it. 
 # Delete all the things 
 clean:
