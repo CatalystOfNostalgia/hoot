@@ -1,6 +1,7 @@
 # Install all necessary python modules 
 # Also creates a virtual env to work with. 
 install:
+	brew install mysql
 	sudo pip install virtualenv
 	virtualenv env
 	source env/bin/activate;
