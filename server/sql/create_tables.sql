@@ -6,5 +6,6 @@ USE hoot;
 
 CREATE TABLE user(
     user_id int NOT NULL AUTO_INCREMENT, 
-    name varchar(100) NOT NULL
+    name varchar(100) NOT NULL,
+    PRIMARY KEY (user_id)
 );
