@@ -1,3 +1,6 @@
+# Intellij Files
+.idea/
+
 # Built application files
 *.apk
 *.ap_
