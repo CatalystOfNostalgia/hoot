@@ -1,3 +1,6 @@
 ipython
 SQLAlchemy
 requests
+flask
+Flask-API
+markdown

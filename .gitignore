@@ -36,3 +36,4 @@ captures/
 
 # Server modules
 server/env
+*.pyc
