@@ -9,3 +9,10 @@ CREATE TABLE user(
     name varchar(100) NOT NULL,
     PRIMARY KEY (user_id)
 );
+
+CREATE TABLE book(
+    id int NOT NULL AUTO_INCREMENT, 
+    title varchar(256) NOT NULL, 
+    author varchar(256) NOT NULL, 
+    PRIMARY KEY (id)
+);

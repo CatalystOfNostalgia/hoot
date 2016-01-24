@@ -10,3 +10,4 @@ session = Session()
 # Import all models here
 
 from user import *
+from book import *

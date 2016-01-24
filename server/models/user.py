@@ -9,5 +9,5 @@ class User(Base):
     __tablename__ = 'user'
 
     user_id = Column(Integer, primary_key=True, autoincrement=True)
-    name    = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False)
     
