@@ -9,4 +9,5 @@ session = Session()
 
 # Import all models here
 
-from user import *
+from multimedia import *
+from comments import *
