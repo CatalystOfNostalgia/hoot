@@ -1,6 +1,6 @@
-ipython
-SQLAlchemy
-requests
-flask
-Flask-API
-markdown
+Flask==0.10.1
+Flask-API==0.6.5
+ipython==4.1.1
+Markdown==2.6.5
+requests==2.9.1
+SQLAlchemy==1.0.12
