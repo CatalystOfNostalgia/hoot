@@ -31,3 +31,16 @@ CREATE TABLE comments (
     PRIMARY KEY (comment_id),
     FOREIGN KEY (item_id) REFERENCES multimedia(media_id)
 );
+
+-- Triggers
+
+-- update number of comments for a media whenever a comment is inserted
+delimiter |
+
+CREATE TRIGGER update_num_comments AFTER INSERT ON comments
+    FOR EACH ROW
+    BEGIN
+        UPDATE multimedia SET number_of_comments = number_of_comments + 1 WHERE media_id = NEW.item_id;
+    END;
+
+|
