@@ -13,7 +13,7 @@ CREATE TABLE multimedia (
     pleasantness double NOT NULL,
     attention double NOT NULL,
     sensitivity double NOT NULL,
-    apitude double NOT NULL,
+    aptitude double NOT NULL,
     polarity double NOT NULL,
     PRIMARY KEY (media_id)
 );

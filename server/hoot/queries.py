@@ -1,5 +1,6 @@
 # use this file to interface with the database
-
+import sys
+sys.path.append('..')
 import models
 from sqlalchemy import func
 
@@ -21,7 +22,7 @@ def insert_comment(item_id, relevancy, pleasentness, attention, \
 def insert_media(title, creator, description, pleasantness, attention, \
                  sensitivity, aptitude, polarity, number_of_comments):
 
-    new_media = models.multimedia.MultiMedia( title = title, creator = creator,\
+    new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
                                               pleasantness = pleasantness, \
                                               attention = attention, \
@@ -50,3 +51,11 @@ def find_comments_for_media(media_id):
     comments = models.session.query(models.Comments).filter(models.Comments.item_id == media_id)
 
     return comments
+
+# rollbacks the sqlalchemy session, use if an exception occurs
+def rollback():
+    models.session.rollback()
+
+insert_media('batman', 'anthony', 'so cool', .5, .5, .5, .5, .5, 0)
+batman = find_media_by_title('batman')
+print(batman)
