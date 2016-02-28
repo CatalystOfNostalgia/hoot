@@ -19,7 +19,7 @@ def insert_comment(item_id, relevancy, pleasentness, attention, \
                                           
 # inserts an entry into the multimedia table
 def insert_media(title, creator, description, pleasantness, attention, \
-                 sensitivity, aptitude, polarity, number_of_comments)
+                 sensitivity, aptitude, polarity, number_of_comments):
 
     new_media = models.multimedia.MultiMedia( title = title, creator = creator,\
                                               description = description, \
@@ -32,3 +32,21 @@ def insert_media(title, creator, description, pleasantness, attention, \
 
     models.session.add(new_media)
     models.session.commit()
+
+# search for media by title
+def find_media_by_title(title):
+    media = models.session.query(models.Multimedia).filter(models.Multimedia.title == title)
+
+    return media
+
+# search for media by creator
+def find_media_by_creator(creator):
+    media = models.session.query(models.Multimedia).filter(models.Multimedia.creator == creator)
+
+    return media
+
+# find all the comments for a certain media
+def find_comments_for_media(media_id):
+    comments = models.session.query(models.Comments).filter(models.Comments.item_id == media_id)
+
+    return comments
