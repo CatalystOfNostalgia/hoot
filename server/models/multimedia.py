@@ -14,6 +14,7 @@ class Multimedia(Base):
     title        = Column(String(100), nullable=False)
     creator      = Column(String(100), nullable=False)
     description  = Column(String(100), nullable=False)
+    media_type   = Column(String(100), nullable=False)
     pleasantness = Column(DOUBLE, nullable=False)
     attention    = Column(DOUBLE, nullable=False)
     sensitivity  = Column(DOUBLE, nullable=False)

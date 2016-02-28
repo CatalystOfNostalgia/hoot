@@ -5,10 +5,10 @@ import models
 from sqlalchemy import func
 
 # inserts an entry into the comments table
-def insert_comment(item_id, relevancy, pleasentness, attention, \
+def insert_comment(item_id, relevancy, pleasantness, attention, \
                    sensitivity, aptitude, polarity):
     
-    new_comment = models.comments.Comment( item_id = item_id, \
+    new_comment = models.comments.Comments( item_id = item_id, \
                                            relevancy_score = relevancy, \
                                            pleasantness = pleasantness, \
                                            attention = attention, \
@@ -19,11 +19,12 @@ def insert_comment(item_id, relevancy, pleasentness, attention, \
     models.session.commit()
                                           
 # inserts an entry into the multimedia table
-def insert_media(title, creator, description, pleasantness, attention, \
-                 sensitivity, aptitude, polarity, number_of_comments):
+def insert_media(title, creator, description, media_type, pleasantness, \
+                 attention, sensitivity, aptitude, polarity, number_of_comments):
 
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
+                                              media_type = media_type, \
                                               pleasantness = pleasantness, \
                                               attention = attention, \
                                               sensitivity = sensitivity, \
@@ -36,19 +37,19 @@ def insert_media(title, creator, description, pleasantness, attention, \
 
 # search for media by title
 def find_media_by_title(title):
-    media = models.session.query(models.Multimedia).filter(models.Multimedia.title == title)
+    media = models.session.query(models.Multimedia).filter(models.Multimedia.title == title).all()
 
     return media
 
 # search for media by creator
 def find_media_by_creator(creator):
-    media = models.session.query(models.Multimedia).filter(models.Multimedia.creator == creator)
+    media = models.session.query(models.Multimedia).filter(models.Multimedia.creator == creator).all()
 
     return media
 
 # find all the comments for a certain media
 def find_comments_for_media(media_id):
-    comments = models.session.query(models.Comments).filter(models.Comments.item_id == media_id)
+    comments = models.session.query(models.Comments).filter(models.Comments.item_id == media_id).all()
 
     return comments
 
@@ -56,6 +57,3 @@ def find_comments_for_media(media_id):
 def rollback():
     models.session.rollback()
 
-insert_media('batman', 'anthony', 'so cool', .5, .5, .5, .5, .5, 0)
-batman = find_media_by_title('batman')
-print(batman)

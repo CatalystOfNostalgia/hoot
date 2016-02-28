@@ -9,6 +9,7 @@ CREATE TABLE multimedia (
     title varchar(100) NOT NULL,
     creator varchar(100) NOT NULL,
     description varchar (100),
+    media_type varchar (100) NOT NULL,
     number_of_comments int NOT NULL,
     pleasantness double NOT NULL,
     attention double NOT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE comments (
     pleasantness double NOT NULL,
     attention double NOT NULL,
     sensitivity double NOT NULL,
-    apitude double NOT NULL,
+    aptitude double NOT NULL,
     polarity double NOT NULL,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (item_id) REFERENCES multimedia(media_id)
