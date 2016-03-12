@@ -208,6 +208,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if selectedTitle == "Back" {
             category = ""
+            selectedControl.selectedSegmentIndex = -1 
             selectedControl = emotionCategories
             selectedControl.selectedSegmentIndex = -1
         } else {
