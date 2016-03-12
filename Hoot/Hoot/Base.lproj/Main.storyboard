@@ -22,7 +22,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OxM-zN-ubK">
-                                <rect key="frame" x="0.0" y="108" width="320" height="692"/>
+                                <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="K9Y-1I-gMa">
@@ -47,6 +47,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="bcG-vy-10i"/>
                     <connections>
+                        <outlet property="navBar" destination="bcG-vy-10i" id="UKN-El-3s7"/>
                         <outlet property="searchBar" destination="b7y-cw-P4g" id="JuN-vW-WQs"/>
                         <outlet property="searchDisplayController" destination="o7e-1i-A3t" id="tmK-kV-vck"/>
                         <outlet property="searchSuggestionsTable" destination="OxM-zN-ubK" id="8cw-W1-fcV"/>
@@ -70,12 +71,11 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="619.73333333333335" y="449.66666666666669"/>
+            <point key="canvasLocation" x="619" y="449"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ckc-hB-xP4">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cJa-ad-cB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="liP-kw-ErY" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="rUc-68-TxX">
@@ -87,6 +87,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="gdY-m8-dLU"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cJa-ad-cB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="114" y="451"/>
         </scene>

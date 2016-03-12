@@ -81,7 +81,7 @@ struct EmotionClasses {
     let ecstasyClass = EmotionClass(backgroundColor: UIColor.yellowColor(), name: "\u{1F604}", emotions: [Emotions().ecstasy, Emotions().joy, Emotions().security])
     let admirationClass = EmotionClass(backgroundColor: UIColor.greenColor(), name: "\u{1F60D}", emotions: [Emotions().admiration, Emotions().trust, Emotions().acceptance])
     let loathingClass = EmotionClass(backgroundColor: UIColor.init(red: 143.0/255.0, green: 0.0/255.0, blue: 255.0/255.0, alpha: 1.0),
-        name: "\u{1F922}", emotions: [Emotions().loathing, Emotions().disgust, Emotions().boredom])
+        name: "\u{1F912}", emotions: [Emotions().loathing, Emotions().disgust, Emotions().boredom])
     let griefClass = EmotionClass(backgroundColor: UIColor.purpleColor(), name: "\u{1F62D}",
         emotions: [Emotions().grief, Emotions().sadness, Emotions().pensiveness])
     let amazementClass = EmotionClass(backgroundColor: UIColor.blueColor(), name: "\u{1F62E}",
