@@ -1,2 +1,3 @@
-# hoot
-Android Social E-Reader
+# Hoot
+Media emotional response engine
+
