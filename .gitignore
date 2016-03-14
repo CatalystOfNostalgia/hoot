@@ -1,6 +1,8 @@
 # XCode stuff 
 
 Hoot/.DS_Store
+Hoot/Hoot.xcodeproj/xcuserdata/
+Hoot/Hoot.xcodeproj/project.xcworkspace/xcuserdata/
 # Intellij Files
 .idea/
 *.iml

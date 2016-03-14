@@ -14,8 +14,8 @@ install:
 run:
 	/usr/local/bin/mysql.server restart
 	mysql -u root < sql/create_tables.sql
-	chmod a+x hoot/app.py
-	hoot/./app.py
+	#chmod a+x hoot/app.py
+	#hoot/./app.py
 
 # Deactivate virtualenv and delete it. 
 # Delete all the things 
