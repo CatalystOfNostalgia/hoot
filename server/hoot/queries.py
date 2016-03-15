@@ -12,9 +12,9 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
     models.session.add(new_comment)
     models.session.commit()
 
-    new_id = models.session.query(func.max(models.Comments.comment_id)).one().comment_id
+    new_id = models.session.query(func.max(models.Comments.comment_id)).one()[0]
 
-    emotions = models.comment_emotions.Comment_Emotions.query.filter_by(comment_id=new_id).first()
+    emotions = models.session.query(models.Comment_Emotions).filter(models.Comment_Emotions.comment_id == new_id).first()
 
     emotions.relevancy_score = relevancy
     emotions.pleasantness = pleasantness
@@ -23,7 +23,7 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
     emotions.aptitude = aptitude
     emotions.polarity = polarity
 
-    session.commit()
+    models.session.commit()
                                           
 # inserts an entry into the multimedia table
 def insert_media(title, creator, description, media_type, pleasantness, \
