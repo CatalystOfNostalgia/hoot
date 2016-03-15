@@ -26,18 +26,11 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
     models.session.commit()
                                           
 # inserts an entry into the multimedia table
-def insert_media(title, creator, description, media_type, pleasantness, \
-                 attention, sensitivity, aptitude, polarity, number_of_comments):
+def insert_media(title, creator, description, media_type):
 
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
-                                              media_type = media_type, \
-                                              pleasantness = pleasantness, \
-                                              attention = attention, \
-                                              sensitivity = sensitivity, \
-                                              aptitude = aptitude, \
-                                              polarity = polarity, \
-                                              number_of_comments = number_of_comments)
+                                              media_type = media_type)
 
     models.session.add(new_media)
     models.session.commit()
