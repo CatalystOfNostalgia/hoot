@@ -12,9 +12,3 @@ class Comments(Base):
     comment_id      = Column(Integer, primary_key=True, \
                              autoincrement=True, nullable=False)
     item_id         = Column(Integer, nullable=False)
-    relevancy_score = Column(Integer, nullable=False)
-    pleasantness    = Column(DOUBLE, nullable=False)
-    attention       = Column(DOUBLE, nullable=False)
-    sensitivity     = Column(DOUBLE, nullable=False)
-    aptitude        = Column(DOUBLE, nullable=False)
-    polarity        = Column(DOUBLE, nullable=False)

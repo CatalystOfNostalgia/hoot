@@ -8,15 +8,22 @@ from sqlalchemy import func
 def insert_comment(item_id, relevancy, pleasantness, attention, \
                    sensitivity, aptitude, polarity):
     
-    new_comment = models.comments.Comments( item_id = item_id, \
-                                           relevancy_score = relevancy, \
-                                           pleasantness = pleasantness, \
-                                           attention = attention, \
-                                           sensitivity = sensitivity, \
-                                           aptitude = aptitude, \
-                                           polarity = polarity)
+    new_comment = models.comments.Comments( item_id = item_id )
     models.session.add(new_comment)
     models.session.commit()
+
+    new_id = models.session.query(func.max(models.Comments.comment_id)).one().comment_id
+
+    emotions = models.comment_emotions.Comment_Emotions.query.filter_by(comment_id=new_id).first()
+
+    emotions.relevancy_score = relevancy
+    emotions.pleasantness = pleasantness
+    emotions.attention = attention
+    emotions.sensitivity = sensitivity
+    emotions.aptitude = aptitude
+    emotions.polarity = polarity
+
+    session.commit()
                                           
 # inserts an entry into the multimedia table
 def insert_media(title, creator, description, media_type, pleasantness, \
