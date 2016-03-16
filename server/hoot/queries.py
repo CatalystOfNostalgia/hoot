@@ -8,29 +8,29 @@ from sqlalchemy import func
 def insert_comment(item_id, relevancy, pleasantness, attention, \
                    sensitivity, aptitude, polarity):
     
-    new_comment = models.comments.Comments( item_id = item_id, \
-                                           relevancy_score = relevancy, \
-                                           pleasantness = pleasantness, \
-                                           attention = attention, \
-                                           sensitivity = sensitivity, \
-                                           aptitude = aptitude, \
-                                           polarity = polarity)
+    new_comment = models.comments.Comments( item_id = item_id )
     models.session.add(new_comment)
+    models.session.commit()
+
+    new_id = models.session.query(func.max(models.Comments.comment_id)).one()[0]
+
+    emotions = models.session.query(models.Comment_Emotions).filter(models.Comment_Emotions.comment_id == new_id).first()
+
+    emotions.relevancy_score = relevancy
+    emotions.pleasantness = pleasantness
+    emotions.attention = attention
+    emotions.sensitivity = sensitivity
+    emotions.aptitude = aptitude
+    emotions.polarity = polarity
+
     models.session.commit()
                                           
 # inserts an entry into the multimedia table
-def insert_media(title, creator, description, media_type, pleasantness, \
-                 attention, sensitivity, aptitude, polarity, number_of_comments):
+def insert_media(title, creator, description, media_type):
 
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
-                                              media_type = media_type, \
-                                              pleasantness = pleasantness, \
-                                              attention = attention, \
-                                              sensitivity = sensitivity, \
-                                              aptitude = aptitude, \
-                                              polarity = polarity, \
-                                              number_of_comments = number_of_comments)
+                                              media_type = media_type)
 
     models.session.add(new_media)
     models.session.commit()
