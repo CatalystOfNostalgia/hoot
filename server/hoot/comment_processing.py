@@ -41,6 +41,7 @@ def tokenizeDocument(document):
     tokenized_doc = [word for word in tokenized_doc if word not in stopwords.words('english')]
     return tokenized_doc
 
+# given the dictionary, return an array of all the tokenized comments
 def buildListOfTokenizedDocuments(json_dict):
     tokenized_docs = []
     tokenized_docs.append(tokenizeDocument(json_dict["description"]))
@@ -48,6 +49,7 @@ def buildListOfTokenizedDocuments(json_dict):
         tokenized_docs.append(tokenizeDocument(comment["text"]))
     return tokenized_docs
 
+# get count of all documents that contain the given token
 def getOccurencesOfToken(tokenized_docs, token):
     occurences = 0
     for document in tokenized_docs:
@@ -67,10 +69,9 @@ def calculateVector(tokenized_comment, tokenized_docs):
 
         # now we need to calculate the IDF
         numDocs = len(tokenized_docs)
-        #print (numDocs ), " / ", getOccurencesOfToken(tokenized_docs, token)
         inverse_doc_freq = math.log( (1 + numDocs) / getOccurencesOfToken(tokenized_docs, token))
         vector_space_model[token] = (token_freq / inverse_doc_freq)
-        # print (token," : ", (token_freq / inverse_doc_freq))
+
     return vector_space_model
 
 if __name__ == '__main__':
