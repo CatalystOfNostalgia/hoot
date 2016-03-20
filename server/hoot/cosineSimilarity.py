@@ -1,5 +1,6 @@
 __author__ = 'Anjana Rao'
-import re,math, sys
+import re,math, sys, nltk
+from nltk.corpus import stopwords
 from collections import Counter
 
 WORD = re.compile(r'\w+')
