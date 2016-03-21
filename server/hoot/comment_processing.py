@@ -16,6 +16,10 @@ def calculateVectorsForAllComments(productID):
 # returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON):
     calculateRelevancy = True
+    jsonfile = open("sampleText.json", 'r+')
+    filetext = jsonfile.read()
+    dictFromJSON = json.loads(filetext)
+
     if "description" not in dictFromJSON:
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
