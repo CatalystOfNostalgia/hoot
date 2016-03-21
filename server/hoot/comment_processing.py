@@ -4,15 +4,10 @@ from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
 
-# dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
-# adds relevancy rating (and eventually emotional rating) for all comments in the dict
-# returns the modified dictionary
-def calculateVectorsForAllComments(dictFromJSON):
-    calculateRelevancy = True
-    jsonfile = open("sampleText.json", 'r+')
-    filetext = jsonfile.read()
-    dictFromJSON = json.loads(filetext)
-
+# currently uses my sampleText just as proof of concept
+# eventually load json of product from AWS
+# returns the JSON of the file, but with the vector space model included
+def calculateVectorsForAllComments(productID):
     compound_emotion_dict = collections.defaultdict(int)
     sentic_emotion_dict = collections.defaultdict(int)
 
