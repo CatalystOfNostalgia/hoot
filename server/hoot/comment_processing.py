@@ -24,7 +24,15 @@ def calculateVectorsForAllComments(dictFromJSON):
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
+<<<<<<< 4e63e830f0b3caebcd91382ce8ecadfecd585ceb
     return dictFromJSON
+=======
+        tokenized_comment = tokenizeDocument(comment["text"])
+        tokenized_desc = tokenizeDocument(dictFromJSON["description"])
+        comment["vector_space"] = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        print(getCosine(calculateVector(tokenized_comment, tokenized_docs), calculateVector(tokenized_comment, tokenized_docs)))
+
+>>>>>>> added cosine
 
 def processFromAWS(productID):
     print("TODO")
@@ -94,5 +102,5 @@ def getCosine(vec1, vec2):
         return float(numerator)/float(denominator)
 
 if __name__ == '__main__':
-    new_jsonfile = calculateVectorsForAllComments("whatever we need to get the file from AWS")
+    new_jsonfile = dictFromJSON = calculateVectorsForAllComments("whatever we need to get the file from AWS")
     print(new_jsonfile)
