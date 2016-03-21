@@ -1,12 +1,7 @@
 #! python3
-import sys
-import nltk
+import sys, nltk, string, json, math
 from nltk.corpus import stopwords
 from nltk import stem
-
-import string
-import json
-import math
 
 # currently uses my sampleText just as proof of concept
 # eventually load json of product from AWS
@@ -23,11 +18,10 @@ def calculateVectorsForAllComments(productID):
             print("VSM already exists for this comment")
             continue
 
-        tokenized_comment = tokenizeDocument(comment["text"])
-        tokenized_desc = tokenizeDocument(dictFromJSON["description"])
-        comment["vector_space"] = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
-        print(getCosine(calculateVector(tokenized_comment, tokenized_docs), calculateVector(tokenized_comment, tokenized_docs)))
-
+        vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]),tokenized_docs)
+        comment["vector_space"] = vectorized_comment
+        comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
     return json.dumps(dictFromJSON)
 
@@ -89,7 +83,7 @@ def getCosine(vec1, vec2):
     if not denominator:
         return 0.0
     else:
-        return float(numerator)/denominator
+        return float(numerator)/float(denominator)
 
 if __name__ == '__main__':
     new_jsonfile = dictFromJSON = calculateVectorsForAllComments("whatever we need to get the file from AWS")
