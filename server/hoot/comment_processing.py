@@ -8,6 +8,10 @@ from nltk import stem
 # returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON):
     calculateRelevancy = True
+    jsonfile = open("sampleText.json", 'r+')
+    filetext = jsonfile.read()
+    dictFromJSON = json.loads(filetext)
+
     if "description" not in dictFromJSON:
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
@@ -24,15 +28,7 @@ def calculateVectorsForAllComments(dictFromJSON):
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
-<<<<<<< 4e63e830f0b3caebcd91382ce8ecadfecd585ceb
     return dictFromJSON
-=======
-        tokenized_comment = tokenizeDocument(comment["text"])
-        tokenized_desc = tokenizeDocument(dictFromJSON["description"])
-        comment["vector_space"] = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
-        print(getCosine(calculateVector(tokenized_comment, tokenized_docs), calculateVector(tokenized_comment, tokenized_docs)))
-
->>>>>>> added cosine
 
 def processFromAWS(productID):
     print("TODO")
