@@ -23,7 +23,11 @@ def calculateVectorsForAllComments(productID):
             print("VSM already exists for this comment")
             continue
 
+        tokenized_comment = tokenizeDocument(comment["text"])
+        tokenized_desc = tokenizeDocument(dictFromJSON["description"])
         comment["vector_space"] = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        print(getCosine(calculateVector(tokenized_comment, tokenized_docs), calculateVector(tokenized_comment, tokenized_docs)))
+
 
     return json.dumps(dictFromJSON)
 
@@ -74,6 +78,19 @@ def calculateVector(tokenized_comment, tokenized_docs):
 
     return vector_space_model
 
+def getCosine(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+
+    sum1 = sum([vec1[x]**2 for x in vec1.keys()])
+    sum2 = sum([vec2[x]**2 for x in vec2.keys()])
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    if not denominator:
+        return 0.0
+    else:
+        return float(numerator)/denominator
+
 if __name__ == '__main__':
-    new_jsonfile = dictFromJSON = calculateRelevancyFromJSON("whatever we need to get the file from AWS")
+    new_jsonfile = dictFromJSON = calculateVectorsForAllComments("whatever we need to get the file from AWS")
     print(new_jsonfile)
