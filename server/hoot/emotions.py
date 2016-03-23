@@ -30,7 +30,6 @@ def find_concepts(comment, start):
         j = i + 1
 
         if found_concept == concept:
-            print('\tlast concept = ' + found_concept)
             last_concept = found_concept
 
         while not line == -1 and j < len(words):
@@ -39,13 +38,10 @@ def find_concepts(comment, start):
             j = j + 1
             line, found_concept = concept_search(concept, line)
             print("\tfound concept: " + found_concept)
-            print('\tlooking for:   ' + concept)
             if found_concept == concept:
-                print('\tlast concept = ' + found_concept)
                 last_concept = found_concept
         
         if last_concept != None:
-            print('appending: ' + last_concept)
             output.append(last_concept)
             
     if len(output) == 0:
