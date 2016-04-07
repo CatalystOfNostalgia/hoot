@@ -4,4 +4,4 @@ ipython==4.1.1
 Markdown==2.6.5
 requests==2.9.1
 SQLAlchemy==1.0.12
-rdflib==4.2.1
+rdflib==3.2.1
