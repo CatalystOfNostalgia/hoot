@@ -117,5 +117,5 @@ def getCosine(vec1, vec2):
         return float(numerator)/float(denominator)
 
 if __name__ == '__main__':
-    new_jsonfile = dictFromJSON = calculateVectorsForAllComments("whatever we need to get the file from AWS")
+    new_jsonfile = calculateVectorsForAllComments("whatever we need to get the file from AWS")
     print(new_jsonfile)
