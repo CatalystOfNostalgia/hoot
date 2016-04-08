@@ -95,15 +95,5 @@ def emotions ( comment ):
     comment.lower()
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
-    average = calculate_average(scores)
-    return average
-
-comment = "What has been said about the Dark Knight cannot be elaborated on - so I won't. The film is muscling its way into my #1 favorite comic movie adaptation of all time. The reason for my review is in hopes of saving you some money. This double disc Special Edition doesn't deliver the price you pay for it. There isn't even deleted scenes!!! I would save your very hard earned dollars and buy the single disc version and wait for the inevitable ULTIMATE re-release that will come later on down the road. But nonetheless, a great film - you will not be dissapointed; I just wish the studio would have given a better Special Edition release than what we have here. So enjoy!"
-
-comment = comment.translate(string.maketrans("",""), string.punctuation)
-comment = comment.lower()
-
-average = emotions(comment)
-
-print('average: \n' + str(average))
+    return calculate_average(scores)
 
