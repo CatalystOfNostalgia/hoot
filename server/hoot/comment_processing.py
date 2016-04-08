@@ -3,13 +3,13 @@ import sys, nltk, string, json, math
 from nltk.corpus import stopwords
 from nltk import stem
 
-# currently uses my sampleText just as proof of concept
-# eventually load json of product from AWS
-# returns the JSON of the file, but with the vector space model included
-def calculateVectorsForAllComments(productID):
-    jsonfile = open("sampleText.json", 'r+')
-    filetext = jsonfile.read()
-    dictFromJSON = json.loads(filetext)
+# dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
+# adds relevancy rating (and eventually emotional rating) for all comments in the dict
+def calculateVectorsForAllComments(dictFromJSON):
+    calculateRelevancy = True
+    if "description" not in dictFromJSON:
+        calculateRelevancy = False
+        return json.dumps(dictFromJSON, indent=4)
 
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
@@ -17,13 +17,20 @@ def calculateVectorsForAllComments(productID):
         if "vector_space" in comment:
             print("VSM already exists for this comment")
             continue
+        if calculateRelevancy:
+            vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+            vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]),tokenized_docs)
+            comment["vector_space"] = vectorized_comment
+            comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
-        vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
-        vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]),tokenized_docs)
-        comment["vector_space"] = vectorized_comment
-        comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
+    return json.dumps(dictFromJSON, indent=4)
 
-    return json.dumps(dictFromJSON)
+def processFromAWS(productID):
+    print("TODO")
+    jsonfile = open("sampleText.json", 'r+')
+    filetext = jsonfile.read()
+    dictFromJSON = json.loads(filetext)
+    calculateVectorsForAllComments(dictFromJSON)
 
 # tokenize, stem, and remove stopwords from document
 def tokenizeDocument(document):
@@ -86,5 +93,5 @@ def getCosine(vec1, vec2):
         return float(numerator)/float(denominator)
 
 if __name__ == '__main__':
-    new_jsonfile = dictFromJSON = calculateVectorsForAllComments("whatever we need to get the file from AWS")
+    new_jsonfile = calculateVectorsForAllComments("whatever we need to get the file from AWS")
     print(new_jsonfile)
