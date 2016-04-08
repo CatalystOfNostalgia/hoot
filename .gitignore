@@ -42,5 +42,5 @@ captures/
 
 # Server modules
 server/env
+server/venv
 *.pyc
-concepts.txt
