@@ -26,14 +26,24 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
     models.session.commit()
                                           
 # inserts an entry into the multimedia table
-def insert_media(title, creator, description, media_type):
+def insert_media(title, creator, description, media_type, genre, asin):
 
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
-                                              media_type = media_type)
+                                              media_type = media_type, \
+                                              genre = genre \
+                                              asin = asin )
 
     models.session.add(new_media)
     models.session.commit()
+
+def find_media_by_asin(asin):
+    '''
+    Search the database by asin number
+    '''
+    media = models.session.query(models.Multimedia).filter(models.Multimedia.asin == asin).all()
+
+    return media
 
 # search for media by title
 def find_media_by_title(title):
