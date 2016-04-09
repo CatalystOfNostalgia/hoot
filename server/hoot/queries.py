@@ -1,12 +1,16 @@
-# use this file to interface with the database
+'''
+Use this file to interface with the database
+'''
 import sys
 sys.path.append('..')
 import models
 from sqlalchemy import func
 
-# inserts an entry into the comments table
 def insert_comment(item_id, relevancy, pleasantness, attention, \
                    sensitivity, aptitude, polarity):
+    '''
+    inserts an entry into the comments table
+    '''
     
     new_comment = models.comments.Comments( item_id = item_id )
     models.session.add(new_comment)
@@ -25,9 +29,10 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
 
     models.session.commit()
                                           
-# inserts an entry into the multimedia table
 def insert_media(title, creator, description, media_type, genre, asin):
-
+    '''
+    Inserts media into the database
+    '''
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
                                               media_type = media_type, \
@@ -45,25 +50,35 @@ def find_media_by_asin(asin):
 
     return media
 
-# search for media by title
 def find_media_by_title(title):
+    '''
+    Search the database by title
+    '''
     media = models.session.query(models.Multimedia).filter(models.Multimedia.title == title).all()
 
     return media
 
-# search for media by creator
 def find_media_by_creator(creator):
+    '''
+    Search the database by creator
+    '''
     media = models.session.query(models.Multimedia).filter(models.Multimedia.creator == creator).all()
 
     return media
 
-# find all the comments for a certain media
 def find_comments_for_media(media_id):
+    '''
+    Find all comments associated with a media
+    '''
     comments = models.session.query(models.Comments).filter(models.Comments.item_id == media_id).all()
 
     return comments
 
-# rollbacks the sqlalchemy session, use if an exception occurs
 def rollback():
+    '''
+    Resets the SQLAlchemy session
+    Use this if an exception is thrown or else you cannot make subsequent 
+    queries
+    '''
     models.session.rollback()
 
