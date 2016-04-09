@@ -10,6 +10,8 @@ CREATE TABLE multimedia (
     creator varchar(100) NOT NULL,
     description varchar (100),
     media_type varchar (100) NOT NULL,
+    genre varchar (100) NOT NULL,
+    asin varchar (100) NOT NULL,
     number_of_comments int NOT NULL DEFAULT 0,
     PRIMARY KEY (media_id)
 );
