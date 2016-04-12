@@ -4,3 +4,5 @@ ipython==4.1.1
 Markdown==2.6.5
 requests==2.9.1
 SQLAlchemy==1.0.12
+nltk==3.2
+boto==2.39
