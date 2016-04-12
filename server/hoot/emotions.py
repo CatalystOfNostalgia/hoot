@@ -2,8 +2,8 @@ import sys
 import string
 import senticnet
 
-# search for a concept given a certain string
 def concept_search(query, start):
+    ''' search for a concept given a certain string '''
     f = open('concepts.txt', 'r')
     num = 0
     output = ''
@@ -16,10 +16,10 @@ def concept_search(query, start):
 
     return (-1, "NO CONCEPT")
             
-# find all the concepts for a comment
 def find_concepts(comment, start):
-    words = comment.split()
+    ''' find all the concepts for a comment '''
 
+    words = comment.split()
     output = []
 
     for i in range(0, len(words)): 
@@ -46,6 +46,7 @@ def find_concepts(comment, start):
     return output
 
 def get_emotional_scores( concepts ):
+    ''' calls the senticDB to get the scores for a group of concepts '''
     sn = senticnet.Senticnet()
     scores = {}
 
@@ -55,6 +56,7 @@ def get_emotional_scores( concepts ):
     return scores
     
 def calculate_average( scores ):
+    ''' calculates the average scores of a group of concepts '''
 
     polarity_sum = 0
 
@@ -66,7 +68,7 @@ def calculate_average( scores ):
         'polarity'    : 0
     }
 
-    for _, score in scores.iteritems():
+    for _, score in scores.items():
 
         sentics = score['sentics']
 
@@ -91,9 +93,13 @@ def calculate_average( scores ):
     return average
 
 def emotions ( comment ):
-    comment.translate(string.maketrans("",""), string.punctuation)
-    comment.lower()
+    ''' finds the emotional values for a string '''
+
+    # some string pre processing, removing punctuation
+    comment = comment.translate(str.maketrans('', '', string.punctuation))
+    comment = comment.lower()
+
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
-    return calculate_average(scores)
-
+    average = calculate_average(scores)
+    return average
