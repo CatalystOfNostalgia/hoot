@@ -1,10 +1,11 @@
 import string
-
 import senticnet
 
+from emotion import Emotion
 
-# search for a concept given a certain string
+
 def concept_search(query, start):
+    """Search for a concept given a certain string."""
     f = open('concepts.txt', 'r')
     num = 0
 
@@ -17,8 +18,8 @@ def concept_search(query, start):
     return (-1, "NO CONCEPT")
 
 
-# find all the concepts for a comment
 def find_concepts(comment, start):
+    """Find all the concepts for a comment."""
     words = comment.split()
 
     output = []
@@ -58,7 +59,7 @@ def get_emotional_scores(concepts):
 
 
 def calculate_average(scores):
-
+    """Calculates the average emotion vector."""
     polarity_sum = 0
 
     average = {
@@ -69,9 +70,14 @@ def calculate_average(scores):
         'polarity': 0
     }
 
-    for _, score in scores.iteritems():
+    for _, score in scores.items():
 
-        sentics = score['sentics']
+        try:
+            sentics = score['sentics']
+        except KeyError:
+            # Necessary since empty dicts are sometimes received
+            continue
+
 
         average['pleasantness'] = \
             average['pleasantness'] + (sentics['pleasantness'] * score['polarity'])
@@ -95,17 +101,11 @@ def calculate_average(scores):
 
 
 def emotions(comment):
-    comment.translate(string.maketrans("", ""), string.punctuation).lower()
+    """Returns the emotion of the comment."""
+    comment = comment.translate(str.maketrans('', '', string.punctuation))
+    comment = comment.lower()
+
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
     average = calculate_average(scores)
-    return average
-
-comment = "What has been said about the Dark Knight cannot be elaborated on - so I won't. The film is muscling its way into my #1 favorite comic movie adaptation of all time. The reason for my review is in hopes of saving you some money. This double disc Special Edition doesn't deliver the price you pay for it. There isn't even deleted scenes!!! I would save your very hard earned dollars and buy the single disc version and wait for the inevitable ULTIMATE re-release that will come later on down the road. But nonetheless, a great film - you will not be dissapointed; I just wish the studio would have given a better Special Edition release than what we have here. So enjoy!"
-
-comment = comment.translate(string.maketrans("",""), string.punctuation)
-comment = comment.lower()
-
-average = emotions(comment)
-
-print('average: \n' + str(average))
+    return Emotion(average)
