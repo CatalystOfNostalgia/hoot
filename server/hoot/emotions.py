@@ -2,8 +2,8 @@ import sys
 import string
 import senticnet
 
-# search for a concept given a certain string
 def concept_search(query, start):
+    ''' search for a concept given a certain string '''
     f = open('concepts.txt', 'r')
     num = 0
     output = ''
@@ -16,10 +16,10 @@ def concept_search(query, start):
 
     return (-1, "NO CONCEPT")
             
-# find all the concepts for a comment
 def find_concepts(comment, start):
-    words = comment.split()
+    ''' find all the concepts for a comment '''
 
+    words = comment.split()
     output = []
 
     for i in range(0, len(words)): 
@@ -46,6 +46,7 @@ def find_concepts(comment, start):
     return output
 
 def get_emotional_scores( concepts ):
+    ''' calls the senticDB to get the scores for a group of concepts '''
     sn = senticnet.Senticnet()
     scores = {}
 
@@ -55,6 +56,7 @@ def get_emotional_scores( concepts ):
     return scores
     
 def calculate_average( scores ):
+    ''' calculates the average scores of a group of concepts '''
 
     polarity_sum = 0
 
@@ -66,7 +68,7 @@ def calculate_average( scores ):
         'polarity'    : 0
     }
 
-    for _, score in scores.iteritems():
+    for _, score in scores.items():
 
         sentics = score['sentics']
 
@@ -91,19 +93,13 @@ def calculate_average( scores ):
     return average
 
 def emotions ( comment ):
-    comment.translate(string.maketrans("",""), string.punctuation)
-    comment.lower()
+    ''' finds the emotional values for a string '''
+
+    # some string pre processing, removing punctuation
+    comment = comment.translate(str.maketrans('', '', string.punctuation))
+    comment = comment.lower()
+
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
     average = calculate_average(scores)
     return average
-
-comment = "What has been said about the Dark Knight cannot be elaborated on - so I won't. The film is muscling its way into my #1 favorite comic movie adaptation of all time. The reason for my review is in hopes of saving you some money. This double disc Special Edition doesn't deliver the price you pay for it. There isn't even deleted scenes!!! I would save your very hard earned dollars and buy the single disc version and wait for the inevitable ULTIMATE re-release that will come later on down the road. But nonetheless, a great film - you will not be dissapointed; I just wish the studio would have given a better Special Edition release than what we have here. So enjoy!"
-
-comment = comment.translate(string.maketrans("",""), string.punctuation)
-comment = comment.lower()
-
-average = emotions(comment)
-
-print('average: \n' + str(average))
-
