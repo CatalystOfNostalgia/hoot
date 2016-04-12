@@ -12,5 +12,4 @@ session = Session()
 
 from .multimedia import *
 from .comments import *
-from .comment_emotions import *
 from .multimedia_emotions import *

@@ -1,6 +1,7 @@
 import queries
 import unittest
 from sqlalchemy import create_engine
+from sqlalchemy.schema import Table
 from sqlalchemy import MetaData
 
 class TestQueries(unittest.TestCase):
@@ -8,9 +9,17 @@ class TestQueries(unittest.TestCase):
     
     def setUp(self):
         ''' clear the database before testing '''
+
         engine = create_engine('mysql+pymysql://root@localhost:3306/hoot')
 
         meta = MetaData()
+        comments = Table('comments', meta, \
+                         autoload=True, autoload_with=engine)
+        comments = Table('multimedia_emotions', meta, \
+                         autoload=True, autoload_with=engine)
+        comments = Table('multimedia', meta, \
+                         autoload=True, autoload_with=engine)
+
         meta.drop_all(engine)
         meta.create_all(engine)
 
