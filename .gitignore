@@ -43,3 +43,6 @@ captures/
 # Server modules
 server/env
 *.pyc
+
+# AWS Config file
+server/keys
