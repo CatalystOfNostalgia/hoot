@@ -45,4 +45,8 @@ server/env
 *.pyc
 
 # AWS Config file
+<<<<<<< HEAD
 server/keys
+=======
+server/keys
+>>>>>>> 677be61cb47a7a49e661c708111a5e2617146e7c
