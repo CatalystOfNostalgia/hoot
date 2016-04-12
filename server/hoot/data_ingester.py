@@ -1,5 +1,5 @@
 #! python3
-import json, gzip, time, bottlenose, random, boto, boto.s3.connection, argparse
+import json, gzip, time, bottlenose, random, boto, boto.s3.connection, argparse, os.path
 from boto.s3.key import Key
 from datetime import datetime
 from urllib.error import HTTPError
@@ -7,7 +7,11 @@ import xml.etree.ElementTree as ET
 from comment_processing import calculateVectorsForAllComments
 from operator import itemgetter
 
-s3conn = boto.connect_s3(aws_access_key_id = "AKIAIEMJ7S7X7VTJNMKQ",aws_secret_access_key = "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")
+# Load the AWS key information
+f = open(os.path.dirname(os.path.realpath(__file__)) + "\keys\\aws.json")
+configs = json.loads(f.read())
+
+s3conn = boto.connect_s3(aws_access_key_id=configs["aws_public_key"],aws_secret_access_key=configs["aws_secret_key"])
 bucket = s3conn.get_bucket("hootproject")
 
 def error_handler(err):
@@ -16,11 +20,7 @@ def error_handler(err):
         time.sleep(random.expovariate(0.1))
         return True
 
-def setupProductApi():
-    public_key = "AKIAIEMJ7S7X7VTJNMKQ"
-    secret_key = "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"
-    tag = "hoot06-20"
-
+def setupProductApi(public_key, secret_key, tag):
     return bottlenose.Amazon(public_key, secret_key, tag, ErrorHandler=error_handler, MaxQPS=0.9)
 
 # for parsing the UCSD zipfiles
@@ -118,7 +118,6 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
             product_dict["image_url"] = "None"
 
     for review in list_of_review_dicts:
-        # product_dict["comments"] =
         comment_dict = dict()
         # if these dont exist in some of them, then so help me god
         comment_dict["rating"]  = review["overall"]
@@ -140,7 +139,6 @@ def pushToS3(filename, jsonToUpload):
     k = Key(bucket)
     k.key = filename
     k.set_contents_from_string(jsonToUpload)
-    print("i think i uploaded it")
 
 def sortListOfDicts(list_of_dicts):
     return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
@@ -158,7 +156,8 @@ if __name__ == '__main__':
 
     startTime = datetime.now()
     print ("starting")
-    productapi = setupProductApi()
+
+    productapi = setupProductApi(configs["aws_public_key"], configs["aws_secret_key"], configs["product_api_tag"])
     parse(filename, skip, amount, productapi)
 
     print ("seconds taken: ",datetime.now() - startTime)
