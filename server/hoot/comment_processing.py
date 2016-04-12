@@ -27,8 +27,8 @@ def calculateVectorsForAllComments(dictFromJSON):
             vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]),tokenized_docs)
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
-            
-    return json.dumps(dictFromJSON, indent=4)
+
+    return dictFromJSON
 
 def processFromAWS(productID):
     print("TODO")
