@@ -5,6 +5,7 @@ from nltk import stem
 
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
+# returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON):
     calculateRelevancy = True
     if "description" not in dictFromJSON:
@@ -23,7 +24,7 @@ def calculateVectorsForAllComments(dictFromJSON):
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
-    return json.dumps(dictFromJSON, indent=4)
+    return dictFromJSON
 
 def processFromAWS(productID):
     print("TODO")
@@ -35,7 +36,7 @@ def processFromAWS(productID):
 # tokenize, stem, and remove stopwords from document
 def tokenizeDocument(document):
     # remove punctuation (otherwise we have a bunch of empty tokens at the end)
-    translate_table = dict((ord(char), None) for char in string.punctuation)
+    translate_table = dict((ord(char), " ") for char in string.punctuation)
     document = document.translate(translate_table)
     # tokenize
     tokenized_doc = nltk.word_tokenize(document)
