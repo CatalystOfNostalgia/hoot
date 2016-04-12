@@ -1,5 +1,5 @@
 from sentic_values import SenticValue
-
+from compound_emotions import CompoundEmotion
 
 interval_maps = {
     'pleasantness': {
@@ -40,6 +40,15 @@ interval_maps = {
 class Emotion:
 
     def __init__(self, emotion_vector):
+        """
+        emotion_vector: a dict in the following format:
+            {
+                'pleasantness': value,
+                'attention'   : value,
+                'sensitivity' : value,
+                'aptitude'    : value
+            }
+        """
         self.emotion_vector = emotion_vector
 
     def get_all_sentic_values(self):
@@ -68,3 +77,84 @@ class Emotion:
         for i in intervals:
             if value <= i:
                 return interval_map[i]
+
+    def get_compound_emotion(self):
+        """
+        Finds and returns any compound emotions associated with the vector.
+        """
+        pleasantness = self.emotion_vector['pleasantness']
+        sensitivity = self.emotion_vector['sensitivity']
+        attention = self.emotion_vector['attention']
+        aptitude = self.emotion_vector['aptitude']
+
+        emotions = []
+
+        first_emotion = None
+        second_emotion = None
+
+        if pleasantness > 0:
+            first_emotion = self.get_compound_emotion_from_value(
+                attention,
+                CompoundEmotion.optimism,
+                CompoundEmotion.frivolity
+            )
+            second_emotion = self.get_compound_emotion_from_value(
+                aptitude,
+                CompoundEmotion.love,
+                CompoundEmotion.gloat
+            )
+        elif pleasantness < 0:
+            first_emotion = self.get_compound_emotion_from_value(
+                attention,
+                CompoundEmotion.frustration,
+                CompoundEmotion.disapproval
+            )
+            second_emotion = self.get_compound_emotion_from_value(
+                aptitude,
+                CompoundEmotion.envy,
+                CompoundEmotion.remorse
+            )
+
+        if first_emotion:
+            emotions.append(first_emotion)
+        if second_emotion:
+            emotions.append(second_emotion)
+
+        third_emotion = None
+        fourth_emotion = None
+
+        if sensitivity > 0:
+            third_emotion = self.get_compound_emotion_from_value(
+                attention,
+                CompoundEmotion.aggressiveness,
+                CompoundEmotion.rejection
+            )
+            fourth_emotion = self.get_compound_emotion_from_value(
+                aptitude,
+                CompoundEmotion.rivalry,
+                CompoundEmotion.contempt
+            )
+        elif sensitivity < 0:
+            third_emotion = self.get_compound_emotion_from_value(
+                attention,
+                CompoundEmotion.anxiety,
+                CompoundEmotion.awe
+            )
+            fourth_emotion = self.get_compound_emotion_from_value(
+                aptitude,
+                CompoundEmotion.submission,
+                CompoundEmotion.coercion
+            )
+
+        if third_emotion:
+            emotions.append(third_emotion)
+        if fourth_emotion:
+            emotions.append(fourth_emotion)
+
+        return emotions
+
+    def get_compound_emotion_from_value(self, value, pos_emotion, neg_emotion):
+        if value > 0:
+            return pos_emotion
+        elif value < 0:
+            return neg_emotion
