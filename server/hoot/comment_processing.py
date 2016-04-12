@@ -11,6 +11,11 @@ def calculateVectorsForAllComments(productID):
     compound_emotion_dict = collections.defaultdict(int)
     sentic_emotion_dict = collections.defaultdict(int)
 
+# dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
+# adds relevancy rating (and eventually emotional rating) for all comments in the dict
+# returns the modified dictionary
+def calculateVectorsForAllComments(dictFromJSON):
+    calculateRelevancy = True
     if "description" not in dictFromJSON:
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
