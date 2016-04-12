@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E544A3FF1CBD624E00A1C380 /* ProductParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A3FE1CBD624E00A1C380 /* ProductParser.swift */; };
+		E544A4011CBD69D200A1C380 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A4001CBD69D200A1C380 /* ProductViewController.swift */; };
+		E544A4061CBD6C1C00A1C380 /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */; };
 		E563AC3C1C8222D900246237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC3B1C8222D900246237 /* AppDelegate.swift */; };
 		E563AC3E1C8222D900246237 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC3D1C8222D900246237 /* ViewController.swift */; };
 		E563AC411C8222D900246237 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E563AC3F1C8222D900246237 /* Main.storyboard */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E544A3FE1CBD624E00A1C380 /* ProductParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductParser.swift; sourceTree = "<group>"; };
+		E544A4001CBD69D200A1C380 /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
 		E563AC381C8222D900246237 /* Hoot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E563AC3B1C8222D900246237 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E563AC3D1C8222D900246237 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -50,8 +56,29 @@
 		E544A3FB1CBCBDFE00A1C380 /* JSONParsers */ = {
 			isa = PBXGroup;
 			children = (
+				E544A3FE1CBD624E00A1C380 /* ProductParser.swift */,
 			);
 			name = JSONParsers;
+			sourceTree = "<group>";
+		};
+		E544A3FC1CBD59E900A1C380 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				E563AC3D1C8222D900246237 /* ViewController.swift */,
+				E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */,
+				E544A4001CBD69D200A1C380 /* ProductViewController.swift */,
+				E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E544A3FD1CBD5A0800A1C380 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				E563AC441C8222D900246237 /* LaunchScreen.storyboard */,
+				E563AC3F1C8222D900246237 /* Main.storyboard */,
+			);
+			name = Storyboards;
 			sourceTree = "<group>";
 		};
 		E563AC2F1C8222D900246237 = {
@@ -73,17 +100,15 @@
 		E563AC3A1C8222D900246237 /* Hoot */ = {
 			isa = PBXGroup;
 			children = (
+				E544A3FD1CBD5A0800A1C380 /* Storyboards */,
+				E544A3FC1CBD59E900A1C380 /* ViewControllers */,
 				E544A3FB1CBCBDFE00A1C380 /* JSONParsers */,
 				E5BCD6C71CB1EBB700FA0060 /* Images */,
 				E563AC501C8239EF00246237 /* API */,
 				E563AC4D1C8232A000246237 /* Models */,
 				E563AC3B1C8222D900246237 /* AppDelegate.swift */,
-				E563AC3D1C8222D900246237 /* ViewController.swift */,
-				E563AC3F1C8222D900246237 /* Main.storyboard */,
 				E563AC421C8222D900246237 /* Assets.xcassets */,
-				E563AC441C8222D900246237 /* LaunchScreen.storyboard */,
 				E563AC471C8222D900246237 /* Info.plist */,
-				E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */,
 			);
 			path = Hoot;
 			sourceTree = "<group>";
@@ -190,7 +215,10 @@
 				E5BCD6C41CB1E47500FA0060 /* SearchResultTableCell.swift in Sources */,
 				E563AC3E1C8222D900246237 /* ViewController.swift in Sources */,
 				E5BCD6CB1CB1EFD800FA0060 /* Comment.swift in Sources */,
+				E544A3FF1CBD624E00A1C380 /* ProductParser.swift in Sources */,
 				E563AC3C1C8222D900246237 /* AppDelegate.swift in Sources */,
+				E544A4061CBD6C1C00A1C380 /* ReviewsViewController.swift in Sources */,
+				E544A4011CBD69D200A1C380 /* ProductViewController.swift in Sources */,
 				E563AC4F1C8232B200246237 /* Emotion.swift in Sources */,
 				E5BCD6C61CB1E6CE00FA0060 /* Product.swift in Sources */,
 			);
