@@ -1,12 +1,12 @@
-import sys
 import string
+
 import senticnet
+
 
 # search for a concept given a certain string
 def concept_search(query, start):
     f = open('concepts.txt', 'r')
     num = 0
-    output = ''
 
     for line in f:
         if line.startswith(query):
@@ -15,14 +15,15 @@ def concept_search(query, start):
         num = num + 1
 
     return (-1, "NO CONCEPT")
-            
+
+
 # find all the concepts for a comment
 def find_concepts(comment, start):
     words = comment.split()
 
     output = []
 
-    for i in range(0, len(words)): 
+    for i in range(0, len(words)):
         concept = words[i]
         last_concept = None
         line, found_concept = concept_search(words[i], start)
@@ -37,15 +38,16 @@ def find_concepts(comment, start):
             line, found_concept = concept_search(concept, line)
             if found_concept == concept:
                 last_concept = found_concept
-        
-        if last_concept != None:
+
+        if last_concept is not None:
             output.append(last_concept)
-            
+
     if len(output) == 0:
         return "no concepts found"
     return output
 
-def get_emotional_scores( concepts ):
+
+def get_emotional_scores(concepts):
     sn = senticnet.Senticnet()
     scores = {}
 
@@ -53,17 +55,18 @@ def get_emotional_scores( concepts ):
         scores[concept] = sn.concept(concept)
 
     return scores
-    
-def calculate_average( scores ):
+
+
+def calculate_average(scores):
 
     polarity_sum = 0
 
     average = {
         'pleasantness': 0,
-        'attention'   : 0,
-        'sensitivity' : 0,
-        'aptitude'    : 0,
-        'polarity'    : 0
+        'attention': 0,
+        'sensitivity': 0,
+        'aptitude': 0,
+        'polarity': 0
     }
 
     for _, score in scores.iteritems():
@@ -83,16 +86,16 @@ def calculate_average( scores ):
             average['aptitude'] + (sentics['aptitude'] * score['polarity'])
 
         polarity_sum = polarity_sum + score['polarity']
-    
+
     for emotion in average:
         if polarity_sum > 0:
             average[emotion] = average[emotion] / polarity_sum
 
     return average
 
-def emotions ( comment ):
-    comment.translate(string.maketrans("",""), string.punctuation)
-    comment.lower()
+
+def emotions(comment):
+    comment.translate(string.maketrans("", ""), string.punctuation).lower()
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
     average = calculate_average(scores)
@@ -106,4 +109,3 @@ comment = comment.lower()
 average = emotions(comment)
 
 print('average: \n' + str(average))
-
