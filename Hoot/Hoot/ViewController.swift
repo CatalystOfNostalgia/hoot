@@ -49,7 +49,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             EmotionClasses().terrorClass.name,
             EmotionClasses().vigilanceClass.name])
         
-        emotionCategories.addTarget(self, action: "categoryValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        emotionCategories.addTarget(self, action: #selector(ViewController.categoryValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         admirationCategory = UISegmentedControl(items: [
             "Back",
@@ -57,7 +57,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Trust",
             "Acceptance"])
 
-        admirationCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        admirationCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         amazementCategory = UISegmentedControl(items: [
             "Back",
@@ -65,7 +65,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Surprise",
             "Distraction"])
         
-        amazementCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        amazementCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         ecstasyCategory = UISegmentedControl(items: [
             "Back",
@@ -73,7 +73,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Joy",
             "Security"])
         
-        ecstasyCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        ecstasyCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         griefCategory = UISegmentedControl(items: [
             "Back",
@@ -81,7 +81,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Sadness",
             "Pensiveness"])
         
-        griefCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        griefCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         loathingCategory = UISegmentedControl(items: [
             "Back",
@@ -89,7 +89,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Disgust",
             "Boredom"])
         
-        loathingCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        loathingCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         rageCategory = UISegmentedControl(items: [
             "Back",
@@ -97,7 +97,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Anger",
             "Annoyance"])
         
-        rageCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        rageCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         terrorCategory = UISegmentedControl(items: [
             "Back",
@@ -105,7 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Fear",
             "Apprehension"])
         
-        terrorCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        terrorCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         vigilanceCategory = UISegmentedControl(items: [
             "Back",
@@ -113,7 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Anticipation",
             "Interest"])
         
-        vigilanceCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        vigilanceCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         selectedControl = emotionCategories
         navBar.title = "Hoot"
@@ -145,6 +145,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
         if searchText == "" {
             suggestions = hootAPI.getInitialSuggestions() // Display some default goodness
         } else {
@@ -158,13 +159,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return 1
     }
     
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44.0
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return suggestions.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as UITableViewCell;
-        cell.textLabel?.text = suggestions[indexPath.row]
+        let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
+        // TODO: Implement product view stuff 
         return cell
     }
     
@@ -208,7 +213,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if selectedTitle == "Back" {
             category = ""
-            selectedControl.selectedSegmentIndex = -1 
+            selectedControl.selectedSegmentIndex = -1
             selectedControl = emotionCategories
             selectedControl.selectedSegmentIndex = -1
         } else {
@@ -216,8 +221,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         self.searchSuggestionsTable.reloadData()
-        
-        
     }
+    
 }
 
