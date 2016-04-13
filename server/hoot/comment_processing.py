@@ -1,7 +1,8 @@
 #! python3
-import sys, nltk, string, json, math
+import sys, nltk, string, json, math, collections
 from nltk.corpus import stopwords
 from nltk import stem
+from emotion_processing.comment_emotions import emotions
 
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
@@ -11,6 +12,9 @@ def calculateVectorsForAllComments(dictFromJSON):
     jsonfile = open("sampleText.json", 'r+')
     filetext = jsonfile.read()
     dictFromJSON = json.loads(filetext)
+
+    compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
 
     if "description" not in dictFromJSON:
         calculateRelevancy = False
@@ -28,6 +32,14 @@ def calculateVectorsForAllComments(dictFromJSON):
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
+        # add emotional score
+        comment_emotion = emotions(comment["text"])
+        comment["emotion_vector"] = comment_emotion.emotion_vector
+        # TODO THESE ARE CURRENTLY NOT SERIALIZABLE
+        # comment["compound_emotions"] = comment_emotion.get_compound_emotion()
+        # comment["sentic_emotions"] = comment_emotion.get_all_sentic_values()
+
+    # get max key from emotions
     return dictFromJSON
 
 def processFromAWS(productID):
