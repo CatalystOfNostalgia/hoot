@@ -1,6 +1,6 @@
 ''' Use this file to interface with the database '''
-import sys
-sys.path.append('..')
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 import models
 from sqlalchemy import func
 
@@ -8,21 +8,14 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
                    sensitivity, aptitude, polarity):
     ''' inserts an entry into the comments table '''
     
-    new_comment = models.comments.Comments( item_id = item_id )
+    new_comment = models.comments.Comments( item_id = item_id, \
+                                            relevancy = relevancy, \
+                                            pleasantness = pleasantness, \
+                                            attention = attention, \
+                                            sensitivity = sensitivity, \
+                                            aptitude = aptitude, \
+                                            polarity = polarity)
     models.session.add(new_comment)
-    models.session.commit()
-
-    new_id = models.session.query(func.max(models.Comments.comment_id)).one()[0]
-
-    emotions = models.session.query(models.Comment_Emotions).filter(models.Comment_Emotions.comment_id == new_id).first()
-
-    emotions.relevancy_score = relevancy
-    emotions.pleasantness = pleasantness
-    emotions.attention = attention
-    emotions.sensitivity = sensitivity
-    emotions.aptitude = aptitude
-    emotions.polarity = polarity
-
     models.session.commit()
                                           
 def insert_media(title, creator, description, media_type, genre, asin):

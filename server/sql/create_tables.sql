@@ -30,7 +30,7 @@ CREATE TABLE multimedia_emotions (
 CREATE TABLE comments (
     comment_id int NOT NULL AUTO_INCREMENT,
     item_id int NOT NULL,
-    elevancy_score int NOT NULL,
+    relevancy int NOT NULL,
     pleasantness double NOT NULL,
     attention double NOT NULL,
     sensitivity double NOT NULL,
