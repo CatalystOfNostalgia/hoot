@@ -44,4 +44,3 @@ captures/
 server/env
 server/venv
 *.pyc
-concepts.txt
