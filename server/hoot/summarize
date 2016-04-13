@@ -5,7 +5,7 @@ from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 
-def getSummary(reviewList):
+def get_summary(reviewList):
     linesMin = 200
     linesMax = 0
     for review in reviewList:
@@ -18,8 +18,7 @@ def getSummary(reviewList):
     avgSize = linesMin + linesMax/2
     reviews = ' '.join(reviewList)
     parser = sumy.parsers.plaintext.PlaintextParser.from_string(reviews, Tokenizer("english"))
-    summarizer = LuhnSummarizer()
     stemmer = Stemmer("english")
+    summarizer = LuhnSummarizer(stemmer)
     summary = summarizer(parser.document, 6)
-    for sentence in summary:
-       print(sentence)
+    return summary
