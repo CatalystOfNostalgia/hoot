@@ -6,7 +6,7 @@ from emotion_processing.emotion import Emotion
 
 def concept_search(query, start):
     """Search for a concept given a certain string."""
-    f = open('concepts.txt', 'r')
+    f = open('emotion_processing\concepts.txt', 'r')
     num = 0
 
     for line in f:
