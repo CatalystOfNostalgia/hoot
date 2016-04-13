@@ -1,25 +1,25 @@
 import queries
 import unittest
-import subprocess
+from emotion_processing.comment_emotions import find_concepts, calculate_average
 from sqlalchemy import create_engine
 from sqlalchemy.schema import Table
 from sqlalchemy import MetaData
 
 class TestQueries(unittest.TestCase):
-    ''' Tester for the queries file 
+    """ Tester for the queries file 
     Database tests WILL FAIL if run independently of the Makefile
-    '''
+    """
     
     @classmethod
     def setUpClass(self):
-        ''' inserts test data '''
+        """ inserts test data """
 
         queries.insert_media('Batman: The Return of the Force', 'Dario', \
                              'A really cool movie', 'Film', 'Romance', \
                              '0440419395')
 
     def test_insert_media(self):
-        ''' Tests if media is inserted and retrieved correctly '''
+        """ Tests if media is inserted and retrieved correctly """
 
         # can we find the movie?
         bat = queries.find_media_by_asin('0440419395')
@@ -31,10 +31,8 @@ class TestQueries(unittest.TestCase):
         bat = queries.find_media_by_creator('Dario')
         self.is_batman_movie(bat[0])
 
-        # is the emotions entry inserted?
-
     def test_comments(self):
-        ''' Tests the insertion and deletion of comments '''
+        """ Tests the insertion and deletion of comments """
 
         bat = queries.find_media_by_creator('Dario')
         queries.insert_comment(bat[0].media_id, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
@@ -56,6 +54,10 @@ class TestQueries(unittest.TestCase):
         self.assertAlmostEqual(float(comments[0].polarity), 0.3, \
                     msg='Retrieved incorrect polarity')
 
+        bat = queries.find_media_by_creator('Dario')
+
+        self.assertEqual(bat[0].number_of_comments, 1, 
+                        'Retrieved incorrect number of comments')
     def is_batman_movie(self, movie):
 
         self.assertEqual(movie.title, 'Batman: The Return of the Force', \
@@ -71,7 +73,37 @@ class TestQueries(unittest.TestCase):
         self.assertEqual(movie.asin, '0440419395', \
                          'Retrieved incorrect asin')
 
+class TestCommentEmotions(unittest.TestCase):
 
+    def test_find_concepts(self):
+        """ Tests finding all concepts for a string """
+
+        none = ''
+        one  = 'dark'
+        many = """Sitting in the theater, I watched my 6 1/2 year old nephew eat
+                up the bright colors and classic sight gags, while I watched  
+                my 25 year old fiancee almost spill his popcorn laughing at 
+                the exact same joke. What I really liked about this movies was 
+                that duality-that one set of lines can be almost making me wet 
+                my pants while the more innocent version is keeping the little 
+                guys and gals glued to the screen. I found it to be reminiscent
+                of the first Toy Story and the underlying message is easy for 
+                kids of all shapes and sizes to understand without being so 
+                cookie cutter sweet and sappy. Score for the big green guy. 
+                I'd take him home."""
+        none_concepts = find_concepts(none, 0)
+        one_concepts  = find_concepts(one, 0)
+        many_concepts = find_concepts(many, 0)
+        many_concepts_true = ['old', 'eat', 'bright', 'classic', 'old', 'can', \
+                              'pants', 'easy', 'cookie', 'big']
+
+        self.assertEqual(len(none_concepts), 0, \
+                         "Found concepts that didn't exist")
+        self.assertEqual(one_concepts[0], 'dark', 'Did not find proper concept')
+        self.assertEqual(many_concepts, many_concepts_true, \
+                         'Did not find all concepts')
+
+    #def test_calculate_average(self):
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,5 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 import string
 import senticnet
 
@@ -6,14 +8,17 @@ from emotion import Emotion
 
 def concept_search(query, start):
     """Search for a concept given a certain string."""
-    f = open('concepts.txt', 'r')
+    f = open(os.path.abspath(os.path.dirname(__file__) + '/concepts.txt'), 'r')
     num = 0
 
     for line in f:
         if line.startswith(query):
+            f.close()
             return (num, line.strip())
 
         num = num + 1
+
+    f.close()
 
     return (-1, "NO CONCEPT")
 
@@ -43,8 +48,6 @@ def find_concepts(comment, start):
         if last_concept is not None:
             output.append(last_concept)
 
-    if len(output) == 0:
-        return "no concepts found"
     return output
 
 
