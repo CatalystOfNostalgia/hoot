@@ -28,19 +28,23 @@ def calculateVectorsForAllComments(dictFromJSON):
             continue
         if calculateRelevancy:
             vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
-            vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]),tokenized_docs)
+            vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
         # add emotional score
         comment_emotion = emotions(comment["text"])
         comment["emotion_vector"] = comment_emotion.emotion_vector
-        # TODO THESE ARE CURRENTLY NOT SERIALIZABLE
-        # comment["compound_emotions"] = comment_emotion.get_compound_emotion()
-        # comment["sentic_emotions"] = comment_emotion.get_all_sentic_values()
+
+        compound_emotions = comment_emotion.get_compound_emotion()
+        sentic_values = comment_emotion.get_all_sentic_values()
+
+        comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
+        comment["sentic_emotions"] = [sentic.name for sentic in sentic_values]
 
     # get max key from emotions
     return dictFromJSON
+
 
 def processFromAWS(productID):
     print("TODO")
