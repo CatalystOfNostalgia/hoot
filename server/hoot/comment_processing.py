@@ -52,6 +52,7 @@ def calculateVectorsForAllComments(dictFromJSON):
     # get max key from emotions
     return dictFromJSON
 
+
 def processFromAWS(productID):
     print("TODO")
     jsonfile = open("sampleText.json", 'r+')
