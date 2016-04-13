@@ -1,12 +1,13 @@
-import sys
 import string
 import senticnet
 
-# search for a concept given a certain string
+from emotion import Emotion
+
+
 def concept_search(query, start):
+    """Search for a concept given a certain string."""
     f = open('concepts.txt', 'r')
     num = 0
-    output = ''
 
     for line in f:
         if line.startswith(query):
@@ -15,14 +16,15 @@ def concept_search(query, start):
         num = num + 1
 
     return (-1, "NO CONCEPT")
-            
-# find all the concepts for a comment
+
+
 def find_concepts(comment, start):
+    """Find all the concepts for a comment."""
     words = comment.split()
 
     output = []
 
-    for i in range(0, len(words)): 
+    for i in range(0, len(words)):
         concept = words[i]
         last_concept = None
         line, found_concept = concept_search(words[i], start)
@@ -37,15 +39,16 @@ def find_concepts(comment, start):
             line, found_concept = concept_search(concept, line)
             if found_concept == concept:
                 last_concept = found_concept
-        
-        if last_concept != None:
+
+        if last_concept is not None:
             output.append(last_concept)
-            
+
     if len(output) == 0:
         return "no concepts found"
     return output
 
-def get_emotional_scores( concepts ):
+
+def get_emotional_scores(concepts):
     sn = senticnet.Senticnet()
     scores = {}
 
@@ -53,22 +56,28 @@ def get_emotional_scores( concepts ):
         scores[concept] = sn.concept(concept)
 
     return scores
-    
-def calculate_average( scores ):
 
+
+def calculate_average(scores):
+    """Calculates the average emotion vector."""
     polarity_sum = 0
 
     average = {
         'pleasantness': 0,
-        'attention'   : 0,
-        'sensitivity' : 0,
-        'aptitude'    : 0,
-        'polarity'    : 0
+        'attention': 0,
+        'sensitivity': 0,
+        'aptitude': 0,
+        'polarity': 0
     }
 
-    for _, score in scores.iteritems():
+    for _, score in scores.items():
 
-        sentics = score['sentics']
+        try:
+            sentics = score['sentics']
+        except KeyError:
+            # Necessary since empty dicts are sometimes received
+            continue
+
 
         average['pleasantness'] = \
             average['pleasantness'] + (sentics['pleasantness'] * score['polarity'])
@@ -83,27 +92,20 @@ def calculate_average( scores ):
             average['aptitude'] + (sentics['aptitude'] * score['polarity'])
 
         polarity_sum = polarity_sum + score['polarity']
-    
+
     for emotion in average:
         if polarity_sum > 0:
             average[emotion] = average[emotion] / polarity_sum
 
     return average
 
-def emotions ( comment ):
-    comment.translate(string.maketrans("",""), string.punctuation)
-    comment.lower()
+
+def emotions(comment):
+    """Returns the emotion of the comment."""
+    comment = comment.translate(str.maketrans('', '', string.punctuation))
+    comment = comment.lower()
+
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts)
     average = calculate_average(scores)
-    return average
-
-comment = "What has been said about the Dark Knight cannot be elaborated on - so I won't. The film is muscling its way into my #1 favorite comic movie adaptation of all time. The reason for my review is in hopes of saving you some money. This double disc Special Edition doesn't deliver the price you pay for it. There isn't even deleted scenes!!! I would save your very hard earned dollars and buy the single disc version and wait for the inevitable ULTIMATE re-release that will come later on down the road. But nonetheless, a great film - you will not be dissapointed; I just wish the studio would have given a better Special Edition release than what we have here. So enjoy!"
-
-comment = comment.translate(string.maketrans("",""), string.punctuation)
-comment = comment.lower()
-
-average = emotions(comment)
-
-print('average: \n' + str(average))
-
+    return Emotion(average)
