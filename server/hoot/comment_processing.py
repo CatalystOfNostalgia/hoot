@@ -20,6 +20,9 @@ def calculateVectorsForAllComments(dictFromJSON):
     filetext = jsonfile.read()
     dictFromJSON = json.loads(filetext)
 
+    compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
+
     if "description" not in dictFromJSON:
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
