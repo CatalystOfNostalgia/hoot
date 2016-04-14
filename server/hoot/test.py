@@ -1,6 +1,9 @@
 import queries
 import unittest
-from emotion_processing.comment_emotions import find_concepts, calculate_average
+import string
+from emotion_processing.comment_emotions import find_concepts, \
+                                                calculate_average, \
+                                                get_emotional_scores
 from sqlalchemy import create_engine
 from sqlalchemy.schema import Table
 from sqlalchemy import MetaData
@@ -54,10 +57,12 @@ class TestQueries(unittest.TestCase):
         self.assertAlmostEqual(float(comments[0].polarity), 0.3, \
                     msg='Retrieved incorrect polarity')
 
+        # is the number of comments incremented
         bat = queries.find_media_by_creator('Dario')
 
         self.assertEqual(bat[0].number_of_comments, 1, 
                         'Retrieved incorrect number of comments')
+
     def is_batman_movie(self, movie):
 
         self.assertEqual(movie.title, 'Batman: The Return of the Force', \
@@ -91,6 +96,7 @@ class TestCommentEmotions(unittest.TestCase):
                 kids of all shapes and sizes to understand without being so 
                 cookie cutter sweet and sappy. Score for the big green guy. 
                 I'd take him home."""
+
         none_concepts = find_concepts(none, 0)
         one_concepts  = find_concepts(one, 0)
         many_concepts = find_concepts(many, 0)
@@ -103,7 +109,29 @@ class TestCommentEmotions(unittest.TestCase):
         self.assertEqual(many_concepts, many_concepts_true, \
                          'Did not find all concepts')
 
-    #def test_calculate_average(self):
+    def test_calculate_average(self):
+        """ Tests getting emotional scores from a comment """
+
+        broken = """What has been said about the Dark Knight cannot be 
+                    elaborated on - so I won't. The film is muscling its way 
+                    into my #1 favorite comic movie adaptation of all time. The 
+                    reason for my review is in hopes of saving you some money. 
+                    This double disc Special Edition doesn't deliver the price 
+                    you pay for it. There isn't even deleted scenes!!! I would 
+                    save your very hard earned dollars and buy the single disc 
+                    version and wait for the inevitable ULTIMATE re-release that
+                    will come later on down the road. But nonetheless, a great 
+                    film - you will not be dissapointed; I just wish the studio 
+                    would have given a better Special Edition release than what
+                    we have here. So enjoy!"""
+        broken = broken.translate(str.maketrans('', '', string.punctuation))
+        broken = broken.lower()
+
+        concepts = find_concepts(broken, 2)
+        scores = get_emotional_scores(concepts)
+        average = calculate_average(scores)
+        print (average)
+
 
 if __name__ == '__main__':
     unittest.main()
