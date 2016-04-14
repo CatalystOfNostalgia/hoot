@@ -49,4 +49,6 @@ class SearchResultTableCell: UITableViewCell {
             }
         }
     }
+    
+    
 }

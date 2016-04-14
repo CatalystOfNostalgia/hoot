@@ -12,10 +12,10 @@ class Product {
     var name: String?
     var description: String?
     var imageURL: String?    
-    var emotions: [Emotion]?
+    var emotions: String?
     var comments: [Comment]?
     
-    init(name: String, description: String, imageURL: String, emotions: [Emotion], comments: [Comment]) {
+    init(name: String, description: String, imageURL: String, emotions: String, comments: [Comment]) {
         self.name = name
         self.imageURL = imageURL
         self.description = description

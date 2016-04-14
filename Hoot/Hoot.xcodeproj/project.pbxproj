@@ -12,6 +12,7 @@
 		E544A4061CBD6C1C00A1C380 /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */; };
 		E544A40A1CBDDA8900A1C380 /* IMG_0801.JPG in Resources */ = {isa = PBXBuildFile; fileRef = E544A4091CBDDA8900A1C380 /* IMG_0801.JPG */; };
 		E544A40E1CBDDC9A00A1C380 /* NoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = E544A40D1CBDDC9A00A1C380 /* NoImage.png */; };
+		E544A4101CBF39A900A1C380 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A40F1CBF39A900A1C380 /* TestData.swift */; };
 		E563AC3C1C8222D900246237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC3B1C8222D900246237 /* AppDelegate.swift */; };
 		E563AC3E1C8222D900246237 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC3D1C8222D900246237 /* ViewController.swift */; };
 		E563AC411C8222D900246237 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E563AC3F1C8222D900246237 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 		E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
 		E544A4091CBDDA8900A1C380 /* IMG_0801.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_0801.JPG; sourceTree = "<group>"; };
 		E544A40D1CBDDC9A00A1C380 /* NoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NoImage.png; sourceTree = "<group>"; };
+		E544A40F1CBF39A900A1C380 /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E563AC381C8222D900246237 /* Hoot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E563AC3B1C8222D900246237 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E563AC3D1C8222D900246237 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +85,14 @@
 			name = Storyboards;
 			sourceTree = "<group>";
 		};
+		E544A4111CBF39AF00A1C380 /* Testing */ = {
+			isa = PBXGroup;
+			children = (
+				E544A40F1CBF39A900A1C380 /* TestData.swift */,
+			);
+			name = Testing;
+			sourceTree = "<group>";
+		};
 		E563AC2F1C8222D900246237 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +112,7 @@
 		E563AC3A1C8222D900246237 /* Hoot */ = {
 			isa = PBXGroup;
 			children = (
+				E544A4111CBF39AF00A1C380 /* Testing */,
 				E544A3FD1CBD5A0800A1C380 /* Storyboards */,
 				E544A3FC1CBD59E900A1C380 /* ViewControllers */,
 				E544A3FB1CBCBDFE00A1C380 /* JSONParsers */,
@@ -216,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E563AC521C823A1900246237 /* HootAPI.swift in Sources */,
+				E544A4101CBF39A900A1C380 /* TestData.swift in Sources */,
 				E5BCD6C41CB1E47500FA0060 /* SearchResultTableCell.swift in Sources */,
 				E563AC3E1C8222D900246237 /* ViewController.swift in Sources */,
 				E5BCD6CB1CB1EFD800FA0060 /* Comment.swift in Sources */,

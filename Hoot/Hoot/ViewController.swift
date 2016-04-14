@@ -29,8 +29,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var vigilanceCategory: UISegmentedControl!
     var selectedControl: UISegmentedControl!
     
-    var suggestions: [String] = []
+    var suggestions: [Product] = TestData.getTestData()
     var category: String = ""
+    var selectedRow: Int?
     
     override func viewDidLoad() {
         searchSuggestionsTable.delegate = self
@@ -169,6 +170,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
+        cell.product = suggestions[indexPath.row]
+        cell.setValues()
         // TODO: Implement product view stuff 
         return cell
     }
@@ -221,6 +224,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         self.searchSuggestionsTable.reloadData()
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedRow = indexPath.row
+        performSegueWithIdentifier("GoToProductPage", sender: self)
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return selectedRow != nil
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "GoToProductPage" {
+            if let destination = segue.destinationViewController as? ProductViewController {
+                
+                guard let row = selectedRow where selectedRow != nil else {
+                    
+                    return
+                }
+                let product: Product = suggestions[row]
+                destination.product = product.name
+                destination.comments = product.comments
+                destination.emotionText = product.emotions
+                destination.summaryText = product.description
+                let cell = searchSuggestionsTable.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) as! SearchResultTableCell
+                print(cell.imageView?.image)
+                destination.productImage = cell.thumbnail.image
+                
+                
+            }
+        }
     }
     
 }

@@ -10,4 +10,33 @@ import UIKit
 
 class ProductViewController: UIViewController {
 
+
+    @IBOutlet weak var productName: UITextView!
+    @IBOutlet weak var summary: UITextView!
+    @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var emotions: UILabel!
+    
+    var comments:[Comment]?
+    var summaryText: String?
+    var productImage: UIImage?
+    var emotionText: String?
+    var product: String?
+
+    @IBAction func viewComments(sender: AnyObject) {
+    
+    }
+    
+    override func viewDidLoad() {
+
+        self.summary.text = summaryText
+        self.image.image = productImage
+        self.productName.text = product
+        self.emotions.text = emotionText
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.summary.setContentOffset(CGPointZero, animated: false)
+        self.productName.setContentOffset(CGPointZero, animated: false)
+    }
+    
 }

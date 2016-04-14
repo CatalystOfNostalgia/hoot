@@ -10,14 +10,14 @@ import Foundation
 
 class HootAPI {
     
-    func getInitialSuggestions() -> [String] {
+    func getInitialSuggestions() -> [Product] {
         // TODO: Create an API end point to get some initial suggestions 
         
-        return ["Deadpool", "Kung Fu Panda 3", "The Witch", "Star Wars: Episode VII - The Force Aawakens", "The Revenant", "Zootopia"]
+        return TestData.getTestData()
     }
     
-    func getSuggestions(searchText: String) -> [String]{
-        return ["Suggestion 1", "Suggestion 2", "Suggestion 3"]
+    func getSuggestions(searchText: String) -> [Product]{
+        return TestData.getTestData()
     }
     
     
