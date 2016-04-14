@@ -53,7 +53,6 @@
                                             <outlet property="mainLabel" destination="LHJ-DI-332" id="WuY-NH-cGQ"/>
                                             <outlet property="secondaryLabel" destination="csC-GX-YOE" id="AQZ-xv-7p2"/>
                                             <outlet property="thumbnail" destination="L9Q-p3-VnK" id="bP4-wb-03m"/>
-                                            <segue destination="ygj-Pp-VK1" kind="push" identifier="GoToProductPage" id="TLZ-bO-KpN"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -74,6 +73,7 @@
                         <outlet property="searchBar" destination="b7y-cw-P4g" id="JuN-vW-WQs"/>
                         <outlet property="searchDisplayController" destination="o7e-1i-A3t" id="tmK-kV-vck"/>
                         <outlet property="searchSuggestionsTable" destination="OxM-zN-ubK" id="8cw-W1-fcV"/>
+                        <segue destination="ygj-Pp-VK1" kind="push" identifier="GoToProductPage" id="sgf-2B-fvh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

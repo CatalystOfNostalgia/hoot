@@ -240,7 +240,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if let destination = segue.destinationViewController as? ProductViewController {
                 
                 guard let row = selectedRow where selectedRow != nil else {
-                    
                     return
                 }
                 let product: Product = suggestions[row]
@@ -249,7 +248,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 destination.emotionText = product.emotions
                 destination.summaryText = product.description
                 let cell = searchSuggestionsTable.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) as! SearchResultTableCell
-                print(cell.imageView?.image)
                 destination.productImage = cell.thumbnail.image
                 
                 
