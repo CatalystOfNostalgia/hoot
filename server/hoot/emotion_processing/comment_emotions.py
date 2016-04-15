@@ -1,7 +1,7 @@
 import string
-import senticnet
+import emotion_processing.senticnet as senticnet
 
-from emotion import Emotion
+from emotion_processing.emotion import Emotion
 
 
 def concept_search(query, start):

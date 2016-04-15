@@ -1,5 +1,5 @@
-from sentic_values import SenticValue
-from compound_emotions import CompoundEmotion
+from emotion_processing.sentic_values import SenticValue
+from emotion_processing.compound_emotions import CompoundEmotion
 
 interval_maps = {
     'pleasantness': {
