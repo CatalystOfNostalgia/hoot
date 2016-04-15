@@ -48,12 +48,12 @@ def find_concepts(comment, start):
     return output
 
 
-def get_emotional_scores(concepts):
+def get_emotional_scores(concepts, g):
     sn = senticnet.Senticnet()
     scores = {}
 
     for concept in concepts:
-        scores[concept] = sn.concept(concept)
+        scores[concept] = sn.concept_local(concept, g)
 
     return scores
 
@@ -100,12 +100,12 @@ def calculate_average(scores):
     return average
 
 
-def emotions(comment):
+def emotions(comment, g):
     """Returns the emotion of the comment."""
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
     concepts = find_concepts(comment, 2)
-    scores = get_emotional_scores(concepts)
+    scores = get_emotional_scores(concepts, g)
     average = calculate_average(scores)
     return Emotion(average)
