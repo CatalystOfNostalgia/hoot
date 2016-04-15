@@ -101,7 +101,20 @@ def calculate_average(scores):
 
 
 def emotions(comment, g):
-    """Returns the emotion of the comment."""
+    """
+    Returns the emotion of the comment.
+
+    In order to initialize g do the following:
+
+        import rdflib
+
+        f = open('senticnet3.rdf.xml') # may need to adjust path
+        g = rdflib.Graph()
+        g.parse(f)
+
+    Initialize g in a place such that it will only be initialized once for
+    all products/comments, since it takes ~1 minute to initilize.
+    """
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
