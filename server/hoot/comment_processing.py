@@ -16,9 +16,6 @@ def calculateVectorsForAllComments(productID):
 # returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON):
     calculateRelevancy = True
-    jsonfile = open("sampleText.json", 'r+')
-    filetext = jsonfile.read()
-    dictFromJSON = json.loads(filetext)
 
     compound_emotion_dict = collections.defaultdict(int)
     sentic_emotion_dict = collections.defaultdict(int)
@@ -39,12 +36,15 @@ def calculateVectorsForAllComments(dictFromJSON):
             comment["vector_space"] = vectorized_comment
             comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
 
+    # TODO sort all by relevancy first, then PRUNE those falling under a certain threshold
         # add emotional score
         comment_emotion = emotions(comment["text"])
         comment["emotion_vector"] = comment_emotion.emotion_vector
 
         compound_emotions = comment_emotion.get_compound_emotion()
         sentic_values = comment_emotion.get_all_sentic_values()
+
+        sentic_values = [value for value in sentic_values if value is not None]
 
         comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
         comment["sentic_emotions"] = [sentic.name for sentic in sentic_values]
@@ -119,6 +119,10 @@ def getCosine(vec1, vec2):
         return 0.0
     else:
         return float(numerator)/float(denominator)
+
+# used for sorting the comments by relevancy
+def sortListOfDicts(list_of_dicts):
+    return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
 
 if __name__ == '__main__':
     new_jsonfile = calculateVectorsForAllComments("whatever we need to get the file from AWS")
