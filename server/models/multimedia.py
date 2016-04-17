@@ -7,7 +7,7 @@ Base = declarative_base()
 class Multimedia(Base):
     __tablename__ = 'multimedia'
 
-    media_id     = Column(Integer, primary_key=True,
+    media_id     = Column(Integer, primary_key=True,\
                           autoincrement=True, nullable=False)
     title        = Column(String(100), nullable=False)
     creator      = Column(String(100), nullable=False)
