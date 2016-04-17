@@ -19,7 +19,8 @@ class Senticnet(object):
         g must be a parsed RDF graph containing the sentic values.
         """
         if (None, None, concept) not in g:
-            print("{} not found in database!".format(concept))
+            # debug statement
+            #print("{} not found in database!".format(concept))
             return {}
 
         result = {'sentics': {}}

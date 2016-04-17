@@ -7,9 +7,7 @@ from emotion_processing.comment_emotions import emotions
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
 # returns the modified dictionary
-def calculateVectorsForAllComments(dictFromJSON):
-    calculateRelevancy = True
-
+def calculateVectorsForAllComments(dictFromJSON, g):
     compound_emotion_dict = collections.defaultdict(int)
     sentic_emotion_dict = collections.defaultdict(int)
 
@@ -17,21 +15,24 @@ def calculateVectorsForAllComments(dictFromJSON):
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
 
+    processed_comments = list()
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
+    counter = 0
     for comment in dictFromJSON["comments"]:
-        # we dont want to calculate the vector every time
-        if "vector_space" in comment:
-            print("VSM already exists for this comment")
-            continue
-        if calculateRelevancy:
-            vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
-            vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
-            comment["vector_space"] = vectorized_comment
-            comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
+        # print("     processing comment", counter, " for ASIN ", dictFromJSON["asin"])
+        counter += 1
+        vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
+        comment["vector_space"] = vectorized_comment
+        relevancy = getCosine(vectorized_comment, vectorized_desc)
 
-    # TODO sort all by relevancy first, then PRUNE those falling under a certain threshold
+        if relevancy < 0.15:
+            continue
+
+        comment["relevancy"] = relevancy
+
         # add emotional score
-        comment_emotion = emotions(comment["text"])
+        comment_emotion = emotions(comment["text"], g)
         comment["emotion_vector"] = comment_emotion.emotion_vector
 
         compound_emotions = comment_emotion.get_compound_emotion()
@@ -40,9 +41,22 @@ def calculateVectorsForAllComments(dictFromJSON):
         sentic_values = [value for value in sentic_values if value is not None]
 
         comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
+
+        ## CHANGE THIS TO USE A DICT TO PAIR KEY WITH VALUES
         comment["sentic_emotions"] = [sentic.name for sentic in sentic_values]
+        processed_comments.append(comment)
+
+        # add all compound_emotions to the default dictFromJSON
+        for compound in comment["compound_emotions"]:
+            compound_emotion_dict[compound] += 1
+
+        for sentic in comment["sentic_emotions"]:
+            sentic_emotion_dict[sentic] += 1
 
     # get max key from emotions
+    dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
+    dictFromJSON["max_sentic_emotion"] = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
+    dictFromJSON["comments"] = processed_comments
     return dictFromJSON
 
 
