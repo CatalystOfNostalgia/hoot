@@ -16,11 +16,16 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         return json.dumps(dictFromJSON, indent=4)
 
     processed_comments = list()
+
+    compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
+
+    if "description" not in dictFromJSON:
+        calculateRelevancy = False
+        return json.dumps(dictFromJSON, indent=4)
+
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
-    counter = 0
     for comment in dictFromJSON["comments"]:
-        # print("     processing comment", counter, " for ASIN ", dictFromJSON["asin"])
-        counter += 1
         vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
         vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
         comment["vector_space"] = vectorized_comment
@@ -28,6 +33,15 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
         if relevancy < 0.15:
             continue
+        if calculateRelevancy:
+            vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+            vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
+            comment["vector_space"] = vectorized_comment
+            comment["relevancy"] = getCosine(vectorized_comment, vectorized_desc)
+
+        # add emotional score
+        comment_emotion = emotions(comment["text"])
+        comment["emotion_vector"] = comment_emotion.emotion_vector
 
         comment["relevancy"] = relevancy
 
@@ -57,6 +71,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
     dictFromJSON["max_sentic_emotion"] = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
     dictFromJSON["comments"] = processed_comments
+
     return dictFromJSON
 
 
