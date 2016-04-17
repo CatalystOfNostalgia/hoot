@@ -10,6 +10,7 @@ from summarize import get_summary
 
 # Load the AWS key information
 f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
+configs = json.loads(f.read())
 
 s3conn = boto.connect_s3(aws_access_key_id=configs["aws_public_key"],aws_secret_access_key=configs["aws_secret_key"])
 bucket = s3conn.get_bucket("hootproject")
