@@ -1,17 +1,13 @@
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy import create_engine
-from sqlalchemy import Date
-from sqlalchemy.dialects.mysql import DOUBLE
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 Base = declarative_base()
 class Multimedia(Base):
     __tablename__ = 'multimedia'
 
-    media_id     = Column(Integer, primary_key=True, \
+    media_id     = Column(Integer, primary_key=True,
                           autoincrement=True, nullable=False)
     title        = Column(String(100), nullable=False)
     creator      = Column(String(100), nullable=False)
