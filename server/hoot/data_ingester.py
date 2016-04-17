@@ -1,18 +1,25 @@
 #! python3
-import json, gzip, time, bottlenose, random, boto, boto.s3.connection, argparse, os.path
+import json, gzip, time, bottlenose, random, boto, boto.s3.connection, argparse, os.path, rdflib
 from boto.s3.key import Key
 from datetime import datetime
 from urllib.error import HTTPError
 import xml.etree.ElementTree as ET
 from comment_processing import calculateVectorsForAllComments
 from operator import itemgetter
+from summarize import get_summary
 
 # Load the AWS key information
-f = open(os.path.dirname(os.path.realpath(__file__)) + "\keys\\aws_keys.json")
+f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
 configs = json.loads(f.read())
 
 s3conn = boto.connect_s3(aws_access_key_id=configs["aws_public_key"],aws_secret_access_key=configs["aws_secret_key"])
 bucket = s3conn.get_bucket("hootproject")
+
+print("parsing the sentic graph")
+f = open('../senticnet3.rdf.xml') # may need to adjust path
+g = rdflib.Graph()
+g.parse(f)
+print("done parsing")
 
 def error_handler(err):
     ex = err['exception']
@@ -125,11 +132,17 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
         comment_dict["text"]    = review["reviewText"]
         product_dict["comments"].append(comment_dict)
 
+    product_dict["asin"] = asin
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
-    processed_dict = calculateVectorsForAllComments(product_dict)
+    processed_dict = calculateVectorsForAllComments(product_dict, g)
     processed_dict["comments"] = sortListOfDicts(processed_dict["comments"])
+
+    # create the summary
+    processed_dict["summary"] = return_summary(processed_dict)
+
     processed_json = json.dumps(processed_dict, indent=4)
+
 
     ## TODO ADD IT TO THE DATABASE
     print ("Adding product with asin: ", asin, "to S3 ---", i)
@@ -143,6 +156,24 @@ def pushToS3(filename, jsonToUpload):
 #
 def sortListOfDicts(list_of_dicts):
     return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
+
+# pass a list of the most relevant comment texts (above a relevancy threshold, or just the first 5)
+def return_summary(product_dict):
+    comments_to_get = 10    # return the first n comments
+    comment_texts = list()
+    top_comments = product_dict["comments"][:comments_to_get]
+    for comment in top_comments:
+        if comment["relevancy"] > 0.2:
+            comment_texts.append(comment["text"])
+    #################################################
+
+    # if we don't get enough "good" comments, just return the first 5
+    if len(comment_texts) < 5:
+        comment_texts = list()
+        for comment in top_comments[:5]:
+            comment_texts.append(comment["text"])
+
+    return summarize(comment_texts)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Pass in UCSD review collection filename, amt of products to skip, and amt of products to upload')

@@ -7,3 +7,4 @@ SQLAlchemy==1.0.12
 rdflib==3.2.1
 nltk==3.2
 boto==2.39
+sumy==0.4.1
