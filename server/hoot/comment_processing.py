@@ -16,13 +16,22 @@ def calculateVectorsForAllComments(productID):
 # returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON, g):
     compound_emotion_dict = collections.defaultdict(int)
-    sentic_emotion_dict = collections.defaultdict(int)
 
     if "description" not in dictFromJSON:
         calculateRelevancy = False
         return json.dumps(dictFromJSON, indent=4)
 
     processed_comments = list()
+
+    compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
+
+    if "description" not in dictFromJSON:
+        calculateRelevancy = False
+        return json.dumps(dictFromJSON, indent=4)
+
+    # TODO add the product to the DB here
+
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     counter = 0
     for comment in dictFromJSON["comments"]:
@@ -50,19 +59,20 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
 
         ## CHANGE THIS TO USE A DICT TO PAIR KEY WITH VALUES
-        comment["sentic_emotions"] = [sentic.name for sentic in sentic_values]
+        sentic_dict = dict()
+        for sentic in sentic_values:
+            sentic_dict[sentic.name] = sentic.value
+        comment["sentic_emotions"] = sentic_dict
         processed_comments.append(comment)
 
         # add all compound_emotions to the default dictFromJSON
         for compound in comment["compound_emotions"]:
             compound_emotion_dict[compound] += 1
 
-        for sentic in comment["sentic_emotions"]:
-            sentic_emotion_dict[sentic] += 1
+        # TODO: add the comment to the database
 
     # get max key from emotions
     dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
-    dictFromJSON["max_sentic_emotion"] = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
     dictFromJSON["comments"] = processed_comments
     return dictFromJSON
 
