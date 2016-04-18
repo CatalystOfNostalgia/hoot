@@ -6,10 +6,10 @@ from sqlalchemy.dialects.mysql import DOUBLE
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
-class Multimedia(Base):
+class MultimediaEmotions(Base):
     __tablename__ = 'multimedia_emotions'
 
-    media_id     = Column(Integer, primary_key=True)
+    media_id     = Column(Integer, primary_key=True, autoincrement=True)
     pleasantness = Column(DOUBLE, nullable=False)
     attention    = Column(DOUBLE, nullable=False)
     sensitivity  = Column(DOUBLE, nullable=False)
