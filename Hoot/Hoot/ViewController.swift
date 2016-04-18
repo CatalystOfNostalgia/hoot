@@ -37,8 +37,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
-        searchSuggestionsTable.hidden = true
-        suggestions = hootAPI.getInitialSuggestions()
+        searchSuggestionsTable.hidden = true // TODO: Set this to false when we are ready to deploy
+        suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
         
         emotionCategories = UISegmentedControl(items: [
             EmotionClasses().admirationClass.name,
@@ -155,7 +155,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        suggestions = hootAPI.getSuggestions(searchText, emotionText: category) // Otherwise try to do useful things
+        var query: String? = nil
+        var emotion: String? = nil
+        if category != "" {
+            emotion = category
+        }
+        
+        if searchText != "" {
+            query = searchText
+        }
+        
+        suggestions = hootAPI.getSuggestions(query, emotionText: emotion) // Otherwise try to do useful things
         
         self.searchSuggestionsTable.reloadData()
     }
@@ -219,7 +229,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let selectedTitle: String = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex)!
         
         if selectedTitle == "Back" {
-            category = nil
+            category = ""
+            
             selectedControl.selectedSegmentIndex = -1
             selectedControl = emotionCategories
             selectedControl.selectedSegmentIndex = -1

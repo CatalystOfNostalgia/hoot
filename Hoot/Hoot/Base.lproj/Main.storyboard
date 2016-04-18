@@ -246,16 +246,16 @@
             </objects>
             <point key="canvasLocation" x="2058" y="474"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Reviews View Controller-->
         <scene sceneID="Qy3-7L-KzN">
             <objects>
-                <tableViewController id="XEC-Ve-gux" sceneMemberID="viewController">
+                <tableViewController id="XEC-Ve-gux" customClass="ReviewsViewController" customModule="Hoot" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="129" sectionHeaderHeight="28" sectionFooterHeight="28" id="CWu-EX-Ofq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="129" id="BsW-aN-ceK">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="129" id="BsW-aN-ceK" customClass="ReviewTableCell" customModule="Hoot" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="129"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BsW-aN-ceK" id="lLc-fH-fYF">
@@ -268,7 +268,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="8" y="8" width="87" height="21"/>
+                                                <rect key="frame" x="8" y="8" width="347" height="21"/>
                                             </variation>
                                         </label>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Rul-eN-eoO">
@@ -278,7 +278,7 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <variation key="widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="8" y="46" width="384" height="74.5"/>
+                                                <rect key="frame" x="8" y="46" width="347" height="74.5"/>
                                             </variation>
                                         </textView>
                                     </subviews>
@@ -296,6 +296,8 @@
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="relevancyLabel" destination="5I0-HJ-klp" id="te9-iR-kQg"/>
+                                    <outlet property="reviewTextPreview" destination="Rul-eN-eoO" id="bcx-55-bOl"/>
                                     <segue destination="pPj-so-pEY" kind="show" identifier="GoToCommentSpecifics" id="Kwd-Ze-kiP"/>
                                 </connections>
                             </tableViewCell>

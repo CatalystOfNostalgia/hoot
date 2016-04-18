@@ -10,7 +10,6 @@
 		E544A3FF1CBD624E00A1C380 /* ProductParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A3FE1CBD624E00A1C380 /* ProductParser.swift */; };
 		E544A4011CBD69D200A1C380 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A4001CBD69D200A1C380 /* ProductViewController.swift */; };
 		E544A4061CBD6C1C00A1C380 /* ReviewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */; };
-		E544A40A1CBDDA8900A1C380 /* IMG_0801.JPG in Resources */ = {isa = PBXBuildFile; fileRef = E544A4091CBDDA8900A1C380 /* IMG_0801.JPG */; };
 		E544A40E1CBDDC9A00A1C380 /* NoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = E544A40D1CBDDC9A00A1C380 /* NoImage.png */; };
 		E544A4101CBF39A900A1C380 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E544A40F1CBF39A900A1C380 /* TestData.swift */; };
 		E563AC3C1C8222D900246237 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC3B1C8222D900246237 /* AppDelegate.swift */; };
@@ -21,6 +20,8 @@
 		E563AC4F1C8232B200246237 /* Emotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC4E1C8232B200246237 /* Emotion.swift */; };
 		E563AC521C823A1900246237 /* HootAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC511C823A1900246237 /* HootAPI.swift */; };
 		E5654C9E1CC41F1F004E545E /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5654C9D1CC41F1F004E545E /* APIConfigs.swift */; };
+		E5654CA01CC46115004E545E /* HOOT.png in Resources */ = {isa = PBXBuildFile; fileRef = E5654C9F1CC46115004E545E /* HOOT.png */; };
+		E5654CA21CC4694B004E545E /* ReviewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5654CA11CC4694B004E545E /* ReviewTableCell.swift */; };
 		E5BCD6C41CB1E47500FA0060 /* SearchResultTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */; };
 		E5BCD6C61CB1E6CE00FA0060 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6C51CB1E6CE00FA0060 /* Product.swift */; };
 		E5BCD6CB1CB1EFD800FA0060 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6CA1CB1EFD800FA0060 /* Comment.swift */; };
@@ -30,7 +31,6 @@
 		E544A3FE1CBD624E00A1C380 /* ProductParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductParser.swift; sourceTree = "<group>"; };
 		E544A4001CBD69D200A1C380 /* ProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
 		E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewsViewController.swift; sourceTree = "<group>"; };
-		E544A4091CBDDA8900A1C380 /* IMG_0801.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_0801.JPG; sourceTree = "<group>"; };
 		E544A40D1CBDDC9A00A1C380 /* NoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NoImage.png; sourceTree = "<group>"; };
 		E544A40F1CBF39A900A1C380 /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		E563AC381C8222D900246237 /* Hoot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +43,8 @@
 		E563AC4E1C8232B200246237 /* Emotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emotion.swift; sourceTree = "<group>"; };
 		E563AC511C823A1900246237 /* HootAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HootAPI.swift; sourceTree = "<group>"; };
 		E5654C9D1CC41F1F004E545E /* APIConfigs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfigs.swift; sourceTree = "<group>"; };
+		E5654C9F1CC46115004E545E /* HOOT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HOOT.png; sourceTree = "<group>"; };
+		E5654CA11CC4694B004E545E /* ReviewTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewTableCell.swift; sourceTree = "<group>"; };
 		E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableCell.swift; sourceTree = "<group>"; };
 		E5BCD6C51CB1E6CE00FA0060 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		E5BCD6CA1CB1EFD800FA0060 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */,
 				E544A4001CBD69D200A1C380 /* ProductViewController.swift */,
 				E544A4051CBD6C1C00A1C380 /* ReviewsViewController.swift */,
+				E5654CA11CC4694B004E545E /* ReviewTableCell.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -158,8 +161,8 @@
 		E5BCD6C71CB1EBB700FA0060 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E5654C9F1CC46115004E545E /* HOOT.png */,
 				E544A40D1CBDDC9A00A1C380 /* NoImage.png */,
-				E544A4091CBDDA8900A1C380 /* IMG_0801.JPG */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -222,9 +225,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E544A40A1CBDDA8900A1C380 /* IMG_0801.JPG in Resources */,
 				E563AC461C8222D900246237 /* LaunchScreen.storyboard in Resources */,
 				E544A40E1CBDDC9A00A1C380 /* NoImage.png in Resources */,
+				E5654CA01CC46115004E545E /* HOOT.png in Resources */,
 				E563AC431C8222D900246237 /* Assets.xcassets in Resources */,
 				E563AC411C8222D900246237 /* Main.storyboard in Resources */,
 			);
@@ -239,6 +242,7 @@
 			files = (
 				E563AC521C823A1900246237 /* HootAPI.swift in Sources */,
 				E544A4101CBF39A900A1C380 /* TestData.swift in Sources */,
+				E5654CA21CC4694B004E545E /* ReviewTableCell.swift in Sources */,
 				E5BCD6C41CB1E47500FA0060 /* SearchResultTableCell.swift in Sources */,
 				E563AC3E1C8222D900246237 /* ViewController.swift in Sources */,
 				E5BCD6CB1CB1EFD800FA0060 /* Comment.swift in Sources */,

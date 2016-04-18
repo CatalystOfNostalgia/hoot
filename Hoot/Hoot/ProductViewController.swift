@@ -22,8 +22,19 @@ class ProductViewController: UIViewController {
     var emotionText: String?
     var product: String?
 
-    @IBAction func viewComments(sender: AnyObject) {
     
+    @IBAction func viewComments(sender: AnyObject) {
+        // Currently is do nothing 
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowReviews" {
+            print("balala") 
+            if let destination = segue.destinationViewController as? ReviewsViewController {
+                destination.comments = comments
+                print("woo")
+            }
+        }
     }
     
     override func viewDidLoad() {
