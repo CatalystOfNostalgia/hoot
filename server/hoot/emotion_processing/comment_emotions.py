@@ -55,6 +55,8 @@ def find_concepts(comment, start):
 
 
 def get_emotional_scores(concepts, g):
+    """ gets the emotional scores for concepts from the sentic database """
+
     sn = senticnet.Senticnet()
     scores = {}
 

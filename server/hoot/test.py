@@ -1,6 +1,5 @@
-import queries
-import unittest
-import string
+import queries, unittest, string, rdflib
+from emotion_processing.emotion import Emotion
 from emotion_processing.comment_emotions import *
 from sqlalchemy import create_engine
 from sqlalchemy.schema import Table
@@ -126,14 +125,20 @@ class TestCommentEmotions(unittest.TestCase):
                     film - you will not be dissapointed; I just wish the studio 
                     would have given a better Special Edition release than what
                     we have here. So enjoy!"""
+
         broken = broken.translate(str.maketrans('', '', string.punctuation))
         broken = broken.lower()
 
+        print ('starting up db')
+        f = open('senticnet3.rdf.xml')
+        g = rdflib.Graph()
+        g.parse(f)
+        print ('db started')
+
         concepts = find_concepts(broken, 2)
-        scores = get_emotional_scores(concepts)
+        scores = get_emotional_scores(concepts, g)
         average = calculate_average(scores)
-        print (average)
-
-
+        emotion = Emotion(average)
+        
 if __name__ == '__main__':
     unittest.main()
