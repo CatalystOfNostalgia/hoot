@@ -20,9 +20,9 @@ run:
 # run the test suite
 # WARNING will wipe the DB
 test:
-	/usr/local/bin/mysql.server restart
-	mysql -u root < sql/create_tables.sql
-	python3 hoot/test.py
+	@/usr/local/bin/mysql.server restart
+	@mysql -u root < sql/create_tables.sql
+	@python3 hoot/test.py
 
 # Deactivate virtualenv and delete it. 
 # Delete all the things 
