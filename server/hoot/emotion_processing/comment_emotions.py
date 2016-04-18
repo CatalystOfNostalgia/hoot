@@ -47,7 +47,10 @@ def find_concepts(comment, start):
 
         if last_concept is not None:
             output.append(last_concept)
+            sys.stdout.write('found: {}       \r'.format(last_concept))
+            sys.stdout.flush()
 
+    print('found {} concepts'.format(len(output)))
     return output
 
 
@@ -80,7 +83,6 @@ def calculate_average(scores):
         except KeyError:
             # Necessary since empty dicts are sometimes received
             continue
-
 
         average['pleasantness'] = \
             average['pleasantness'] + (sentics['pleasantness'] * score['polarity'])

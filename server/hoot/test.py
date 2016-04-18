@@ -1,9 +1,7 @@
 import queries
 import unittest
 import string
-from emotion_processing.comment_emotions import find_concepts, \
-                                                calculate_average, \
-                                                get_emotional_scores
+from emotion_processing.comment_emotions import *
 from sqlalchemy import create_engine
 from sqlalchemy.schema import Table
 from sqlalchemy import MetaData
@@ -100,8 +98,12 @@ class TestCommentEmotions(unittest.TestCase):
         none_concepts = find_concepts(none, 0)
         one_concepts  = find_concepts(one, 0)
         many_concepts = find_concepts(many, 0)
-        many_concepts_true = ['old', 'eat', 'bright', 'classic', 'old', 'can', \
-                              'pants', 'easy', 'cookie', 'big']
+        many_concepts_true = ['year', 'old', 'eat', 'bright', 'classic', \
+                              'year', 'old', 'spill', 'popcorn', 'exact', \
+                              'one', 'set', 'can', 'wet', 'pants', 'innocent', \
+                              'keeping', 'little', 'glued', 'first', 'message',\
+                              'easy', 'understand', 'cookie', 'sweet', 'big', \
+                              'green', 'take']
 
         self.assertEqual(len(none_concepts), 0, \
                          "Found concepts that didn't exist")
