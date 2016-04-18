@@ -29,8 +29,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var vigilanceCategory: UISegmentedControl!
     var selectedControl: UISegmentedControl!
     
-    var suggestions: [String] = []
+    var suggestions: [Product] = TestData.getTestData()
     var category: String = ""
+    var selectedRow: Int?
     
     override func viewDidLoad() {
         searchSuggestionsTable.delegate = self
@@ -49,7 +50,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             EmotionClasses().terrorClass.name,
             EmotionClasses().vigilanceClass.name])
         
-        emotionCategories.addTarget(self, action: "categoryValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        emotionCategories.addTarget(self, action: #selector(ViewController.categoryValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        emotionCategories.backgroundColor = UIColor.whiteColor()
         
         admirationCategory = UISegmentedControl(items: [
             "Back",
@@ -57,7 +59,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Trust",
             "Acceptance"])
 
-        admirationCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        admirationCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        admirationCategory.backgroundColor = UIColor.whiteColor()
         
         amazementCategory = UISegmentedControl(items: [
             "Back",
@@ -65,7 +68,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Surprise",
             "Distraction"])
         
-        amazementCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        amazementCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        amazementCategory.backgroundColor = UIColor.whiteColor()
         
         ecstasyCategory = UISegmentedControl(items: [
             "Back",
@@ -73,7 +77,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Joy",
             "Security"])
         
-        ecstasyCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        ecstasyCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        ecstasyCategory.backgroundColor = UIColor.whiteColor()
         
         griefCategory = UISegmentedControl(items: [
             "Back",
@@ -81,7 +86,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Sadness",
             "Pensiveness"])
         
-        griefCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        griefCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        griefCategory.backgroundColor = UIColor.whiteColor()
         
         loathingCategory = UISegmentedControl(items: [
             "Back",
@@ -89,7 +95,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Disgust",
             "Boredom"])
         
-        loathingCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        loathingCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        loathingCategory.backgroundColor = UIColor.whiteColor()
         
         rageCategory = UISegmentedControl(items: [
             "Back",
@@ -97,7 +104,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Anger",
             "Annoyance"])
         
-        rageCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        rageCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        rageCategory.backgroundColor = UIColor.whiteColor()
         
         terrorCategory = UISegmentedControl(items: [
             "Back",
@@ -105,7 +113,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Fear",
             "Apprehension"])
         
-        terrorCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        terrorCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        terrorCategory.backgroundColor = UIColor.whiteColor()
         
         vigilanceCategory = UISegmentedControl(items: [
             "Back",
@@ -113,7 +122,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Anticipation",
             "Interest"])
         
-        vigilanceCategory.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        vigilanceCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        vigilanceCategory.backgroundColor = UIColor.whiteColor()
         
         selectedControl = emotionCategories
         navBar.title = "Hoot"
@@ -145,11 +155,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            suggestions = hootAPI.getInitialSuggestions() // Display some default goodness
-        } else {
-            suggestions = hootAPI.getSuggestions(searchText) // Otherwise try to do useful things
-        }
+        suggestions = hootAPI.getSuggestions(searchText, emotionText: category) // Otherwise try to do useful things
         
         self.searchSuggestionsTable.reloadData()
     }
@@ -158,13 +164,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return 1
     }
     
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44.0
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return suggestions.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as UITableViewCell;
-        cell.textLabel?.text = suggestions[indexPath.row]
+        let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
+        cell.product = suggestions[indexPath.row]
+        cell.setValues()
+        // TODO: Implement product view stuff 
         return cell
     }
     
@@ -207,8 +219,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let selectedTitle: String = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex)!
         
         if selectedTitle == "Back" {
-            category = ""
-            selectedControl.selectedSegmentIndex = -1 
+            category = nil
+            selectedControl.selectedSegmentIndex = -1
             selectedControl = emotionCategories
             selectedControl.selectedSegmentIndex = -1
         } else {
@@ -216,8 +228,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         self.searchSuggestionsTable.reloadData()
-        
-        
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedRow = indexPath.row
+        performSegueWithIdentifier("GoToProductPage", sender: self)
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return selectedRow != nil
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "GoToProductPage" {
+            if let destination = segue.destinationViewController as? ProductViewController {
+                
+                guard let row = selectedRow where selectedRow != nil else {
+                    return
+                }
+                let product: Product = suggestions[row]
+                destination.product = product.name
+                destination.comments = product.comments
+                destination.emotionText = product.emotions
+                destination.summaryText = product.description
+                let cell = searchSuggestionsTable.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) as! SearchResultTableCell
+                destination.productImage = cell.thumbnail.image
+                
+                
+            }
+        }
+    }
+    
 }
 
