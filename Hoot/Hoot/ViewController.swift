@@ -51,6 +51,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             EmotionClasses().vigilanceClass.name])
         
         emotionCategories.addTarget(self, action: #selector(ViewController.categoryValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        emotionCategories.backgroundColor = UIColor.whiteColor()
         
         admirationCategory = UISegmentedControl(items: [
             "Back",
@@ -59,6 +60,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Acceptance"])
 
         admirationCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        admirationCategory.backgroundColor = UIColor.whiteColor()
         
         amazementCategory = UISegmentedControl(items: [
             "Back",
@@ -67,6 +69,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Distraction"])
         
         amazementCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        amazementCategory.backgroundColor = UIColor.whiteColor()
         
         ecstasyCategory = UISegmentedControl(items: [
             "Back",
@@ -75,6 +78,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Security"])
         
         ecstasyCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        ecstasyCategory.backgroundColor = UIColor.whiteColor()
         
         griefCategory = UISegmentedControl(items: [
             "Back",
@@ -83,6 +87,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Pensiveness"])
         
         griefCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        griefCategory.backgroundColor = UIColor.whiteColor()
         
         loathingCategory = UISegmentedControl(items: [
             "Back",
@@ -91,6 +96,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Boredom"])
         
         loathingCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        loathingCategory.backgroundColor = UIColor.whiteColor()
         
         rageCategory = UISegmentedControl(items: [
             "Back",
@@ -99,6 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Annoyance"])
         
         rageCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        rageCategory.backgroundColor = UIColor.whiteColor()
         
         terrorCategory = UISegmentedControl(items: [
             "Back",
@@ -107,6 +114,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Apprehension"])
         
         terrorCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        terrorCategory.backgroundColor = UIColor.whiteColor()
         
         vigilanceCategory = UISegmentedControl(items: [
             "Back",
@@ -115,6 +123,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             "Interest"])
         
         vigilanceCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        vigilanceCategory.backgroundColor = UIColor.whiteColor()
         
         selectedControl = emotionCategories
         navBar.title = "Hoot"
@@ -146,12 +155,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText == "" {
-            suggestions = hootAPI.getInitialSuggestions() // Display some default goodness
-        } else {
-            suggestions = hootAPI.getSuggestions(searchText) // Otherwise try to do useful things
-        }
+        suggestions = hootAPI.getSuggestions(searchText, emotionText: category) // Otherwise try to do useful things
         
         self.searchSuggestionsTable.reloadData()
     }
@@ -215,7 +219,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let selectedTitle: String = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex)!
         
         if selectedTitle == "Back" {
-            category = ""
+            category = nil
             selectedControl.selectedSegmentIndex = -1
             selectedControl = emotionCategories
             selectedControl.selectedSegmentIndex = -1

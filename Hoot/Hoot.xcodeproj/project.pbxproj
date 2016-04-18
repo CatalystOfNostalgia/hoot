@@ -20,6 +20,7 @@
 		E563AC461C8222D900246237 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E563AC441C8222D900246237 /* LaunchScreen.storyboard */; };
 		E563AC4F1C8232B200246237 /* Emotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC4E1C8232B200246237 /* Emotion.swift */; };
 		E563AC521C823A1900246237 /* HootAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E563AC511C823A1900246237 /* HootAPI.swift */; };
+		E5654C9E1CC41F1F004E545E /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5654C9D1CC41F1F004E545E /* APIConfigs.swift */; };
 		E5BCD6C41CB1E47500FA0060 /* SearchResultTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */; };
 		E5BCD6C61CB1E6CE00FA0060 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6C51CB1E6CE00FA0060 /* Product.swift */; };
 		E5BCD6CB1CB1EFD800FA0060 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BCD6CA1CB1EFD800FA0060 /* Comment.swift */; };
@@ -41,6 +42,7 @@
 		E563AC471C8222D900246237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E563AC4E1C8232B200246237 /* Emotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emotion.swift; sourceTree = "<group>"; };
 		E563AC511C823A1900246237 /* HootAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HootAPI.swift; sourceTree = "<group>"; };
+		E5654C9D1CC41F1F004E545E /* APIConfigs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfigs.swift; sourceTree = "<group>"; };
 		E5BCD6C31CB1E47500FA0060 /* SearchResultTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultTableCell.swift; sourceTree = "<group>"; };
 		E5BCD6C51CB1E6CE00FA0060 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		E5BCD6CA1CB1EFD800FA0060 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		E563AC3A1C8222D900246237 /* Hoot */ = {
 			isa = PBXGroup;
 			children = (
+				E5654C9C1CC41EC7004E545E /* Configs */,
 				E544A4111CBF39AF00A1C380 /* Testing */,
 				E544A3FD1CBD5A0800A1C380 /* Storyboards */,
 				E544A3FC1CBD59E900A1C380 /* ViewControllers */,
@@ -142,6 +145,14 @@
 				E563AC511C823A1900246237 /* HootAPI.swift */,
 			);
 			name = API;
+			sourceTree = "<group>";
+		};
+		E5654C9C1CC41EC7004E545E /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				E5654C9D1CC41F1F004E545E /* APIConfigs.swift */,
+			);
+			name = Configs;
 			sourceTree = "<group>";
 		};
 		E5BCD6C71CB1EBB700FA0060 /* Images */ = {
@@ -236,6 +247,7 @@
 				E544A4061CBD6C1C00A1C380 /* ReviewsViewController.swift in Sources */,
 				E544A4011CBD69D200A1C380 /* ProductViewController.swift in Sources */,
 				E563AC4F1C8232B200246237 /* Emotion.swift in Sources */,
+				E5654C9E1CC41F1F004E545E /* APIConfigs.swift in Sources */,
 				E5BCD6C61CB1E6CE00FA0060 /* Product.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
