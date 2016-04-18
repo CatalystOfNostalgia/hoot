@@ -10,7 +10,7 @@ import UIKit
 
 class ReviewsViewController: UITableViewController {
     var comments: [Comment]?
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell") as! ReviewTableCell
         let index = indexPath.row
@@ -18,7 +18,8 @@ class ReviewsViewController: UITableViewController {
             cell.relevancyLabel.text = "Relevancy: \(relevancy)"
         }
         cell.reviewTextPreview.text = comments![index].comment
-        return cell 
+        cell.reviewTextPreview.setContentOffset(CGPointZero, animated: false)
+        return cell
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
