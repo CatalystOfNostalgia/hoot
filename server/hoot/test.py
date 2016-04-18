@@ -113,7 +113,7 @@ class TestCommentEmotions(unittest.TestCase):
     def test_calculate_average(self):
         """ Tests getting emotional scores from a comment """
 
-        broken = """What has been said about the Dark Knight cannot be 
+        test = """What has been said about the Dark Knight cannot be 
                     elaborated on - so I won't. The film is muscling its way 
                     into my #1 favorite comic movie adaptation of all time. The 
                     reason for my review is in hopes of saving you some money. 
@@ -126,8 +126,11 @@ class TestCommentEmotions(unittest.TestCase):
                     would have given a better Special Edition release than what
                     we have here. So enjoy!"""
 
-        broken = broken.translate(str.maketrans('', '', string.punctuation))
-        broken = broken.lower()
+        test = test.translate(str.maketrans('', '', string.punctuation))
+        test = test.lower()
+
+        golden = {'sensitivity': 0.0625, 'aptitude': 0.7452, 'polarity': 0.0, \
+                  'pleasantness': 0.8657, 'attention': 0.1042}
 
         print ('starting up db')
         f = open('senticnet3.rdf.xml')
@@ -135,10 +138,21 @@ class TestCommentEmotions(unittest.TestCase):
         g.parse(f)
         print ('db started')
 
-        concepts = find_concepts(broken, 2)
+        concepts = find_concepts(test, 2)
         scores = get_emotional_scores(concepts, g)
         average = calculate_average(scores)
-        emotion = Emotion(average)
+
+        self.assertAlmostEqual(average['sensitivity'], golden['sensitivity'],\
+                                msg='got different sensitivity', places=3)
+        self.assertAlmostEqual(average['aptitude'], golden['aptitude'],\
+                                msg='got different aptitude', places=3)
+        self.assertAlmostEqual(average['polarity'], golden['polarity'],\
+                                msg='got different polarity', places=3)
+        self.assertAlmostEqual(average['pleasantness'], golden['pleasantness'],\
+                                msg='got different pleasantness', places=3)
+        self.assertAlmostEqual(average['attention'], golden['attention'],\
+                                msg='got different attention', places=3)
+
         
 if __name__ == '__main__':
     unittest.main()
