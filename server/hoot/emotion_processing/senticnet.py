@@ -1,16 +1,48 @@
 import rdflib
 import requests
 
+from rdflib import URIRef
+
+BASE_URI = 'http://sentic.net/api'
+
 
 class Senticnet(object):
     """
     Simple API to use Senticnet 3 without be bothered by RDF stuff.
     """
     def __init__(self):
-        self.concept_base_uri = "http://sentic.net/api/en/concept/"
-        self.senticapi_base_uri = "http://sentic.net/api"
+        self.concept_base_uri = BASE_URI + '/en/concept/'
 
-    def concept(self, concept):
+    def concept_local(self, concept, g):
+        """
+        Return all the information abou a concept from the local sentic db.
+        g must be a parsed RDF graph containing the sentic values.
+        """
+        if (None, None, concept) not in g:
+            print("{} not found in database!".format(concept))
+            return {}
+
+        result = {'sentics': {}}
+
+        # find the subject, the return generator will always have 1 object
+        subject = next(g.subjects(URIRef(BASE_URI + 'text'), concept))
+
+        for s, p, o in g.triples((subject, None, None)):
+            value = o.toPython()
+            if p == URIRef(BASE_URI + 'pleasantness'):
+                result['sentics']['pleasantness'] = value
+            elif p == URIRef(BASE_URI + 'aptitude'):
+                result['sentics']['aptitude'] = value
+            elif p == URIRef(BASE_URI + 'sensitivity'):
+                result['sentics']['sensitivity'] = value
+            elif p == URIRef(BASE_URI + 'attention'):
+                result['sentics']['attention'] = value
+            elif p == URIRef(BASE_URI + 'polarity'):
+                result['polarity'] = value
+
+        return result
+
+    def concept_api(self, concept):
         """
         Return all the information about a concept: semantics,
         sentics and polarity.
@@ -28,22 +60,22 @@ class Senticnet(object):
 
         return result
 
-    def semantics(self, concept, parsed_graph=None):
+    def semantics_api(self, concept, parsed_graph=None):
         """
         Return the semantics associated with a concept.
         If you pass a parsed graph, the method do not load the rdf again.
         """
-        concept_semantics_uri = self.concept_base_uri+concept+"/semantics"
+        concept_semantics_uri = self.concept_base_uri + concept + "/semantics"
         _, result = self._output(concept_semantics_uri)
 
         return [str(self._last_uri_element(x)) for x in result]
 
-    def sentics(self, concept, parsed_graph=None):
+    def sentics_api(self, concept, parsed_graph=None):
         """
         Return sentics of a concept.
         If you pass a parsed graph, the method do not load the rdf again.
         """
-        concept_sentics_uri = self.concept_base_uri+concept+"/sentics"
+        concept_sentics_uri = self.concept_base_uri + concept + "/sentics"
         sentics = {
             "pleasantness": 0,
             "attention": 0,

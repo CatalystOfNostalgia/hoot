@@ -1,7 +1,7 @@
 import string
-import senticnet
+import emotion_processing.senticnet as senticnet
 
-from emotion import Emotion
+from emotion_processing.emotion import Emotion
 
 
 def concept_search(query, start):
@@ -48,12 +48,12 @@ def find_concepts(comment, start):
     return output
 
 
-def get_emotional_scores(concepts):
+def get_emotional_scores(concepts, g):
     sn = senticnet.Senticnet()
     scores = {}
 
     for concept in concepts:
-        scores[concept] = sn.concept(concept)
+        scores[concept] = sn.concept_local(concept, g)
 
     return scores
 
@@ -100,12 +100,25 @@ def calculate_average(scores):
     return average
 
 
-def emotions(comment):
-    """Returns the emotion of the comment."""
+def emotions(comment, g):
+    """
+    Returns the emotion of the comment.
+
+    In order to initialize g do the following:
+
+        import rdflib
+
+        f = open('senticnet3.rdf.xml') # may need to adjust path
+        g = rdflib.Graph()
+        g.parse(f)
+
+    Initialize g in a place such that it will only be initialized once for
+    all products/comments, since it takes ~1 minute to initilize.
+    """
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
     concepts = find_concepts(comment, 2)
-    scores = get_emotional_scores(concepts)
+    scores = get_emotional_scores(concepts, g)
     average = calculate_average(scores)
     return Emotion(average)
