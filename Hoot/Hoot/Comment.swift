@@ -9,15 +9,15 @@
 import Foundation
 
 class Comment {
-    var emotions: [Emotion]?
+    var emotions: String?
     var comment: String?
     var userName: String?
-    var source: String?
+    var relevancy: Double?
     
-    init(emotions: [Emotion], comment: String, userName: String, source: String) {
+    init(emotions: String, comment: String, userName: String, relevancy: Double) {
         self.emotions = emotions
         self.comment = comment
         self.userName = userName
-        self.source = source
+        self.relevancy = relevancy
     }
 }
