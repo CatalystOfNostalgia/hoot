@@ -129,7 +129,7 @@ class TestCommentEmotions(unittest.TestCase):
         test = test.translate(str.maketrans('', '', string.punctuation))
         test = test.lower()
 
-        golden = {'sensitivity': 0.0625, 'aptitude': 0.7452, 'polarity': 0.0, \
+        golden = {'sensitivity': 0.0625, 'aptitude': 0.7452, 'polarity': 0.1982, \
                   'pleasantness': 0.8657, 'attention': 0.1042}
 
         print ('starting up db')

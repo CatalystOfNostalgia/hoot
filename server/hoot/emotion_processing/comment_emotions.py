@@ -104,6 +104,7 @@ def calculate_average(scores):
         if polarity_sum > 0:
             average[emotion] = average[emotion] / polarity_sum
 
+    average['polarity'] = polarity_sum / len(scores)
     return average
 
 
