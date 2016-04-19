@@ -15,7 +15,7 @@ INDEX_DIR = 'index'
 
 SCHEMA = Schema(
     product_name=TEXT(stored=True),
-    emotions=KEYWORD(stored=True),
+    emotions=KEYWORD(stored=True, scorable=True),
 )
 
 
@@ -39,7 +39,7 @@ def indexer():
         # find the sentic values of the media
         emotion = Emotion(emotions_dict)
         sentic_values = emotion.get_all_sentic_values()
-        sentic_values_string = ','.join([value.name for value in sentic_values])
+        sentic_values_string = ' '.join([value.name for value in sentic_values])
         # write to indexer
         writer.add_document(
             product_name=product.title,
