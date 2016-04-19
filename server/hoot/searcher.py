@@ -62,11 +62,17 @@ def build_json_from_results(results):
     for result in results:
         result_dict = {}
         result_dict['product_name'] = result['product_name']
-        result_dict['emotions'] = result['emotions']
+        result_dict['emotions'] = convert_emotions_to_list(result['emotions'])
         return_value.append(result_dict)
 
     return return_value
 
+
+def convert_emotions_to_list(emotions):
+    """
+    Converts the space deliminated list of emotions to a python list.
+    """
+    return [emotion for emotion in emotions.split()]
 
 if __name__ == '__main__':
     print(search('title'))
