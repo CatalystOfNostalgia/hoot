@@ -4,13 +4,6 @@ from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
 
-# currently uses my sampleText just as proof of concept
-# eventually load json of product from AWS
-# returns the JSON of the file, but with the vector space model included
-def calculateVectorsForAllComments(productID):
-    compound_emotion_dict = collections.defaultdict(int)
-    sentic_emotion_dict = collections.defaultdict(int)
-
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
 # returns the modified dictionary
@@ -33,10 +26,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     # TODO add the product to the DB here
 
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
-    counter = 0
     for comment in dictFromJSON["comments"]:
-        # print("     processing comment", counter, " for ASIN ", dictFromJSON["asin"])
-        counter += 1
         vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
         vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
         comment["vector_space"] = vectorized_comment
@@ -74,8 +64,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     # get max key from emotions
     dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
     dictFromJSON["comments"] = processed_comments
-    return dictFromJSON
 
+    return dictFromJSON
 
 def processFromAWS(productID):
     print("TODO")

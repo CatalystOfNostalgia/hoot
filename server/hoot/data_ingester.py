@@ -143,7 +143,6 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
 
     processed_json = json.dumps(processed_dict, indent=4)
 
-
     ## TODO ADD IT TO THE DATABASE
     print ("Adding product with asin: ", asin, "to S3 ---", i)
     pushToS3(filename, processed_json)
@@ -165,7 +164,6 @@ def return_summary(product_dict):
     for comment in top_comments:
         if comment["relevancy"] > 0.2:
             comment_texts.append(comment["text"])
-    #################################################
 
     # if we don't get enough "good" comments, just return the first 5
     if len(comment_texts) < 5:
