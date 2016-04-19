@@ -2,6 +2,7 @@ from indexer import INDEX_DIR
 from indexer import SCHEMA
 
 from whoosh import index
+from whoosh import query
 from whoosh.qparser import QueryParser
 
 
@@ -18,7 +19,7 @@ def search(product_name=None, emotion=None):
     elif emotion is None:
         return product_name_search(product_name, ix)
 
-    return {}
+    return product_name_search(product_name, ix, emotion)
 
 
 def emotion_search(emotion, ix):
@@ -33,15 +34,22 @@ def emotion_search(emotion, ix):
         return build_json_from_results(results)
 
 
-def product_name_search(product_name, ix):
+def product_name_search(product_name, ix, emotion=None):
     """
     Find all products that match the product_name.
     """
     qp = QueryParser('product_name', schema=SCHEMA)
     q = qp.parse(product_name)
 
+    if emotion is not None:
+        emotion_filter = query.Term('emotions', emotion)
+
     with ix.searcher() as s:
-        results = s.search(q)
+        if emotion is not None:
+            results = s.search(q, filter=emotion_filter)
+        else:
+            results = s.search(q)
+
         return build_json_from_results(results)
 
 
