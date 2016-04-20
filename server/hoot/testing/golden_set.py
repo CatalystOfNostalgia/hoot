@@ -26,7 +26,7 @@ for comment in data['comments']:
         print('\t\t{}'.format(sentic.name)) 
 
     print('\tcompound_emotion:')
-    for compound in compounds:
-        print('\t\t{}'.format(compound.name))
+    for compound, qualifier in compounds:
+        print('\t\t{} {}'.format(qualifier.name, compound.name))
     
     print('\n')
