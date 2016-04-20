@@ -1,3 +1,4 @@
+import json
 import os
 import os.path
 
@@ -44,20 +45,26 @@ def indexer():
         emotion = Emotion(emotions_dict)
         sentic_values = emotion.get_all_sentic_values()
         sentic_values_string = ' '.join([value.name for value in sentic_values])
+
+        s3_json = get_json_from_s3(product.title, product.asin)
+
         # write to indexer
         writer.add_document(
             product_name=product.title,
             emotions=sentic_values_string,
-            image_url=u'temp_url',
-            sumy=u'temp_sumy',
-            comments=u'temp_comments'
+            image_url=s3_json['image_url'],
+            sumy=s3_json['sumy'],
+            comments=json.dumps(s3_json['comments']),
         )
 
     writer.commit()
 
-    print('\n\nCONTENTS:')
-    for doc in ix.searcher().documents():
-        print(doc)
+
+def get_json_from_s3(product_name, asin):
+    """
+    Retrieves the json file from s3.
+    """
+    pass
 
 
 if __name__ == '__main__':
