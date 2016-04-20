@@ -63,6 +63,8 @@ def build_json_from_results(results):
         result_dict = {}
         result_dict['product_name'] = result['product_name']
         result_dict['emotions'] = convert_emotions_to_list(result['emotions'])
+        result_dict['image_url'] = result['image_url']
+        result_dict['sumy'] = result['sumy']
         return_value.append(result_dict)
 
     return return_value

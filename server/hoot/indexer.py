@@ -10,12 +10,16 @@ from whoosh import index
 from whoosh.fields import Schema
 from whoosh.fields import TEXT
 from whoosh.fields import KEYWORD
+from whoosh.fields import STORED
 
 INDEX_DIR = 'index'
 
 SCHEMA = Schema(
     product_name=TEXT(stored=True),
     emotions=KEYWORD(stored=True, scorable=True),
+    image_url=STORED,
+    sumy=STORED,
+    comments=STORED,
 )
 
 
@@ -43,7 +47,10 @@ def indexer():
         # write to indexer
         writer.add_document(
             product_name=product.title,
-            emotions=sentic_values_string
+            emotions=sentic_values_string,
+            image_url=u'temp_url',
+            sumy=u'temp_sumy',
+            comments=u'temp_comments'
         )
 
     writer.commit()
