@@ -42,6 +42,7 @@ captures/
 
 # Server modules
 server/env
+server/index
 *.pyc
 
 # AWS Config file
