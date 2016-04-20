@@ -29,6 +29,16 @@ def insert_media(title, creator, description, media_type, genre, asin):
     models.session.add(new_media)
     models.session.commit()
 
+def insert_media_emotion(media_id, emotion):
+    """ Adds an emotion to a media in the database """
+    new_emotion = models.multimedia_emotions\
+                        .MultimediaEmotions(media_id = media_id, \
+                                            emotion = emotion)
+
+    models.session.add(new_emotion)
+    models.session.commit()
+                                                    
+
 def find_media_by_asin(asin):
     """ Search the database by asin number """
     media = models.session.query(models.Multimedia).\
@@ -56,6 +66,18 @@ def find_comments_for_media(media_id):
         filter(models.Comments.item_id == media_id).all()
 
     return comments
+
+def find_emotions_for_media(media_id):
+    """ Finds all the emotions for a given media """
+    media_emotions = models.session.query(models.MultimediaEmotions).\
+                  filter(models.MultimediaEmotions.media_id == media_id).all()
+
+    emotions = []
+
+    for emotion in media_emotions:
+        emotions.append(emotion.emotion)
+    
+    return emotions
 
 def rollback():
     """" Resets the SQLAlchemy session

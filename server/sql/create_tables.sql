@@ -17,13 +17,9 @@ CREATE TABLE multimedia (
 );
 
 CREATE TABLE multimedia_emotions (
-    media_id int NOT NULL AUTO_INCREMENT,
-    pleasantness double,
-    attention double,
-    sensitivity double,
-    aptitude double,
-    polarity double,
-    PRIMARY KEY (media_id),
+    media_id int NOT NULL,
+    emotion varchar(50) NOT NULL, 
+    PRIMARY KEY (media_id, emotion),
     FOREIGN KEY (media_id) REFERENCES multimedia(media_id)
 );
 
@@ -52,15 +48,5 @@ CREATE TRIGGER update_num_comments AFTER INSERT ON comments
     END;
 
 |
-
--- new media entry -> new media_emotion entry
-CREATE TRIGGER add_multimedia_emotions AFTER INSERT ON multimedia
-    FOR EACH ROW
-    BEGIN
-        INSERT INTO multimedia_emotions () VALUES ();
-    END;
-
-|
             
-
 delimiter ;
