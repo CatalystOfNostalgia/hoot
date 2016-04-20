@@ -86,23 +86,23 @@ def calculate_average(scores):
             # Necessary since empty dicts are sometimes received
             continue
 
-        average['pleasantness'] = \
-            average['pleasantness'] + (sentics['pleasantness'] * score['polarity'])
+        weighted = {
+            'pleasantness': 0,
+            'attention': 0,
+            'sensitivity': 0,
+            'aptitude': 0,
+            'polarity': 0
+        }
 
-        average['attention'] = \
-            average['attention'] + (sentics['attention'] * score['polarity'])
+        for emotion in sentics:
+            weighted[emotion] = sentics[emotion] + 1 * score['polarity'] + 1
+            average[emotion]  = average[emotion] + weighted[emotion]
 
-        average['sensitivity'] = \
-            average['sensitivity'] + (sentics['sensitivity'] * score['polarity'])
-
-        average['aptitude'] = \
-            average['aptitude'] + (sentics['aptitude'] * score['polarity'])
-
-        polarity_sum = polarity_sum + score['polarity']
+        polarity_sum = polarity_sum + score['polarity'] + 1
 
     for emotion in average:
-        if polarity_sum > 0:
-            average[emotion] = average[emotion] / polarity_sum
+        if polarity_sum != 0:
+            average[emotion] = (average[emotion] / polarity_sum) - 1
 
     average['polarity'] = polarity_sum / len(scores)
     return average

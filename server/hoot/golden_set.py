@@ -10,7 +10,18 @@ with open('../senticnet3.rdf.xml', 'r') as f:
     g.parse(f)
 
 for comment in data['comments']:
-   emotion = emotions(comment, g)
-   print(comment[0:30])
-   print('\tsentic values: {}'.format(emotion.get_all_sentic_values()))
-   print('\tcompound_emotion: {}'.format(emotion.get_compound_emotion()))
+   emotion   = emotions(comment, g)
+   sentics   = emotion.get_all_sentic_values()
+   compounds = emotion.get_compound_emotion()
+
+   print(comment[0:60])
+   print('\temotion vector:')
+   print('\t\t{}'.format(emotion.emotion_vector))
+
+   print('\tsentic values:')
+   for sentic in sentics:
+      print('\t\t{}'.format(sentic.name)) 
+
+   print('\tcompound_emotion:')
+   for compound in compounds:
+       print('\t\t{}'.format(compound.name))
