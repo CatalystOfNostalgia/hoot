@@ -29,5 +29,5 @@ def push_to_S3(filename, jsonToUpload):
 
 def retrieve_from_S3(filename):
     key = bucket.new_key(filename)
-    contents = key.get_contents_as_string()
+    contents = key.get_contents_as_string().decode(encoding='UTF-8')
     return contents

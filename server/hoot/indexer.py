@@ -2,6 +2,7 @@ import json
 import os
 import os.path
 
+from aws_module import retrieve_from_S3
 from queries import get_all_media
 from queries import find_emotions_for_media
 
@@ -24,6 +25,9 @@ SCHEMA = Schema(
 
 
 def indexer():
+    """
+    Indexes all search criteria.
+    """
     if not os.path.exists(INDEX_DIR):
         os.mkdir(INDEX_DIR)
 
@@ -34,9 +38,9 @@ def indexer():
     products = get_all_media()
     for product in products:
         emotions = find_emotions_for_media(product.media_id)
-        sentic_values_string = ' '.join([value.name for value in emotions])
+        sentic_values_string = ' '.join([value for value in emotions])
 
-        s3_json = get_json_from_s3(product.title, product.asin)
+        s3_json = get_json_from_S3(product.title, product.asin)
 
         # trim comment dict
         comments = s3_json['comments']
@@ -50,18 +54,19 @@ def indexer():
             product_name=product.title,
             emotions=sentic_values_string,
             image_url=s3_json['image_url'],
-            sumy=s3_json['sumy'],
+            #sumy=s3_json['sumy'],
             comments=json.dumps(comments),
         )
 
     writer.commit()
 
 
-def get_json_from_s3(product_name, asin):
+def get_json_from_S3(product_name, asin):
     """
     Retrieves the json file from s3.
     """
-    pass
+    filename = '{}$$${}'.format(product_name, asin)
+    return json.loads(retrieve_from_S3(filename))
 
 
 if __name__ == '__main__':

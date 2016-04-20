@@ -66,7 +66,7 @@ def build_json_from_results(results):
         result_dict['product_name'] = result['product_name']
         result_dict['emotions'] = convert_emotions_to_list(result['emotions'])
         result_dict['image_url'] = result['image_url']
-        result_dict['sumy'] = result['sumy']
+        #result_dict['sumy'] = result['sumy']
         result_dict['comments'] = json.loads(result['comments'])
         return_value.append(result_dict)
 
@@ -79,6 +79,3 @@ def convert_emotions_to_list(emotions):
     """
     return [emotion for emotion in emotions.split()]
 
-if __name__ == '__main__':
-    print(search('title'))
-    print(search(None, 'sadness'))
