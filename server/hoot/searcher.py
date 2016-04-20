@@ -1,3 +1,5 @@
+import json
+
 from indexer import INDEX_DIR
 from indexer import SCHEMA
 
@@ -65,6 +67,7 @@ def build_json_from_results(results):
         result_dict['emotions'] = convert_emotions_to_list(result['emotions'])
         result_dict['image_url'] = result['image_url']
         result_dict['sumy'] = result['sumy']
+        result_dict['comments'] = json.loads(result['comments'])
         return_value.append(result_dict)
 
     return return_value

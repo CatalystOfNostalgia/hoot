@@ -38,13 +38,20 @@ def indexer():
 
         s3_json = get_json_from_s3(product.title, product.asin)
 
+        # trim comment dict
+        comments = s3_json['comments']
+        for comment in comments:
+            comment.pop('vector_space')
+            comment.pop('emotion_vector')
+            comment['relevancy'] = float('%2.f' % comment['relevancy'])
+
         # write to indexer
         writer.add_document(
             product_name=product.title,
             emotions=sentic_values_string,
             image_url=s3_json['image_url'],
             sumy=s3_json['sumy'],
-            comments=json.dumps(s3_json['comments']),
+            comments=json.dumps(comments),
         )
 
     writer.commit()
