@@ -1,5 +1,6 @@
-from emotion_processing.sentic_values import SenticValue
 from emotion_processing.compound_emotions import CompoundEmotion
+from emotion_processing.emotion_qualifiers import EmotionQualifier
+from emotion_processing.sentic_values import SenticValue
 
 interval_maps = {
     'pleasantness': {
@@ -168,6 +169,6 @@ class Emotion:
 
         for i in range(1, 4):
             if max_value < (cutoff * i) and value2 > 0:
-                return (pos_emotion, i)
+                return (pos_emotion, EmotionQualifier(i))
             elif max_value < (cutoff * i) and value2 < 0:
-                return (neg_emotion, i)
+                return (neg_emotion, EmotionQualifier(i))
