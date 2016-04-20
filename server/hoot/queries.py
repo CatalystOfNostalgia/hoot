@@ -29,6 +29,15 @@ def insert_media(title, creator, description, media_type, genre, asin):
     models.session.add(new_media)
     models.session.commit()
 
+def insert_media_emotion(media_id, emotion):
+    """ Adds an emotion to a media in the database """
+    new_emotion = models.multimedia.MultimediaEmotions(media_id = media_id, \
+                                                       emotion = emotion)
+
+    models.session.add(new_emotion)
+    models.session.commit()
+                                                    
+
 def find_media_by_asin(asin):
     """ Search the database by asin number """
     media = models.session.query(models.Multimedia).\
