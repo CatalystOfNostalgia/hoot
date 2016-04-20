@@ -73,10 +73,26 @@ def calculate_average(scores):
 
     average = {
         'pleasantness': 0,
-        'attention': 0,
-        'sensitivity': 0,
-        'aptitude': 0,
-        'polarity': 0
+        'attention':    0, 
+        'sensitivity':  0,
+        'polarity':     0,
+        'aptitude':     0
+    }
+
+    mins = {
+        'pleasantness': 100,
+        'attention':    100, 
+        'sensitivity':  100,
+        'polarity':     100,
+        'aptitude':     100
+    }
+
+    maxs = {
+        'pleasantness': 0,
+        'attention':    0, 
+        'sensitivity':  0,
+        'polarity':     0,
+        'aptitude':     0
     }
 
     for _, score in scores.items():
@@ -87,17 +103,16 @@ def calculate_average(scores):
             # Necessary since empty dicts are sometimes received
             continue
 
-        weighted = {
-            'pleasantness': 0,
-            'attention': 0,
-            'sensitivity': 0,
-            'aptitude': 0,
-            'polarity': 0
-        }
+        weighted = {}
 
         for emotion in sentics:
             weighted[emotion] = sentics[emotion] * abs(score['polarity'])
             average[emotion]  = average[emotion] + weighted[emotion]
+
+            if sentics[emotion] < mins[emotion]:
+                mins[emotion] = sentics[emotion] 
+            if sentics[emotion] > maxs[emotion]:
+                maxs[emotion] = sentics[emotion]
 
         polarity_sum = polarity_sum + score['polarity']
         polarity_denominator = polarity_denominator + abs(score['polarity'])
@@ -105,6 +120,8 @@ def calculate_average(scores):
     for emotion in average:
         if polarity_sum != 0:
             average[emotion] = (average[emotion] / polarity_denominator)
+            average[emotion] = 2 * ((average[emotion] - mins[emotion]) / \
+                                   (maxs[emotion] - mins[emotion])) - 1
 
     average['polarity'] = polarity_sum / len(scores)
     return average
