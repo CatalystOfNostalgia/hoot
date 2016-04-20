@@ -141,8 +141,9 @@ class TestCommentEmotions(unittest.TestCase):
         test = test.translate(str.maketrans('', '', string.punctuation))
         test = test.lower()
 
-        golden = {'sensitivity': 0.0625, 'aptitude': 0.7452, 'polarity': 0.1982, \
-                  'pleasantness': 0.8657, 'attention': 0.1042}
+        golden = {'sensitivity': -0.3454, 'aptitude': 0.7312, \
+                  'polarity': 0.1983, 'pleasantness': 0.5074, \
+                  'attention': 0.1225}
 
         print ('starting up db')
         f = open('senticnet3.rdf.xml')
@@ -154,6 +155,7 @@ class TestCommentEmotions(unittest.TestCase):
         scores = get_emotional_scores(concepts, g)
         average = calculate_average(scores)
 
+        print('average: {}'.format(average))
         self.assertAlmostEqual(average['sensitivity'], golden['sensitivity'],\
                                 msg='got different sensitivity', places=3)
         self.assertAlmostEqual(average['aptitude'], golden['aptitude'],\
