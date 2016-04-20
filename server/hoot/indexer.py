@@ -2,7 +2,6 @@ import json
 import os
 import os.path
 
-from emotion_processing.emotion import Emotion
 from queries import get_all_media
 from queries import find_emotions_for_media
 
@@ -34,17 +33,8 @@ def indexer():
 
     products = get_all_media()
     for product in products:
-        product_emotions = find_emotions_for_media(product.media_id)
-        emotions_dict = {
-            'pleasantness': product_emotions.pleasantness,
-            'aptitude': product_emotions.aptitude,
-            'attention': product_emotions.attention,
-            'sensitivity': product_emotions.sensitivity,
-        }
-        # find the sentic values of the media
-        emotion = Emotion(emotions_dict)
-        sentic_values = emotion.get_all_sentic_values()
-        sentic_values_string = ' '.join([value.name for value in sentic_values])
+        emotions = find_emotions_for_media(product.media_id)
+        sentic_values_string = ' '.join([value.name for value in emotions])
 
         s3_json = get_json_from_s3(product.title, product.asin)
 
