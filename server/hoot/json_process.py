@@ -1,10 +1,5 @@
 import json
 
-"""
-This script takes a comment in comment.txt and puts it in the json
-stored in samples.json
-"""
-
 with open('samples.json', 'r') as f:
     samples = json.loads(f.read())
 

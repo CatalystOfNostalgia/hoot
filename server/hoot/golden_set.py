@@ -1,12 +1,6 @@
 import json, rdflib
 from emotion_processing.comment_emotions import emotions
 
-"""
-Use this script to print out the emotions of every comment in samples.json
-you can add comments to samples.json by copying the comment into a text
-file names comment.txt and running json_process.py
-"""
-
 with open('samples.json', 'r') as samples:
     data = json.loads(samples.read())
 
