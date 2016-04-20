@@ -31,6 +31,16 @@ class TestQueries(unittest.TestCase):
         bat = queries.find_media_by_creator('Dario')
         self.is_batman_movie(bat[0])
 
+        queries.insert_media_emotion(bat[0].media_id, 'cool')
+        queries.insert_media_emotion(bat[0].media_id, 'dark')
+
+        emotions = queries.find_emotions_for_media(bat[0].media_id)
+
+        self.assertTrue('dark' in emotions, \
+                        "Didn't find all emotions for media")
+        self.assertTrue('cool' in emotions, \
+                        "Didn't find all emotions for media")
+
     def test_comments(self):
         """ Tests the insertion and deletion of comments """
 

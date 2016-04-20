@@ -18,7 +18,7 @@ CREATE TABLE multimedia (
 
 CREATE TABLE multimedia_emotions (
     media_id int NOT NULL,
-    emotion varchar(50) NOT NULL
+    emotion varchar(50) NOT NULL, 
     PRIMARY KEY (media_id, emotion),
     FOREIGN KEY (media_id) REFERENCES multimedia(media_id)
 );
