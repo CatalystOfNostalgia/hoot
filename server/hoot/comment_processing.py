@@ -3,6 +3,7 @@ import sys, nltk, string, json, math, collections
 from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
+from operator import itemgetter
 
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
@@ -63,7 +64,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
     # get max key from emotions
     dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
-    dictFromJSON["comments"] = processed_comments
+    dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
 
     return dictFromJSON
 
@@ -135,7 +136,7 @@ def getCosine(vec1, vec2):
         return float(numerator)/float(denominator)
 
 # used for sorting the comments by relevancy
-def sortListOfDicts(list_of_dicts):
+def sort_list_of_dicts(list_of_dicts):
     return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
 
 if __name__ == '__main__':

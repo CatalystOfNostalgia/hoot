@@ -1,34 +1,17 @@
 #! python3
-import json, gzip, time, bottlenose, random, boto, boto.s3.connection, argparse, os.path, rdflib
-from boto.s3.key import Key
+import json, gzip, time, random, argparse, os.path, rdflib
 from datetime import datetime
-from urllib.error import HTTPError
 import xml.etree.ElementTree as ET
+from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
 from operator import itemgetter
-from summarize import get_summary
-
-# Load the AWS key information
-f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
-configs = json.loads(f.read())
-
-s3conn = boto.connect_s3(aws_access_key_id=configs["aws_public_key"],aws_secret_access_key=configs["aws_secret_key"])
-bucket = s3conn.get_bucket("hootproject")
+# from summarize import get_summary
 
 print("parsing the sentic graph")
-f = open('../senticnet3.rdf.xml') # may need to adjust path
+f = open('../senticnet3.rdf.xml') # may need to adjust p
 g = rdflib.Graph()
 g.parse(f)
 print("done parsing")
-
-def error_handler(err):
-    ex = err['exception']
-    if isinstance(ex, HTTPError) and ex.code == 503:
-        time.sleep(random.expovariate(0.1))
-        return True
-
-def setupProductApi(public_key, secret_key, tag):
-    return bottlenose.Amazon(public_key, secret_key, tag, ErrorHandler=error_handler, MaxQPS=0.9)
 
 # for parsing the UCSD zipfiles
 def parse(path, skip, amount, productapi):
@@ -136,7 +119,6 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
     processed_dict = calculateVectorsForAllComments(product_dict, g)
-    processed_dict["comments"] = sortListOfDicts(processed_dict["comments"])
 
     # create the summary
     processed_dict["summary"] = return_summary(processed_dict)
@@ -145,16 +127,7 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
 
     ## TODO ADD IT TO THE DATABASE
     print ("Adding product with asin: ", asin, "to S3 ---", i)
-    pushToS3(filename, processed_json)
-
-def pushToS3(filename, jsonToUpload):
-    k = Key(bucket)
-    k.key = filename
-    k.set_contents_from_string(jsonToUpload)
-
-#
-def sortListOfDicts(list_of_dicts):
-    return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
+    push_to_S3(filename, processed_json)
 
 # pass a list of the most relevant comment texts (above a relevancy threshold, or just the first 5)
 def return_summary(product_dict):
@@ -171,7 +144,7 @@ def return_summary(product_dict):
         for comment in top_comments[:5]:
             comment_texts.append(comment["text"])
 
-    return summarize(comment_texts)
+    return get_summary(comment_texts)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Pass in UCSD review collection filename, amt of products to skip, and amt of products to upload')
@@ -187,7 +160,7 @@ if __name__ == '__main__':
     startTime = datetime.now()
     print ("starting")
 
-    productapi = setupProductApi(configs["aws_public_key"], configs["aws_secret_key"], configs["product_api_tag"])
+    productapi = setup_product_api()
     parse(filename, skip, amount, productapi)
 
     print ("seconds taken: ",datetime.now() - startTime)
