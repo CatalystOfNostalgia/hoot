@@ -94,22 +94,26 @@ class Emotion:
 
         if pleasantness > 0:
             first_emotion = self.get_compound_emotion_from_value(
+                pleasantness,
                 attention,
                 CompoundEmotion.optimism,
                 CompoundEmotion.frivolity
             )
             second_emotion = self.get_compound_emotion_from_value(
+                pleasantness,
                 aptitude,
                 CompoundEmotion.love,
                 CompoundEmotion.gloat
             )
         elif pleasantness < 0:
             first_emotion = self.get_compound_emotion_from_value(
+                pleasantness,
                 attention,
                 CompoundEmotion.frustration,
                 CompoundEmotion.disapproval
             )
             second_emotion = self.get_compound_emotion_from_value(
+                pleasantness,
                 aptitude,
                 CompoundEmotion.envy,
                 CompoundEmotion.remorse
@@ -125,36 +129,45 @@ class Emotion:
 
         if sensitivity > 0:
             third_emotion = self.get_compound_emotion_from_value(
+                sensitivity,
                 attention,
                 CompoundEmotion.aggressiveness,
                 CompoundEmotion.rejection
             )
             fourth_emotion = self.get_compound_emotion_from_value(
+                sensitivity,
                 aptitude,
                 CompoundEmotion.rivalry,
                 CompoundEmotion.contempt
             )
         elif sensitivity < 0:
             third_emotion = self.get_compound_emotion_from_value(
+                sensitivity,
                 attention,
                 CompoundEmotion.anxiety,
                 CompoundEmotion.awe
             )
             fourth_emotion = self.get_compound_emotion_from_value(
+                sensitivity,
                 aptitude,
                 CompoundEmotion.submission,
                 CompoundEmotion.coercion
             )
 
-        if third_emotion:
+        if third_emotion is not None:
             emotions.append(third_emotion)
-        if fourth_emotion:
+        if fourth_emotion is not None:
             emotions.append(fourth_emotion)
 
         return emotions
 
-    def get_compound_emotion_from_value(self, value, pos_emotion, neg_emotion):
-        if value > 0:
-            return pos_emotion
-        elif value < 0:
-            return neg_emotion
+    def get_compound_emotion_from_value(self, value1, value2,
+                                        pos_emotion, neg_emotion):
+        cutoff = 1 / 3
+        max_value = max(abs(value1), abs(value2))
+
+        for i in range(1, 4):
+            if max_value < (cutoff * i) and value2 > 0:
+                return (pos_emotion, i)
+            elif max_value < (cutoff * i) and value2 < 0:
+                return (neg_emotion, i)
