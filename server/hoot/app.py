@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 
-from serach import search
+from searcher import search
 
 app = Flask(__name__)
 api = Api(app)
