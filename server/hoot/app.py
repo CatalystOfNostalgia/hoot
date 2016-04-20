@@ -16,12 +16,11 @@ class MultimediaAPI(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('product', type=str)
         parser.add_argument('emotion', type=str)
+	args = parser.parse_args()
+	return search(args['product'], args['emotion'])
 
-        args = parser.parse_args()
-        return search(args['product'], args['emotion'])
 
 api.add_resource(MultimediaAPI, '/search', endpoint='search')
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=80)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)

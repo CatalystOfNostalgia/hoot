@@ -3,7 +3,7 @@
 install:
 	brew install mysql
 	sudo pip install virtualenv
-	virtualenv env
+	virtualenv -p /usr/bin/python3 env
 	env/bin/pip install -Ur requirements.txt;
 	@echo 'installed'
 
@@ -16,6 +16,10 @@ run:
 	mysql -u root < sql/create_tables.sql
 	#chmod a+x hoot/app.py
 	#hoot/./app.py
+
+update_dir:
+	rm -rf /var/www/html/hoot/
+	cp -r /home/ubuntu/hoot/server/. /var/www/html/hoot/
 
 # run the test suite
 # WARNING will wipe the DB
