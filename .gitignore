@@ -1,4 +1,4 @@
-# XCode stuff 
+# XCode stuff
 
 Hoot/.DS_Store
 Hoot/Hoot.xcodeproj/xcuserdata/
@@ -43,3 +43,6 @@ captures/
 # Server modules
 server/env
 *.pyc
+
+# AWS Config file
+server/keys

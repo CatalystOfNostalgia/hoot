@@ -1,36 +1,83 @@
 #! python3
-import sys
-import nltk
+import sys, nltk, string, json, math, collections
 from nltk.corpus import stopwords
 from nltk import stem
+from emotion_processing.comment_emotions import emotions
 
-import string
-import json
-import math
+# dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
+# adds relevancy rating (and eventually emotional rating) for all comments in the dict
+# returns the modified dictionary
+def calculateVectorsForAllComments(dictFromJSON, g):
+    compound_emotion_dict = collections.defaultdict(int)
 
-# currently uses my sampleText just as proof of concept
-# eventually load json of product from AWS
-# returns the JSON of the file, but with the vector space model included
-def calculateVectorsForAllComments(productID):
-    jsonfile = open("sampleText.json", 'r+')
-    filetext = jsonfile.read()
-    dictFromJSON = json.loads(filetext)
+    if "description" not in dictFromJSON:
+        calculateRelevancy = False
+        return json.dumps(dictFromJSON, indent=4)
+
+    processed_comments = list()
+
+    compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
+
+    if "description" not in dictFromJSON:
+        calculateRelevancy = False
+        return json.dumps(dictFromJSON, indent=4)
+
+    # TODO add the product to the DB here
 
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
-        # we dont want to calculate the vector every time
-        if "vector_space" in comment:
-            print("VSM already exists for this comment")
+        vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
+        comment["vector_space"] = vectorized_comment
+        relevancy = getCosine(vectorized_comment, vectorized_desc)
+
+        if relevancy < 0.15:
             continue
 
-        comment["vector_space"] = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
+        comment["relevancy"] = relevancy
 
-    return json.dumps(dictFromJSON)
+        # add emotional score
+        comment_emotion = emotions(comment["text"], g)
+        comment["emotion_vector"] = comment_emotion.emotion_vector
+
+        compound_emotions = comment_emotion.get_compound_emotion()
+        sentic_values = comment_emotion.get_all_sentic_values()
+
+        sentic_values = [value for value in sentic_values if value is not None]
+
+        comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
+
+        ## CHANGE THIS TO USE A DICT TO PAIR KEY WITH VALUES
+        sentic_dict = dict()
+        for sentic in sentic_values:
+            sentic_dict[sentic.name] = sentic.value
+        comment["sentic_emotions"] = sentic_dict
+        processed_comments.append(comment)
+
+        # add all compound_emotions to the default dictFromJSON
+        for compound in comment["compound_emotions"]:
+            compound_emotion_dict[compound] += 1
+
+        # TODO: add the comment to the database
+
+    # get max key from emotions
+    dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
+    dictFromJSON["comments"] = processed_comments
+
+    return dictFromJSON
+
+def processFromAWS(productID):
+    print("TODO")
+    jsonfile = open("sampleText.json", 'r+')
+    filetext = jsonfile.read()
+    dictFromJSON = json.loads(filetext)
+    calculateVectorsForAllComments(dictFromJSON)
 
 # tokenize, stem, and remove stopwords from document
 def tokenizeDocument(document):
     # remove punctuation (otherwise we have a bunch of empty tokens at the end)
-    translate_table = dict((ord(char), None) for char in string.punctuation)
+    translate_table = dict((ord(char), " ") for char in string.punctuation)
     document = document.translate(translate_table)
     # tokenize
     tokenized_doc = nltk.word_tokenize(document)
@@ -74,6 +121,23 @@ def calculateVector(tokenized_comment, tokenized_docs):
 
     return vector_space_model
 
+def getCosine(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+
+    sum1 = sum([vec1[x]**2 for x in vec1.keys()])
+    sum2 = sum([vec2[x]**2 for x in vec2.keys()])
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    if not denominator:
+        return 0.0
+    else:
+        return float(numerator)/float(denominator)
+
+# used for sorting the comments by relevancy
+def sortListOfDicts(list_of_dicts):
+    return sorted(list_of_dicts, key=itemgetter('relevancy'), reverse=True)
+
 if __name__ == '__main__':
-    new_jsonfile = dictFromJSON = calculateRelevancyFromJSON("whatever we need to get the file from AWS")
+    new_jsonfile = calculateVectorsForAllComments("whatever we need to get the file from AWS")
     print(new_jsonfile)
