@@ -26,7 +26,7 @@ update_dir:
 test:
 	@/usr/local/bin/mysql.server restart
 	@mysql -u root < sql/create_tables.sql
-	@python3 hoot/test.py
+	@python3 hoot/testing/test.py
 
 # Deactivate virtualenv and delete it. 
 # Delete all the things 
