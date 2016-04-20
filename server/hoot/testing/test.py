@@ -1,4 +1,6 @@
-import queries, unittest, string, rdflib
+import unittest, string, rdflib, sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import queries
 from emotion_processing.emotion import Emotion
 from emotion_processing.comment_emotions import *
 from sqlalchemy import create_engine
