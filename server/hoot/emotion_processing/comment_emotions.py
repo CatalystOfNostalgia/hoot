@@ -69,6 +69,7 @@ def get_emotional_scores(concepts, g):
 def calculate_average(scores):
     """Calculates the average emotion vector."""
     polarity_sum = 0
+    polarity_denominator = 0
 
     average = {
         'pleasantness': 0,
@@ -95,14 +96,15 @@ def calculate_average(scores):
         }
 
         for emotion in sentics:
-            weighted[emotion] = sentics[emotion] + 1 * score['polarity'] + 1
+            weighted[emotion] = sentics[emotion] * abs(score['polarity'])
             average[emotion]  = average[emotion] + weighted[emotion]
 
-        polarity_sum = polarity_sum + score['polarity'] + 1
+        polarity_sum = polarity_sum + score['polarity']
+        polarity_denominator = polarity_denominator + abs(score['polarity'])
 
     for emotion in average:
         if polarity_sum != 0:
-            average[emotion] = (average[emotion] / polarity_sum) - 1
+            average[emotion] = (average[emotion] / polarity_denominator)
 
     average['polarity'] = polarity_sum / len(scores)
     return average
