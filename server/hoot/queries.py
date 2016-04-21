@@ -17,12 +17,11 @@ def insert_comment(item_id, relevancy, pleasantness, attention,
     models.session.add(new_comment)
     models.session.commit()
 
-def insert_media(title, creator, description, media_type, genre, asin):
+def insert_media(title, creator, description, media_type, asin):
     """ Inserts media into the database """
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
                                               media_type = media_type, \
-                                              genre = genre, \
                                               asin = asin )
     models.session.add(new_media)
     models.session.commit()
