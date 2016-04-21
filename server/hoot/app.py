@@ -23,4 +23,4 @@ class MultimediaAPI(Resource):
 api.add_resource(MultimediaAPI, '/search', endpoint='search')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, debug=True)
