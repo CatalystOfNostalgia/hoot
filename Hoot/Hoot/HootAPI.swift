@@ -41,12 +41,14 @@ class HootAPI {
                 return
             } else {
                 // TODO: Handle proper response
+                self.products = ProductParser().parseProducts(data!)
+                
             }
             
         }
         
         dataTask.resume()
-        return TestData.getTestData()
+        return products
     }
     
 }

@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_0801.JPG" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-pl-svY">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HOOT.png" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-pl-svY">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="80" y="51" width="240" height="302"/>
+                                    <rect key="frame" x="20" y="28" width="360" height="364"/>
                                 </variation>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hoot" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuz-xo-d7i">
@@ -55,6 +55,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IMG_0801.JPG" width="2080" height="3126"/>
+        <image name="HOOT.png" width="960" height="720"/>
     </resources>
 </document>
