@@ -10,3 +10,4 @@ nltk==3.2
 boto==2.39
 sumy==0.4.1
 bottlenose==0.6.3
+Whoosh==2.7.4
