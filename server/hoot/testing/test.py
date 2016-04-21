@@ -17,14 +17,14 @@ class TestQueries(unittest.TestCase):
         """ inserts test data """
 
         queries.insert_media('Batman: The Return of the Force', 'Dario', \
-                             'A really cool movie', 'Film', '0440419395')
+                             'A really cool movie', 'Film', '0440419395', 11)
 
     def test_insert_media(self):
         """ Tests if media is inserted and retrieved correctly """
 
         # can we find the movie?
         bat = queries.find_media_by_asin('0440419395')
-        self.is_batman_movie(bat[0])
+        self.is_batman_movie(bat)
 
         bat = queries.find_media_by_title('Batman: The Return of the Force')
         self.is_batman_movie(bat[0])
@@ -32,21 +32,49 @@ class TestQueries(unittest.TestCase):
         bat = queries.find_media_by_creator('Dario')
         self.is_batman_movie(bat[0])
 
-        queries.insert_media_emotion(bat[0].media_id, 'cool')
-        queries.insert_media_emotion(bat[0].media_id, 'dark')
 
-        emotions = queries.find_emotions_for_media(bat[0].media_id)
+    def test_updating_media(self):
+        """ Tests updating media and media emotions """
+
+        bat = queries.find_media_by_asin('0440419395')
+
+        # testing updating the emotions
+        queries.insert_media_emotion(bat.media_id, 'cool')
+        queries.insert_media_emotion(bat.media_id, 'dark')
+
+        emotions = queries.find_emotions_for_media(bat.media_id)
 
         self.assertTrue('dark' in emotions, \
                         "Didn't find all emotions for media")
         self.assertTrue('cool' in emotions, \
                         "Didn't find all emotions for media")
 
+        # test updating the last_updated column
+        queries.update_media(bat.media_id, 20)
+
+        self.assertEqual(bat.last_updated, 20, \
+                         'Did not updated date properly')
+        
+    def test_clean(self):
+        """ Tests cleaning the database of comments and emotions """
+
+        bat = queries.find_media_by_asin('0440419395')
+        queries.insert_comment(bat.media_id, 11, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
+
+        queries.clean_media(bat.media_id)
+
+        comments = queries.find_comments_for_media(bat.media_id)
+        emotions = queries.find_emotions_for_media(bat.media_id)
+
+        self.assertEqual(len(comments), 0)
+        self.assertEqual(len(emotions), 0)
+
+
     def test_comments(self):
         """ Tests the insertion and deletion of comments """
 
         bat = queries.find_media_by_creator('Dario')
-        queries.insert_comment(bat[0].media_id, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
+        queries.insert_comment(bat[0].media_id, 11, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
         comments = queries.find_comments_for_media(bat[0].media_id)
 
         # can we find the comments?
@@ -103,7 +131,9 @@ class TestCommentEmotions(unittest.TestCase):
                 cookie cutter sweet and sappy. Score for the big green guy. 
                 I'd take him home."""
 
-        none_concepts = find_concepts(none, 0)
+        with self.assertRaises(ConceptError):
+            find_concepts(none, 0)
+
         one_concepts  = find_concepts(one, 0)
         many_concepts = find_concepts(many, 0)
         many_concepts_true = ['year', 'old', 'eat', 'bright', 'classic', \
@@ -113,8 +143,6 @@ class TestCommentEmotions(unittest.TestCase):
                               'easy', 'understand', 'cookie', 'sweet', 'big', \
                               'green', 'take']
 
-        self.assertEqual(len(none_concepts), 0, \
-                         "Found concepts that didn't exist")
         self.assertEqual(one_concepts[0], 'dark', 'Did not find proper concept')
         self.assertEqual(many_concepts, many_concepts_true, \
                          'Did not find all concepts')
@@ -152,7 +180,6 @@ class TestCommentEmotions(unittest.TestCase):
         scores = get_emotional_scores(concepts, g)
         average = calculate_average(scores)
 
-        print('average: {}'.format(average))
         self.assertAlmostEqual(average['sensitivity'], golden['sensitivity'],\
                                 msg='got different sensitivity', places=3)
         self.assertAlmostEqual(average['aptitude'], golden['aptitude'],\

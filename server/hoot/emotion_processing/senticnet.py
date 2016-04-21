@@ -60,7 +60,7 @@ class Senticnet(object):
             print("{} not found in database!".format(concept))
             return {}
 
-        sys.stdout.write('got values for: {}     \r'.format(concept))
+        sys.stdout.write('got values for: {}                \r'.format(concept))
         sys.stdout.flush()
         return result
 

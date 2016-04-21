@@ -14,5 +14,6 @@ class Multimedia(Base):
     description  = Column(String(100), nullable=False)
     media_type   = Column(String(100), nullable=False)
     asin         = Column(String(100), nullable=False)
+    last_updated = Column(Integer, nullable=False)
     number_of_comments = Column(Integer, nullable=False, default=0)
 
