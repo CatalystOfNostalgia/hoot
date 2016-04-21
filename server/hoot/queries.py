@@ -4,10 +4,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 import models
 from sqlalchemy import func
 
-def insert_comment(item_id, relevancy, pleasantness, attention, \
+def insert_comment(item_id, relevancy, pleasantness, attention,
                    sensitivity, aptitude, polarity):
     """ inserts an entry into the comments table """
-    
     new_comment = models.comments.Comments( item_id = item_id, \
                                             relevancy = relevancy, \
                                             pleasantness = pleasantness, \
@@ -17,15 +16,13 @@ def insert_comment(item_id, relevancy, pleasantness, attention, \
                                             polarity = polarity)
     models.session.add(new_comment)
     models.session.commit()
-                                          
-def insert_media(title, creator, description, media_type, genre, asin):
+
+def insert_media(title, creator, description, media_type, asin):
     """ Inserts media into the database """
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
                                               media_type = media_type, \
-                                              genre = genre, \
                                               asin = asin )
-
     models.session.add(new_media)
     models.session.commit()
 
@@ -37,7 +34,9 @@ def insert_media_emotion(media_id, emotion):
 
     models.session.add(new_emotion)
     models.session.commit()
-                                                    
+
+def get_all_media():
+    return models.session.query(models.Multimedia).all()
 
 def find_media_by_asin(asin):
     """ Search the database by asin number """
@@ -60,6 +59,9 @@ def find_media_by_creator(creator):
 
     return media
 
+def find_emotions_for_media(media_id):
+    return models.session.query(models.MultimediaEmotions).get(media_id)
+
 def find_comments_for_media(media_id):
     """ Find all comments associated with a media """
     comments = models.session.query(models.Comments).\
@@ -76,12 +78,12 @@ def find_emotions_for_media(media_id):
 
     for emotion in media_emotions:
         emotions.append(emotion.emotion)
-    
+
     return emotions
 
 def rollback():
     """" Resets the SQLAlchemy session
-    Use this if an exception is thrown or else you cannot make subsequent 
+    Use this if an exception is thrown or else you cannot make subsequent
     queries
     """
     models.session.rollback()

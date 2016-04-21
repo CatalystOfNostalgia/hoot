@@ -42,7 +42,11 @@ captures/
 
 # Server modules
 server/env
+server/index
 *.pyc
+
+# file to feed into samples.json
+comment.txt
 
 # AWS Config file
 server/keys

@@ -1,4 +1,6 @@
-import queries, unittest, string, rdflib
+import unittest, string, rdflib, sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import queries
 from emotion_processing.emotion import Emotion
 from emotion_processing.comment_emotions import *
 from sqlalchemy import create_engine
@@ -15,8 +17,7 @@ class TestQueries(unittest.TestCase):
         """ inserts test data """
 
         queries.insert_media('Batman: The Return of the Force', 'Dario', \
-                             'A really cool movie', 'Film', 'Romance', \
-                             '0440419395')
+                             'A really cool movie', 'Film', '0440419395')
 
     def test_insert_media(self):
         """ Tests if media is inserted and retrieved correctly """
@@ -80,8 +81,6 @@ class TestQueries(unittest.TestCase):
                          'Retrieved incorrect descriptiom')
         self.assertEqual(movie.media_type, 'Film', \
                          'Retrieved incorrect media type')
-        self.assertEqual(movie.genre, 'Romance', \
-                         'Retrieved incorrect genre')
         self.assertEqual(movie.asin, '0440419395', \
                          'Retrieved incorrect asin')
 
@@ -139,8 +138,9 @@ class TestCommentEmotions(unittest.TestCase):
         test = test.translate(str.maketrans('', '', string.punctuation))
         test = test.lower()
 
-        golden = {'sensitivity': 0.0625, 'aptitude': 0.7452, 'polarity': 0.1982, \
-                  'pleasantness': 0.8657, 'attention': 0.1042}
+        golden = {'sensitivity': -0.3454, 'aptitude': 0.7312, \
+                  'polarity': 0.1983, 'pleasantness': 0.5074, \
+                  'attention': 0.1225}
 
         print ('starting up db')
         f = open('senticnet3.rdf.xml')
@@ -152,6 +152,7 @@ class TestCommentEmotions(unittest.TestCase):
         scores = get_emotional_scores(concepts, g)
         average = calculate_average(scores)
 
+        print('average: {}'.format(average))
         self.assertAlmostEqual(average['sensitivity'], golden['sensitivity'],\
                                 msg='got different sensitivity', places=3)
         self.assertAlmostEqual(average['aptitude'], golden['aptitude'],\

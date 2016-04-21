@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 import string
 import emotion_processing.senticnet as senticnet
@@ -70,14 +70,20 @@ def calculate_average(scores):
     """Calculates the average emotion vector."""
     polarity_sum = 0
 
-    average = {
+    emotion_template = {
         'pleasantness': 0,
-        'attention': 0,
-        'sensitivity': 0,
-        'aptitude': 0,
-        'polarity': 0
+        'attention':    0, 
+        'sensitivity':  0,
+        'polarity':     0,
+        'aptitude':     0
     }
 
+    average, polarity = {}, {}
+
+    average.update(emotion_template)
+    polarity.update(emotion_template)
+
+    
     for _, score in scores.items():
 
         try:
@@ -86,23 +92,19 @@ def calculate_average(scores):
             # Necessary since empty dicts are sometimes received
             continue
 
-        average['pleasantness'] = \
-            average['pleasantness'] + (sentics['pleasantness'] * score['polarity'])
+        weighted = {}
 
-        average['attention'] = \
-            average['attention'] + (sentics['attention'] * score['polarity'])
+        for emotion in sentics:
+            if sentics[emotion] != 0 and score['polarity'] != 0:
+                weighted[emotion] = sentics[emotion]  * abs(score['polarity'])
+                average[emotion]  = average[emotion]  + weighted[emotion]
+                polarity[emotion] = polarity[emotion] + abs(score['polarity'])
 
-        average['sensitivity'] = \
-            average['sensitivity'] + (sentics['sensitivity'] * score['polarity'])
-
-        average['aptitude'] = \
-            average['aptitude'] + (sentics['aptitude'] * score['polarity'])
-
-        polarity_sum = polarity_sum + score['polarity']
+        polarity_sum = polarity_sum + score['polarity'] 
 
     for emotion in average:
-        if polarity_sum > 0:
-            average[emotion] = average[emotion] / polarity_sum
+        if polarity[emotion] != 0:
+            average[emotion] = (average[emotion] / polarity[emotion])
 
     average['polarity'] = polarity_sum / len(scores)
     return average
@@ -123,10 +125,13 @@ def emotions(comment, g):
     Initialize g in a place such that it will only be initialized once for
     all products/comments, since it takes ~1 minute to initilize.
     """
+    start = time.time()    
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
     concepts = find_concepts(comment, 2)
     scores = get_emotional_scores(concepts, g)
     average = calculate_average(scores)
+    end = time.time()
+    print('time: {}'.format(end - start))
     return Emotion(average)
