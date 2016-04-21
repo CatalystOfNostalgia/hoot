@@ -9,6 +9,7 @@ from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
 from operator import itemgetter
+from emotion_processing.comment_emotions import ConceptError
 
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
@@ -35,7 +36,12 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         comment["relevancy"] = relevancy
 
         # add emotional score
-        comment_emotion = emotions(comment["text"], g)
+        try:
+            comment_emotion = emotions(comment["text"], g)
+        except ConceptError:
+            print("Not enough concepts to do anything useful - skipping this product")
+            continue
+
         comment["emotion_vector"] = comment_emotion.emotion_vector
 
         compound_emotions = comment_emotion.get_compound_emotion()
