@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 
-from searcher import search
+from search.searcher import search
 
 app = Flask(__name__)
 api = Api(app)
@@ -16,8 +16,8 @@ class MultimediaAPI(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('product', type=str)
         parser.add_argument('emotion', type=str)
-	args = parser.parse_args()
-	return search(args['product'], args['emotion'])
+        args = parser.parse_args()
+        return search(args['product'], args['emotion'])
 
 
 api.add_resource(MultimediaAPI, '/search', endpoint='search')

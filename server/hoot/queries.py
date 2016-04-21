@@ -41,7 +41,7 @@ def get_all_media():
 def find_media_by_asin(asin):
     """ Search the database by asin number """
     media = models.session.query(models.Multimedia).\
-        filter(models.Multimedia.asin == asin).all()
+        filter(models.Multimedia.asin == asin).one()
 
     return media
 
