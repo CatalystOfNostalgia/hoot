@@ -19,9 +19,6 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
     processed_comments = list()
 
-    compound_emotion_dict = collections.defaultdict(int)
-    sentic_emotion_dict = collections.defaultdict(int)
-
     # the product model from the DB
     product = queries.find_media_by_asin(dictFromJSON["asin"])
 
