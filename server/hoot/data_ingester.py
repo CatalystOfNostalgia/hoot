@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
-# from summarize import get_summary
+from summarize import get_summary
 
 print("parsing the sentic graph")
 f = open('../senticnet3.rdf.xml') # may need to adjust p
@@ -147,7 +147,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     processed_dict = calculateVectorsForAllComments(product_dict, g)
 
     # create the summary
-    processed_dict["summary"] = get_summary(processed_dict)
+    processed_dict["summary"] = return_summary(processed_dict)
 
     processed_json = json.dumps(processed_dict, indent=4)
 

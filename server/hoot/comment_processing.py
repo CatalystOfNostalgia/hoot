@@ -1,5 +1,12 @@
+
 #! python3
-import sys, nltk, string, json, math, collections
+import nltk
+import string
+import json
+import math
+import queries
+import collections
+
 from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
@@ -10,6 +17,7 @@ from operator import itemgetter
 # returns the modified dictionary
 def calculateVectorsForAllComments(dictFromJSON, g):
     compound_emotion_dict = collections.defaultdict(int)
+    sentic_emotion_dict = collections.defaultdict(int)
 
     if "description" not in dictFromJSON:
         calculateRelevancy = False
@@ -20,11 +28,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     compound_emotion_dict = collections.defaultdict(int)
     sentic_emotion_dict = collections.defaultdict(int)
 
-    if "description" not in dictFromJSON:
-        calculateRelevancy = False
-        return json.dumps(dictFromJSON, indent=4)
-
-    # TODO add the product to the DB here
+    # the product model from the DB
+    product = queries.find_media_by_asin(dictFromJSON["asin"])
 
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
@@ -45,25 +50,54 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         compound_emotions = comment_emotion.get_compound_emotion()
         sentic_values = comment_emotion.get_all_sentic_values()
 
-        sentic_values = [value for value in sentic_values if value is not None]
+        sentic_values = [value.name for value in sentic_values if value is not None]
 
-        comment["compound_emotions"] = [emotion.name for emotion in compound_emotions]
+        compound_emotions_list = []
+        for compound_emotion, strength in compound_emotions:
+            compound_emotions_list.append(
+                {"compound_emotion": compound_emotion.name, "strength": strength.name}
+            )
+        comment["compound_emotions"] = compound_emotions_list
 
-        ## CHANGE THIS TO USE A DICT TO PAIR KEY WITH VALUES
-        sentic_dict = dict()
-        for sentic in sentic_values:
-            sentic_dict[sentic.name] = sentic.value
-        comment["sentic_emotions"] = sentic_dict
-        processed_comments.append(comment)
+        comment["sentic_emotions"] = sentic_values
 
         # add all compound_emotions to the default dictFromJSON
         for compound in comment["compound_emotions"]:
-            compound_emotion_dict[compound] += 1
+            compound_emotion_dict[compound["compound_emotion"]] += 1
 
-        # TODO: add the comment to the database
+        for sentic in comment["sentic_emotions"]:
+            sentic_emotion_dict[sentic] += 1
 
-    # get max key from emotions
-    dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
+        # add the comment to the database
+        # insert_comment(item_id, relevancy, pleasantness, attention, sensitivity, aptitude, polarity)
+        queries.insert_comment(product.media_id,
+                                comment["relevancy"],
+                                comment["emotion_vector"]["pleasantness"],
+                                comment["emotion_vector"]["attention"],
+                                comment["emotion_vector"]["sensitivity"],
+                                comment["emotion_vector"]["aptitude"],
+                                comment["emotion_vector"]["polarity"])
+
+        processed_comments.append(comment)
+
+    popular_compound_emotions = []
+    for i in range(0, 3):
+        popular_emotion = max(compound_emotion_dict, key=compound_emotion_dict.get)
+        popular_compound_emotions.append(popular_emotion)
+        compound_emotion_dict.pop(popular_emotion)
+
+
+    popular_sentic_emotions = []
+    for i in range(0, 3):
+        popular_sentic = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
+        popular_sentic_emotions.append(popular_sentic)
+        sentic_emotion_dict.pop(popular_sentic)
+        # add emotion to the database
+        queries.insert_media_emotion(product.media_id, popular_sentic)
+
+    dictFromJSON["popular_compound_emotions"] = popular_compound_emotions
+    dictFromJSON["popular_sentic_emotions"] = popular_sentic_emotions
+
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
 
     return dictFromJSON
