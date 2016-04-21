@@ -48,6 +48,12 @@ CREATE TRIGGER update_num_comments AFTER INSERT ON comments
         UPDATE multimedia SET number_of_comments = number_of_comments + 1 WHERE media_id = NEW.item_id;
     END;
 
+CREATE TRIGGER decrement_num_comments AFTER DELETE ON comments
+    FOR EACH ROW
+    BEGIN
+        UPDATE multimedia SET number_of_comments = number_of_comments - 1 WHERE media_id = OLD.item_id;
+    END;
+
 |
 
 delimiter ;

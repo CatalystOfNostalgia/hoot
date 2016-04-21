@@ -4,6 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 import models
 from sqlalchemy import func
 
+
 def insert_comment(item_id, date, relevancy, pleasantness, attention,
                    sensitivity, aptitude, polarity):
     """ inserts an entry into the comments table """
@@ -38,7 +39,26 @@ def insert_media_emotion(media_id, emotion):
     models.session.commit()
 
 def clean_media(media_id):
-    print('hello')    
+    """ removes all the associated comments and emotions for a media """
+    media_emotions = find_emotions_for_media(media_id)
+    media_comments = find_comments_for_media(media_id)
+
+    for emotion in media_emotions:
+        models.session.delete(emotion)
+
+    for comment in media_comments:
+        models.session.delete(comment)
+
+    models.session.commit()
+
+def update_media(media_id, date):
+    """ updates the last_updated date for a piece of media """
+    update = models.session.query(models.Multimedia).\
+        filter(models.Multimedia.media_id == media_id).one()
+
+    update.last_updated = date
+
+    models.session.commit()
 
 def get_all_media():
     """ returns all the media """
