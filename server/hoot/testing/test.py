@@ -24,7 +24,7 @@ class TestQueries(unittest.TestCase):
 
         # can we find the movie?
         bat = queries.find_media_by_asin('0440419395')
-        self.is_batman_movie(bat[0])
+        self.is_batman_movie(bat)
 
         bat = queries.find_media_by_title('Batman: The Return of the Force')
         self.is_batman_movie(bat[0])
@@ -103,7 +103,9 @@ class TestCommentEmotions(unittest.TestCase):
                 cookie cutter sweet and sappy. Score for the big green guy. 
                 I'd take him home."""
 
-        none_concepts = find_concepts(none, 0)
+        with self.assertRaises(ConceptError):
+            find_concepts(none, 0)
+
         one_concepts  = find_concepts(one, 0)
         many_concepts = find_concepts(many, 0)
         many_concepts_true = ['year', 'old', 'eat', 'bright', 'classic', \
@@ -113,8 +115,6 @@ class TestCommentEmotions(unittest.TestCase):
                               'easy', 'understand', 'cookie', 'sweet', 'big', \
                               'green', 'take']
 
-        self.assertEqual(len(none_concepts), 0, \
-                         "Found concepts that didn't exist")
         self.assertEqual(one_concepts[0], 'dark', 'Did not find proper concept')
         self.assertEqual(many_concepts, many_concepts_true, \
                          'Did not find all concepts')
