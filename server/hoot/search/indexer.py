@@ -37,10 +37,11 @@ def indexer():
 
     products = get_all_media()
     for product in products:
-        emotions = find_emotions_for_media(product.media_id)
-        sentic_values_string = ' '.join([value for value in emotions])
-
         s3_json = get_json_from_S3(product.title, product.asin)
+
+        emotions = find_emotions_for_media(product.media_id)
+        emotions.extend(s3_json['compound_emotions'])
+        sentic_values_string = ' '.join([value for value in emotions])
 
         # trim comment dict
         comments = s3_json['comments']

@@ -72,7 +72,12 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         # TODO: add the comment to the database
 
     # get max key from emotions
-    dictFromJSON["max_compound_emotion"] = max(compound_emotion_dict, key=compound_emotion_dict.get)
+    popular_compound_emotions = []
+    for i in range(0, 3):
+        popular_emotion = max(compound_emotion_dict, key=compound_emotion_dict.get)
+        compound_emotion_dict.pop(popular_emotion)
+
+    dictFromJSON["compound_emotions"] = popular_compound_emotions
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
 
     return dictFromJSON
