@@ -17,8 +17,7 @@ class TestQueries(unittest.TestCase):
         """ inserts test data """
 
         queries.insert_media('Batman: The Return of the Force', 'Dario', \
-                             'A really cool movie', 'Film', 'Romance', \
-                             '0440419395')
+                             'A really cool movie', 'Film', '0440419395')
 
     def test_insert_media(self):
         """ Tests if media is inserted and retrieved correctly """
@@ -82,8 +81,6 @@ class TestQueries(unittest.TestCase):
                          'Retrieved incorrect descriptiom')
         self.assertEqual(movie.media_type, 'Film', \
                          'Retrieved incorrect media type')
-        self.assertEqual(movie.genre, 'Romance', \
-                         'Retrieved incorrect genre')
         self.assertEqual(movie.asin, '0440419395', \
                          'Retrieved incorrect asin')
 

@@ -13,7 +13,6 @@ class Multimedia(Base):
     creator      = Column(String(100), nullable=False)
     description  = Column(String(100), nullable=False)
     media_type   = Column(String(100), nullable=False)
-    genre        = Column(String(100), nullable=False)
     asin         = Column(String(100), nullable=False)
     number_of_comments = Column(Integer, nullable=False, default=0)
 
