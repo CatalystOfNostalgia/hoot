@@ -1,9 +1,7 @@
 import sumy.parsers.plaintext
 from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lex_rank import LexRankSummarizer
 from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.nlp.stemmers import Stemmer
-from sumy.utils import get_stop_words
 
 def get_summary(reviewList):
     linesMin = 200
