@@ -47,8 +47,8 @@ def find_concepts(comment, start):
 
         if last_concept is not None:
             output.append(last_concept)
-            sys.stdout.write('found: {}       \r'.format(last_concept))
-            sys.stdout.flush()
+            # sys.stdout.write('found: {}       \r'.format(last_concept))
+            # sys.stdout.flush()
 
     print('found {} concepts'.format(len(output)))
     return output
@@ -72,7 +72,7 @@ def calculate_average(scores):
 
     emotion_template = {
         'pleasantness': 0,
-        'attention':    0, 
+        'attention':    0,
         'sensitivity':  0,
         'polarity':     0,
         'aptitude':     0
@@ -83,7 +83,7 @@ def calculate_average(scores):
     average.update(emotion_template)
     polarity.update(emotion_template)
 
-    
+
     for _, score in scores.items():
 
         try:
@@ -100,7 +100,7 @@ def calculate_average(scores):
                 average[emotion]  = average[emotion]  + weighted[emotion]
                 polarity[emotion] = polarity[emotion] + abs(score['polarity'])
 
-        polarity_sum = polarity_sum + score['polarity'] 
+        polarity_sum = polarity_sum + score['polarity']
 
     for emotion in average:
         if polarity[emotion] != 0:
@@ -125,7 +125,7 @@ def emotions(comment, g):
     Initialize g in a place such that it will only be initialized once for
     all products/comments, since it takes ~1 minute to initilize.
     """
-    start = time.time()    
+    start = time.time()
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
