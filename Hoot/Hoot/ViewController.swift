@@ -18,28 +18,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let hootAPI: HootAPI = HootAPI() // Class used to get data from the HOOT API
     
     // Used for the search bar header
-    var emotionCategories: UISegmentedControl!
-    var admirationCategory: UISegmentedControl!
-    var amazementCategory: UISegmentedControl!
-    var ecstasyCategory: UISegmentedControl!
-    var griefCategory: UISegmentedControl!
-    var loathingCategory: UISegmentedControl!
-    var rageCategory: UISegmentedControl!
-    var terrorCategory: UISegmentedControl!
-    var vigilanceCategory: UISegmentedControl!
-    var selectedControl: UISegmentedControl!
+    var emotionCategories: [String]!
+    var admirationCategory: [String]!
+    var amazementCategory: [String]!
+    var ecstasyCategory: [String]!
+    var griefCategory: [String]!
+    var loathingCategory: [String]!
+    var rageCategory: [String]!
+    var terrorCategory: [String]!
+    var vigilanceCategory: [String]!
+    var selectedControl: [String]!
     
-    var suggestions: [String] = []
+    var suggestions: [Product] = TestData.getTestData()
     var category: String = ""
+    var selectedRow: Int?
     
     override func viewDidLoad() {
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
-        searchSuggestionsTable.hidden = true
-        suggestions = hootAPI.getInitialSuggestions()
+        searchSuggestionsTable.hidden = true // TODO: Set this to false when we are ready to deploy
+        suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
         
-        emotionCategories = UISegmentedControl(items: [
+        emotionCategories = [
             EmotionClasses().admirationClass.name,
             EmotionClasses().amazementClass.name,
             EmotionClasses().ecstasyClass.name,
@@ -47,75 +48,60 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             EmotionClasses().loathingClass.name,
             EmotionClasses().rageClass.name,
             EmotionClasses().terrorClass.name,
-            EmotionClasses().vigilanceClass.name])
+            EmotionClasses().vigilanceClass.name]
         
-        emotionCategories.addTarget(self, action: #selector(ViewController.categoryValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        admirationCategory = UISegmentedControl(items: [
+        admirationCategory = [
             "Back",
             "Admiration",
             "Trust",
-            "Acceptance"])
-
-        admirationCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            "Acceptance"]
         
-        amazementCategory = UISegmentedControl(items: [
+        amazementCategory = [
             "Back",
             "Amazement",
             "Surprise",
-            "Distraction"])
+            "Distraction"]
         
-        amazementCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        ecstasyCategory = UISegmentedControl(items: [
+        ecstasyCategory = [
             "Back",
             "Ecstasy",
             "Joy",
-            "Security"])
+            "Security"]
         
-        ecstasyCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        griefCategory = UISegmentedControl(items: [
+        griefCategory = [
             "Back",
             "Grief",
             "Sadness",
-            "Pensiveness"])
+            "Pensiveness"]
         
-        griefCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        loathingCategory = UISegmentedControl(items: [
+        loathingCategory = [
             "Back",
             "Loathing",
             "Disgust",
-            "Boredom"])
+            "Boredom"]
         
-        loathingCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        rageCategory = UISegmentedControl(items: [
+        rageCategory = [
             "Back",
             "Rage",
             "Anger",
-            "Annoyance"])
+            "Annoyance"]
         
-        rageCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        terrorCategory = UISegmentedControl(items: [
+        terrorCategory = [
             "Back",
             "Terror",
             "Fear",
-            "Apprehension"])
+            "Apprehension"]
         
-        terrorCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        vigilanceCategory = UISegmentedControl(items: [
+        vigilanceCategory = [
             "Back",
             "Vigilance",
             "Anticipation",
-            "Interest"])
-        
-        vigilanceCategory.addTarget(self, action: #selector(ViewController.valueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            "Interest"]
         
         selectedControl = emotionCategories
+        searchBar.scopeButtonTitles = emotionCategories
+        searchBar.showsScopeBar = false
+        searchBar.selectedScopeButtonIndex = -1
         navBar.title = "Hoot"
         super.viewDidLoad()
     }
@@ -144,13 +130,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchSuggestionsTable.hidden = true
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText == "" {
-            suggestions = hootAPI.getInitialSuggestions() // Display some default goodness
+    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+        searchBar.showsScopeBar = true
+        return true
+    }
+    
+    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
+        searchBar.showsScopeBar = false
+        return true
+    }
+    
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        if emotionCategories == searchBar.scopeButtonTitles! {
+            changeSearchScope(selectedScope)
+            category = ""
+        } else if (selectedScope == 0) {
+            searchBar.scopeButtonTitles = emotionCategories
+            searchBar.selectedScopeButtonIndex = -1
+            selectedControl = emotionCategories
+            category = ""
         } else {
-            suggestions = hootAPI.getSuggestions(searchText) // Otherwise try to do useful things
+            category = selectedControl[selectedScope]
+            print(category)
         }
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        var query: String? = nil
+        var emotion: String? = nil
+        if category != "" {
+            emotion = category
+        }
+        
+        if searchText != "" {
+            query = searchText
+        }
+        
+        suggestions = hootAPI.getSuggestions(query, emotionText: emotion) // Otherwise try to do useful things
         
         self.searchSuggestionsTable.reloadData()
     }
@@ -159,68 +175,79 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return 1
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44.0
-    }
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return suggestions.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
+        cell.product = suggestions[indexPath.row]
+        cell.setValues()
         // TODO: Implement product view stuff 
         return cell
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return selectedControl
-        } else {
-            return nil
-        }
-    }
-    
-    func categoryValueChanged(segmentedControl: UISegmentedControl) {
-        let selectedTitle: String = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex)!
-        
+    func changeSearchScope(index: Int) {
+        let selectedTitle: String = selectedControl[index]
         switch selectedTitle {
         case EmotionClasses().rageClass.name:
             selectedControl = rageCategory
+            searchBar.scopeButtonTitles = rageCategory
         case EmotionClasses().loathingClass.name:
             selectedControl = loathingCategory
+            searchBar.scopeButtonTitles = loathingCategory
         case EmotionClasses().griefClass.name:
             selectedControl = griefCategory
+            searchBar.scopeButtonTitles = griefCategory
         case EmotionClasses().ecstasyClass.name:
             selectedControl = ecstasyCategory
+            searchBar.scopeButtonTitles = ecstasyCategory
         case EmotionClasses().admirationClass.name:
             selectedControl = admirationCategory
+            searchBar.scopeButtonTitles = admirationCategory
         case EmotionClasses().amazementClass.name:
             selectedControl = amazementCategory
+            searchBar.scopeButtonTitles = amazementCategory
         case EmotionClasses().terrorClass.name:
             selectedControl = terrorCategory
+            searchBar.scopeButtonTitles = terrorCategory
         case EmotionClasses().vigilanceClass.name:
             selectedControl = vigilanceCategory
+            searchBar.scopeButtonTitles = vigilanceCategory
         default:
             break
         }
-        
+        searchBar.selectedScopeButtonIndex = -1
         self.searchSuggestionsTable.reloadData()
     }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedRow = indexPath.row
+        performSegueWithIdentifier("GoToProductPage", sender: self)
+    }
     
-    func valueChanged(segmentedControl: UISegmentedControl) {
-        let selectedTitle: String = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex)!
-        
-        if selectedTitle == "Back" {
-            category = ""
-            selectedControl.selectedSegmentIndex = -1
-            selectedControl = emotionCategories
-            selectedControl.selectedSegmentIndex = -1
-        } else {
-            category = selectedTitle
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return selectedRow != nil
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "GoToProductPage" {
+            if let destination = segue.destinationViewController as? ProductViewController {
+                
+                guard let row = selectedRow where selectedRow != nil else {
+                    return
+                }
+                let product: Product = suggestions[row]
+                destination.product = product.name
+                destination.comments = product.comments
+                destination.emotionText = product.emotions
+                destination.summaryText = product.description
+                let cell = searchSuggestionsTable.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) as! SearchResultTableCell
+                destination.productImage = cell.thumbnail.image
+                
+                
+            }
         }
-        
-        self.searchSuggestionsTable.reloadData()
     }
     
 }
