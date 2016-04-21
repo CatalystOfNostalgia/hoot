@@ -17,7 +17,8 @@ INDEX_DIR = 'index'
 
 SCHEMA = Schema(
     product_name=TEXT(stored=True),
-    emotions=KEYWORD(stored=True, scorable=True),
+    sentic_emotions=KEYWORD(stored=True, scorable=True),
+    compound_emotions=KEYWORD(stored=True, scorable=True),
     image_url=STORED,
     sumy=STORED,
     comments=STORED,
@@ -39,9 +40,11 @@ def indexer():
     for product in products:
         s3_json = get_json_from_S3(product.title, product.asin)
 
-        emotions = find_emotions_for_media(product.media_id)
-        emotions.extend(s3_json['compound_emotions'])
-        sentic_values_string = ' '.join([value for value in emotions])
+        sentic_emotions = find_emotions_for_media(product.media_id)
+        compound_emotions = s3_json['compound_emotions']
+
+        sentic_values_string = ' '.join([e for e in sentic_emotions])
+        compound_emotions_string = ' '.join([e for e in compound_emotions])
 
         # trim comment dict
         comments = s3_json['comments']
@@ -53,7 +56,8 @@ def indexer():
         # write to indexer
         writer.add_document(
             product_name=product.title,
-            emotions=sentic_values_string,
+            sentic_emotions=sentic_values_string,
+            compound_emotions=compound_emotions_string,
             image_url=s3_json['image_url'],
             sumy=s3_json['sumy'],
             comments=json.dumps(comments),
