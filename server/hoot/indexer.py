@@ -54,7 +54,7 @@ def indexer():
             product_name=product.title,
             emotions=sentic_values_string,
             image_url=s3_json['image_url'],
-            #sumy=s3_json['sumy'],
+            sumy=s3_json['sumy'],
             comments=json.dumps(comments),
         )
 
