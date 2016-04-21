@@ -63,9 +63,11 @@ class ProductParser {
                     if let commentText = commentJson[COMMENT_DATA_KEY] as? String {
                         if let compoundEmotions = commentJson[COMMENT_COMPOUND_EMOTIONS_KEY] as? [String] {
                             if let senticEmotions = commentJson[COMMENT_SENTIC_EMOTIONS_KEY] as? [String] {
-                                var allEmotions = compoundEmotions.joinWithSeparator(",")
-                                allEmotions = allEmotions + "," + senticEmotions.joinWithSeparator(",")
-                                parsed_comments.append(Comment(emotions: allEmotions, comment: commentText, relevancy: relevancy))
+                                if let commentRating = commentJson[COMMENT_RATING_KEY] as? Double {
+                                    var allEmotions = compoundEmotions.joinWithSeparator(",")
+                                    allEmotions = allEmotions + "," + senticEmotions.joinWithSeparator(",")
+                                    parsed_comments.append(Comment(emotions: allEmotions, comment: commentText, relevancy: relevancy, rating: commentRating))
+                                }
                             }
                         }
                     }
