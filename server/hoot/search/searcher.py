@@ -1,7 +1,7 @@
 import json
 
-from indexer import INDEX_DIR
-from indexer import SCHEMA
+from search.indexer import INDEX_DIR
+from search.indexer import SCHEMA
 
 from whoosh import index
 from whoosh import query
