@@ -96,13 +96,6 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
     return dictFromJSON
 
-def processFromAWS(productID):
-    print("TODO")
-    jsonfile = open("sampleText.json", 'r+')
-    filetext = jsonfile.read()
-    dictFromJSON = json.loads(filetext)
-    calculateVectorsForAllComments(dictFromJSON)
-
 # tokenize, stem, and remove stopwords from document
 def tokenizeDocument(document):
     # remove punctuation (otherwise we have a bunch of empty tokens at the end)
