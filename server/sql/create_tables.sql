@@ -12,6 +12,7 @@ CREATE TABLE multimedia (
     media_type varchar (100) NOT NULL,
     asin varchar (20) NOT NULL UNIQUE,
     number_of_comments int NOT NULL DEFAULT 0,
+    last_updated int NOT NULL,
     PRIMARY KEY (media_id)
 );
 
@@ -24,6 +25,7 @@ CREATE TABLE multimedia_emotions (
 
 CREATE TABLE comments (
     comment_id int NOT NULL AUTO_INCREMENT,
+    comment_date int NOT NULL,
     item_id int NOT NULL,
     relevancy double NOT NULL,
     pleasantness double NOT NULL,
@@ -44,6 +46,12 @@ CREATE TRIGGER update_num_comments AFTER INSERT ON comments
     FOR EACH ROW
     BEGIN
         UPDATE multimedia SET number_of_comments = number_of_comments + 1 WHERE media_id = NEW.item_id;
+    END;
+
+CREATE TRIGGER decrement_num_comments AFTER DELETE ON comments
+    FOR EACH ROW
+    BEGIN
+        UPDATE multimedia SET number_of_comments = number_of_comments - 1 WHERE media_id = OLD.item_id;
     END;
 
 |

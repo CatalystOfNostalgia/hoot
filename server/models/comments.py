@@ -11,6 +11,7 @@ class Comments(Base):
 
     comment_id   = Column(Integer, primary_key=True, \
                           autoincrement=True, nullable=False)
+    comment_date = Column(Integer, nullable=False)
     item_id      = Column(Integer, nullable=False)
     relevancy    = Column(Integer, nullable=False)
     pleasantness = Column(DOUBLE, nullable=False)
