@@ -1,10 +1,9 @@
 #! python3
-import json, gzip, time, random, argparse, os.path, rdflib
-from datetime import datetime
+import json, gzip, time, random, argparse, os.path, rdflib, queries
 import xml.etree.ElementTree as ET
+from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
-from operator import itemgetter
 # from summarize import get_summary
 
 print("parsing the sentic graph")
@@ -13,8 +12,11 @@ g = rdflib.Graph()
 g.parse(f)
 print("done parsing")
 
+# just for counting the # of products posted to S3
+i = 0
+
 # for parsing the UCSD zipfiles
-def parse(path, skip, amount, productapi):
+def parse(path, skip, amount, productapi, producttype):
     if skip is None:
         skip = 0
     if amount is None:
@@ -22,7 +24,8 @@ def parse(path, skip, amount, productapi):
         amount = 999999999
     allReviews = gzip.open(path, 'r')
     # keep track of currrent product
-    i = 0
+    global i
+
     current_asin = "";
     reviews_for_current_asin = list()
     for reviewText in allReviews:
@@ -42,14 +45,15 @@ def parse(path, skip, amount, productapi):
                 # we only want to upload N times where N
                 if (i > (skip + amount)):
                     break
-                handleReview(current_asin, reviews_for_current_asin, productapi, i)
+                handleReview(current_asin, reviews_for_current_asin, productapi, producttype)
             reviews_for_current_asin = list()
             current_asin = review["asin"]
 
         reviews_for_current_asin.append(review)
 
 # takes our constructed JSON file and runs our processing methods on it
-def handleReview(asin, list_of_review_dicts, productapi, i):
+def handleReview(asin, list_of_review_dicts, productapi, type):
+    global i
     product_dict = dict()
     product_dict["comments"] = list()
 
@@ -63,9 +67,14 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
         return
     if item.find(namespace + "ItemAttributes") is None:
         return
+
+    creator = "Unknown"
+    image_node = item.find(namespace + "LargeImage")
     ean_node = item.find(namespace + "ItemAttributes").find(namespace + "EAN")
     title_node = item.find(namespace + "ItemAttributes").find(namespace + "Title")
-    image_node = item.find(namespace + "LargeImage")
+    author_node = item.find(namespace + "ItemAttributes").find(namespace + "Author")
+    director_node = item.find(namespace + "ItemAttributes").find(namespace + "Director")
+    lead_actor_node = item.find(namespace + "ItemAttributes").find(namespace + "Actor")
 
     # find the "best" desciption given for the product
     description = ""
@@ -107,6 +116,24 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
         else:
             product_dict["image_url"] = "None"
 
+    if author_node is not None:
+        creator = author_node.text
+    elif director_node is not None:
+        creator = director_node.text
+    elif lead_actor_node is not None:
+        creator = lead_actor_node.text
+
+    # add the creator to the dict
+    product_dict["creator"] = creator
+
+    # add the ASIN to the dict
+    product_dict["asin"] = asin
+
+    #TODO Insert the product into the database
+    #insert_media(title, creator, description, media_type, asin)
+    queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin)
+
+
     for review in list_of_review_dicts:
         comment_dict = dict()
         # if these dont exist in some of them, then so help me god
@@ -115,17 +142,16 @@ def handleReview(asin, list_of_review_dicts, productapi, i):
         comment_dict["text"]    = review["reviewText"]
         product_dict["comments"].append(comment_dict)
 
-    product_dict["asin"] = asin
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
     processed_dict = calculateVectorsForAllComments(product_dict, g)
 
     # create the summary
-    processed_dict["summary"] = return_summary(processed_dict)
+    processed_dict["summary"] = get_summary(processed_dict)
 
     processed_json = json.dumps(processed_dict, indent=4)
 
-    ## TODO ADD IT TO THE DATABASE
+    ## TODO ADD EMOTION TO THE DATABASE
     print ("Adding product with asin: ", asin, "to S3 ---", i)
     push_to_S3(filename, processed_json)
 
@@ -151,16 +177,19 @@ if __name__ == '__main__':
     parser.add_argument('-f','--filename', help='filename of the UCSD review collection zip', required=True)
     parser.add_argument('-s','--skip', help='Skip the first n products in the set', required=False)
     parser.add_argument('-a', '--amount', help='The amount of products to process and upload to S3 / the database', required=False)
+    parser.add_argument('-t', '--producttype', help='Enter the media type (Movie, TV, Books', required=True)
     args = vars(parser.parse_args())
 
     filename = args['filename']
     skip = args['skip']
     amount = args['amount']
+    producttype = args['producttype']
 
     startTime = datetime.now()
     print ("starting")
 
     productapi = setup_product_api()
-    parse(filename, skip, amount, productapi)
+
+    parse(filename, skip, amount, productapi, producttype)
 
     print ("seconds taken: ",datetime.now() - startTime)
