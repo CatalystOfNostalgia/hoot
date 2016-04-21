@@ -64,7 +64,8 @@ def build_json_from_results(results):
     for result in results:
         result_dict = {}
         result_dict['product_name'] = result['product_name']
-        result_dict['emotions'] = convert_emotions_to_list(result['emotions'])
+        result_dict['sentic_values'] = convert_emotions_to_list(result['sentic_emotions'])
+        result_dict['compound_emotions'] = convert_emotions_to_list(result['compound_emotions'])
         result_dict['image_url'] = result['image_url']
         result_dict['sumy'] = result['sumy']
         result_dict['comments'] = json.loads(result['comments'])
