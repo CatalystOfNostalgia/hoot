@@ -129,16 +129,17 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     # add the ASIN to the dict
     product_dict["asin"] = asin
 
-    #insert_media(title, creator, description, media_type, asin)
-    queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin)
+    #insert_media(title, creator, description, media_type, asin, date)
+    queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin, int(time.time()))
 
 
     for review in list_of_review_dicts:
         comment_dict = dict()
         # if these dont exist in some of them, then so help me god
-        comment_dict["rating"]  = review["overall"]
-        comment_dict["helpful"] = review["helpful"]
-        comment_dict["text"]    = review["reviewText"]
+        comment_dict["rating"]   = review["overall"]
+        comment_dict["helpful"]  = review["helpful"]
+        comment_dict["unixtime"] = int(review["unixReviewTime"])
+        comment_dict["text"]     = review["reviewText"]
         product_dict["comments"].append(comment_dict)
 
     # now process this dict in comment_processing
