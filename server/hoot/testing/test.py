@@ -17,7 +17,7 @@ class TestQueries(unittest.TestCase):
         """ inserts test data """
 
         queries.insert_media('Batman: The Return of the Force', 'Dario', \
-                             'A really cool movie', 'Film', '0440419395')
+                             'A really cool movie', 'Film', '0440419395', 11)
 
     def test_insert_media(self):
         """ Tests if media is inserted and retrieved correctly """
@@ -46,7 +46,7 @@ class TestQueries(unittest.TestCase):
         """ Tests the insertion and deletion of comments """
 
         bat = queries.find_media_by_creator('Dario')
-        queries.insert_comment(bat[0].media_id, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
+        queries.insert_comment(bat[0].media_id, 11, 7, 0.9, 0.4, -0.5, 0.6, 0.3)
         comments = queries.find_comments_for_media(bat[0].media_id)
 
         # can we find the comments?

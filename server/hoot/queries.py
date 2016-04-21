@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 import models
 from sqlalchemy import func
 
-def insert_comment(item_id, relevancy, pleasantness, attention,
+def insert_comment(item_id, date, relevancy, pleasantness, attention,
                    sensitivity, aptitude, polarity):
     """ inserts an entry into the comments table """
     new_comment = models.comments.Comments( item_id = item_id, \
@@ -13,16 +13,18 @@ def insert_comment(item_id, relevancy, pleasantness, attention,
                                             attention = attention, \
                                             sensitivity = sensitivity, \
                                             aptitude = aptitude, \
-                                            polarity = polarity)
+                                            polarity = polarity,\
+                                            comment_date = date)
     models.session.add(new_comment)
     models.session.commit()
 
-def insert_media(title, creator, description, media_type, asin):
+def insert_media(title, creator, description, media_type, asin, date):
     """ Inserts media into the database """
     new_media = models.multimedia.Multimedia( title = title, creator = creator,\
                                               description = description, \
                                               media_type = media_type, \
-                                              asin = asin )
+                                              asin = asin, \
+                                              last_updated = date)
     models.session.add(new_media)
     models.session.commit()
 
@@ -35,7 +37,11 @@ def insert_media_emotion(media_id, emotion):
     models.session.add(new_emotion)
     models.session.commit()
 
+def clean_media(media_id):
+    print('hello')    
+
 def get_all_media():
+    """ returns all the media """
     return models.session.query(models.Multimedia).all()
 
 def find_media_by_asin(asin):
