@@ -271,9 +271,6 @@
                                             <variation key="widthClass=compact" fixedFrame="YES">
                                                 <rect key="frame" x="11" y="8" width="347" height="21"/>
                                             </variation>
-                                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="12" y="8" width="347" height="21"/>
-                                            </variation>
                                         </label>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Rul-eN-eoO">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -284,21 +281,47 @@
                                             <variation key="widthClass=compact" fixedFrame="YES">
                                                 <rect key="frame" x="11" y="37" width="347" height="74.5"/>
                                             </variation>
-                                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="8" y="32" width="347" height="74.5"/>
-                                            </variation>
                                         </textView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="topMargin" secondItem="5I0-HJ-klp" secondAttribute="top" id="1WM-v5-cI4"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Rul-eN-eoO" secondAttribute="trailing" constant="37" id="8KM-Wt-EqA"/>
+                                        <constraint firstItem="Rul-eN-eoO" firstAttribute="top" secondItem="5I0-HJ-klp" secondAttribute="bottom" constant="3" id="Hdg-ew-J30"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="Rul-eN-eoO" secondAttribute="leading" id="Tch-1W-FyA"/>
+                                        <constraint firstItem="5I0-HJ-klp" firstAttribute="leading" secondItem="lLc-fH-fYF" secondAttribute="leadingMargin" constant="4" id="VKQ-5J-ynY"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="5I0-HJ-klp" secondAttribute="trailing" id="wpp-uj-3nU"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Rul-eN-eoO" secondAttribute="bottom" constant="10" id="y0r-xr-EBD"/>
+                                    </constraints>
                                     <variation key="default">
                                         <mask key="subviews">
                                             <exclude reference="5I0-HJ-klp"/>
                                             <exclude reference="Rul-eN-eoO"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <exclude reference="1WM-v5-cI4"/>
+                                            <exclude reference="VKQ-5J-ynY"/>
+                                            <exclude reference="wpp-uj-3nU"/>
+                                            <exclude reference="8KM-Wt-EqA"/>
+                                            <exclude reference="Hdg-ew-J30"/>
+                                            <exclude reference="Tch-1W-FyA"/>
+                                            <exclude reference="y0r-xr-EBD"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
                                         <mask key="subviews">
                                             <include reference="5I0-HJ-klp"/>
                                             <include reference="Rul-eN-eoO"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="constraints">
+                                            <include reference="1WM-v5-cI4"/>
+                                            <include reference="VKQ-5J-ynY"/>
+                                            <include reference="wpp-uj-3nU"/>
+                                            <include reference="8KM-Wt-EqA"/>
+                                            <include reference="Hdg-ew-J30"/>
+                                            <include reference="Tch-1W-FyA"/>
+                                            <include reference="y0r-xr-EBD"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
