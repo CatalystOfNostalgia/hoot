@@ -1,5 +1,9 @@
-#! python3
-import nltk, string, json, math, collections
+import nltk
+import string
+import json
+import math
+import collections
+
 from nltk.corpus import stopwords
 from nltk import stem
 from emotion_processing.comment_emotions import emotions
