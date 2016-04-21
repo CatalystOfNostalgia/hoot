@@ -25,7 +25,7 @@ for comment in data['comments']:
         print('\tsentic values:')
         for sentic in sentics:
             if sentic is None:
-                print('none')
+                print('\t\tnone')
             else:
                 print('\t\t{}'.format(sentic.name)) 
 
