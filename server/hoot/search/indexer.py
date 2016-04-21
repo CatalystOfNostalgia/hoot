@@ -1,6 +1,10 @@
+#!/usr/bin/env python
 import json
 import os
 import os.path
+
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0, parentdir)
 
 from aws_module import retrieve_from_S3
 from queries import get_all_media
@@ -13,7 +17,7 @@ from whoosh.fields import TEXT
 from whoosh.fields import KEYWORD
 from whoosh.fields import STORED
 
-INDEX_DIR = 'index'
+INDEX_DIR = '/home/ubuntu/hoot/server/index'
 
 SCHEMA = Schema(
     product_name=TEXT(stored=True),
@@ -38,10 +42,13 @@ def indexer():
 
     products = get_all_media()
     for product in products:
-        s3_json = get_json_from_S3(product.title, product.asin)
+        try:
+            s3_json = get_json_from_S3(product.title, product.asin)
+        except:
+            continue
 
         sentic_emotions = find_emotions_for_media(product.media_id)
-        compound_emotions = s3_json['compound_emotions']
+        compound_emotions = s3_json['popular_compound_emotions']
 
         sentic_values_string = ' '.join([e for e in sentic_emotions])
         compound_emotions_string = ' '.join([e for e in compound_emotions])
@@ -59,9 +66,10 @@ def indexer():
             sentic_emotions=sentic_values_string,
             compound_emotions=compound_emotions_string,
             image_url=s3_json['image_url'],
-            sumy=s3_json['sumy'],
+            sumy=s3_json['summary'],
             comments=json.dumps(comments),
         )
+        print('{} indexed'.format(product.title))
 
     writer.commit()
 
