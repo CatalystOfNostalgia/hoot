@@ -21,4 +21,7 @@ def get_summary(reviewList):
     stemmer = Stemmer("english")
     summarizer = LuhnSummarizer(stemmer)
     summary = summarizer(parser.document, 6)
-    return summary
+    s = ""
+    for sentence in summary:
+        s+=str(sentence)
+    return s
