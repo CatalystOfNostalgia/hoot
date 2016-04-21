@@ -5,6 +5,11 @@ import emotion_processing.senticnet as senticnet
 
 from emotion_processing.emotion import Emotion
 
+class ConceptError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 def concept_search(query, start):
     """Search for a concept given a certain string."""
@@ -50,6 +55,9 @@ def find_concepts(comment, start):
             sys.stdout.write('found: {}       \r'.format(last_concept))
             sys.stdout.flush()
 
+    if len(output) == 0:
+        raise ConceptError("no concepts found")
+
     print('found {} concepts'.format(len(output)))
     return output
 
@@ -83,7 +91,6 @@ def calculate_average(scores):
     average.update(emotion_template)
     polarity.update(emotion_template)
 
-
     for _, score in scores.items():
 
         try:
@@ -106,7 +113,11 @@ def calculate_average(scores):
         if polarity[emotion] != 0:
             average[emotion] = (average[emotion] / polarity[emotion])
 
-    average['polarity'] = polarity_sum / len(scores)
+    if len(scores):
+        average['polarity'] = polarity_sum / len(scores)
+    else:
+        average['polarity'] = 0
+
     return average
 
 
@@ -129,9 +140,11 @@ def emotions(comment, g):
     comment = comment.translate(str.maketrans('', '', string.punctuation))
     comment = comment.lower()
 
-    concepts = find_concepts(comment, 2)
+    concepts = find_concepts(comment, 0)
     scores = get_emotional_scores(concepts, g)
     average = calculate_average(scores)
     end = time.time()
     print('time: {}'.format(end - start))
     return Emotion(average)
+
+
