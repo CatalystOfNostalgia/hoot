@@ -129,7 +129,6 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     # add the ASIN to the dict
     product_dict["asin"] = asin
 
-    #TODO Insert the product into the database
     #insert_media(title, creator, description, media_type, asin)
     queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin)
 
@@ -151,7 +150,6 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
 
     processed_json = json.dumps(processed_dict, indent=4)
 
-    ## TODO ADD EMOTION TO THE DATABASE
     print ("Adding product with asin: ", asin, "to S3 ---", i)
     push_to_S3(filename, processed_json)
 
