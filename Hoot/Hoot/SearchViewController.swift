@@ -39,7 +39,15 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
         searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
-        //suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
+        //hootAPI.getRealSuggestions(nil, emotionText: nil, )
+        hootAPI.getRealSuggestions(nil, emotionText: nil) {
+            (result: [Product], error: NSError!) in
+            if error != nil {
+                self.suggestions = result
+                self.searchSuggestionsTable.reloadData()
+            }
+        }
+        
         suggestions = [Product]()
         
         emotionCategories = [
@@ -138,12 +146,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         activityIndicator.startAnimating()
-        print(query)
         hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
-            print("returned") 
             self.suggestions = data
-            self.searchSuggestionsTable.reloadData()
-            self.activityIndicator.stopAnimating()
+            
+            //self.searchSuggestionsTable.reloadData()
+            dispatch_async(dispatch_get_main_queue(), {
+                    self.activityIndicator.stopAnimating()
+                    self.searchSuggestionsTable.reloadData()
+                })
         })
         
     }
@@ -186,10 +196,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let start = NSDate()
         let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
         cell.product = suggestions[indexPath.row]
         cell.setValues()
-        // TODO: Implement product view stuff 
+        // TODO: Implement product view stuff
         return cell
     }
     

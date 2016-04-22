@@ -22,10 +22,12 @@ class SearchResultTableCell: UITableViewCell {
             return
         }
         
+        let start = NSDate()
         mainLabel.text = product?.name
         secondaryLabel.text = product?.description
         let url = NSURL(string: (product?.imageURL)!)
         downloadImage(url!)
+        print("finished cell: \(NSDate().timeIntervalSinceDate(start))")
         
     }
     
