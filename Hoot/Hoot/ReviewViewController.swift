@@ -18,6 +18,8 @@ class ReviewViewController: UIViewController {
     @IBOutlet weak var fifthStarView: UIImageView!
     @IBOutlet weak var commentTextView: UITextView!
     @IBOutlet weak var relevancyLabel: UILabel!
+    @IBOutlet weak var basicEmotionLabel: UILabel!
+    @IBOutlet weak var complexEmotionLabel: UILabel!
     
     var comment: Comment?
     
@@ -25,6 +27,8 @@ class ReviewViewController: UIViewController {
         
         commentTextView.text = comment!.comment
         relevancyLabel.text = "Relevancy: \(comment!.relevancy)"
+        basicEmotionLabel.text = comment?.emotions
+        complexEmotionLabel.text = comment?.complexEmotions
         var images = getImages()
         
         firstStarView.image = images[0]

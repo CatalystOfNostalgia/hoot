@@ -11,6 +11,7 @@ import UIKit
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchSuggestionsTable: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var navBar: UINavigationItem!
@@ -37,7 +38,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
-        searchSuggestionsTable.hidden = true // TODO: Set this to false when we are ready to deploy
+        searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
         suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
         
         emotionCategories = [
@@ -112,22 +113,38 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        searchSuggestionsTable.hidden = false
+        searchBar.enablesReturnKeyAutomatically = false 
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
+        var query: String? = nil
+        var emotion: String? = nil
+        if category != "" {
+            emotion = category.lowercaseString
+        }
+        
+        if searchBar.text != "" {
+            query = searchBar.text
+        }
+        
+        activityIndicator.startAnimating()
+        print(query)
+        hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
+            print("returned") 
+            self.suggestions = data
+            self.searchSuggestionsTable.reloadData()
+            self.activityIndicator.stopAnimating()
+        })
+        
     }
     
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
@@ -156,19 +173,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        var query: String? = nil
-        var emotion: String? = nil
-        if category != "" {
-            emotion = category
-        }
-        
-        if searchText != "" {
-            query = searchText
-        }
-        
-        suggestions = hootAPI.getSuggestions(query, emotionText: emotion) // Otherwise try to do useful things
-        
-        self.searchSuggestionsTable.reloadData()
+
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
