@@ -17,6 +17,10 @@ def search(product_name=None, emotion=None, page=1):
     returns the list of products that best match those queries.
     """
     ix = index.open_dir(INDEX_DIR)
+
+    if not page:
+        page = 1
+
     if product_name is None and emotion is None:
         return []
     elif product_name is None:
