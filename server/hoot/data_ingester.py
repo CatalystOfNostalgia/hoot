@@ -47,6 +47,8 @@ def parse(path, skip, amount, productapi, producttype):
             if len(reviews_for_current_asin) > 5:
                 if (i < skip):
                     i = i + 1
+                    reviews_for_current_asin = list()
+                    current_asin = review["asin"]
                     continue
 
                 i = i + 1
