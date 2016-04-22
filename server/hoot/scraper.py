@@ -5,6 +5,7 @@ import queries
 
 
 class Scraper:
+    #update all asins
     def update_reviews(asin):
         f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
         configs = json.loads(f.read())
@@ -18,7 +19,18 @@ class Scraper:
         for review in reviews:
             if date > review.date:
                 update = True
+        list_of_review_dicts =[]
         if(update):
              for review in reviews:
-                 updateReviews.append(review.text)
+                 comment_dict = dict()
+                 comment_dict["text"] = review.text
+                 comment_dict
         return updateReviews
+    #gets all asins and calls update
+    def get_asins(self):
+        media = queries.get_all_media()
+        asins = []
+        for item in media:
+            asins.append(item.asin)
+        for asin in asins:
+            Scraper.update_reviews(asin)
