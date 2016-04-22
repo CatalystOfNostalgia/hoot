@@ -41,9 +41,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
         //hootAPI.getRealSuggestions(nil, emotionText: nil, )
         hootAPI.getRealSuggestions(nil, emotionText: nil) {
-            (result: [Product], error: NSError!) in
+            (result: [Product]?, error: NSError!) in
             if error != nil {
-                self.suggestions = result
+                if (result != nil) {
+                    self.suggestions = result
+                } else {
+                    self.suggestions = [] 
+                }
                 self.searchSuggestionsTable.reloadData()
             }
         }
@@ -133,7 +137,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
-        updateProducts(searchBar)
+        //updateProducts(searchBar)
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -161,7 +165,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             category = ""
         } else {
             category = selectedControl[selectedScope]
-            print(category)
+            updateProducts(searchBar)
         }
     }
     
@@ -177,7 +181,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let start = NSDate()
         let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
         cell.product = suggestions[indexPath.row]
         cell.setValues()
@@ -242,13 +245,26 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         activityIndicator.startAnimating()
         hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
-            self.suggestions = data
-            
-            //self.searchSuggestionsTable.reloadData()
-            dispatch_async(dispatch_get_main_queue(), {
-                self.activityIndicator.stopAnimating()
-                self.searchSuggestionsTable.reloadData()
-            })
+            if (error != nil) {
+                print("balala")
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.activityIndicator.stopAnimating()
+                    let alertController = UIAlertController(title: "Error",
+                        message: "Network Error Occurred", preferredStyle: .Alert)
+                    
+                    let defaultAction = UIAlertAction(title: "OK", style: .Default , handler: nil)
+                    alertController.addAction(defaultAction)
+                    
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                })
+            } else {
+                self.suggestions = data
+                //self.searchSuggestionsTable.reloadData()
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.activityIndicator.stopAnimating()
+                    self.searchSuggestionsTable.reloadData()
+                })
+            }
         })
     }
     
