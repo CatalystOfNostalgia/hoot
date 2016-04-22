@@ -1,5 +1,6 @@
 import nltk
 import string
+import html
 import json
 import math
 import queries
@@ -24,8 +25,12 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     # the product model from the DB
     product = queries.find_media_by_asin(dictFromJSON["asin"])
 
+    # get rid of escaped html characters in description
+    dictFromJSON["description"] = html.unescape(comment["text"])
+
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
+        comment["text"] = html.unescape(dictFromJSON["description"])
         vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
         vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
         comment["vector_space"] = vectorized_comment
