@@ -14,7 +14,7 @@ class Scraper:
         p = amzn.lookup(ItemId=asin)
         reviews = p.reviews()
         dates = queries.find_date_for_review(asin)
-        type = queries.find_type_by_id(asin)
+        media_type = queries.find_type_by_id(asin)
         date = max(dates)
         update = False
         for review in reviews:
@@ -28,7 +28,7 @@ class Scraper:
                  comment_dict["text"] = review.text
                  comment_dict["unixtime"] = int(review.date)
                  list_of_review_dicts.append(comment_dict)
-        return data_ingester.handleReview(asin, list_of_review_dicts, product_api, type)
+        return data_ingester.handleReview(asin, list_of_review_dicts, product_api, media_type)
 
     def get_asins(self):
         """
