@@ -165,8 +165,10 @@ def add_amazon_info_to_dict(asin, product_dict):
             # if we dont have a description we don't want anything to do with this
             raise AmazonInfoNotFoundError("No description that's useful enough")
 
+
         # Find the Image url
         # check to see if LargeImage, if not check Medium, if not that check Small
+        product_dict["image_url"] = "None"
         if image_node is None:
             image_node = item.find(namespace + "MediumImage")
         if image_node is None:
@@ -177,8 +179,6 @@ def add_amazon_info_to_dict(asin, product_dict):
             if image_url_node is not None:
                 # add the image url to the json
                 product_dict["image_url"] = image_url_node.text
-            else:
-                product_dict["image_url"] = "None"
 
         if author_node is not None:
             creator = author_node.text
