@@ -125,7 +125,7 @@ def find_date_for_review(asin):
 
 def find_type_by_id(asin):
     media = find_media_by_asin(asin)
-    return media.type
+    return media.media_type
 
 def rollback():
     """" Resets the SQLAlchemy session
