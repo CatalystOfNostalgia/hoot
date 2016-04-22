@@ -241,6 +241,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         activityIndicator.startAnimating()
+        activityIndicator.layer.zPosition = 1
         hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
             if (error != nil) {
                 print("balala")
