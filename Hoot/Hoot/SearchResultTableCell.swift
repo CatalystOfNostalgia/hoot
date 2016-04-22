@@ -30,9 +30,9 @@ class SearchResultTableCell: UITableViewCell {
     }
     
     func getData(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
-        NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
+        NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration()).dataTaskWithURL(url) { (data, response, error) in
             completion(data: data, response: response, error: error)
-            }.resume()
+        }.resume()
     }
     
     func downloadImage(url: NSURL){

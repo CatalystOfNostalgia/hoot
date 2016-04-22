@@ -16,23 +16,22 @@ class HootAPI {
     }
     
     // TODO: Replace current geSuggestions() with this once this is ready. 
-    func getRealSuggestions(searchText: String?, emotionText: String?) -> [Product] {
+    func getRealSuggestions(searchText: String?, emotionText: String?, completionHandler: (([Product], NSError!) -> Void)!) -> Void {
         var searchString = APIConfigs().baseURL + APIConfigs().searchEndPoint
         // Determiens what kind of search we should do
         if searchText == nil && emotionText == nil{
             // Do Nothing
-        } else if searchText != nil {
+        } else if searchText == nil {
             searchString = searchString + "?" + APIConfigs().emotionKey + "=" + emotionText!
         } else if emotionText == nil {
             searchString = searchString + "?" + APIConfigs().queryKey + "=" + searchText!
         } else {
             searchString = searchString + "?" + APIConfigs().emotionKey + "=" + emotionText! + "&" + APIConfigs().queryKey + "=" + searchText!
         }
-        
-        let url: NSURL = NSURL(string: searchString)!
+        let url: NSURL = NSURL(string: searchString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!
         let sessionConfiguartion: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session: NSURLSession = NSURLSession(configuration: sessionConfiguartion)
-
+        
         let dataTask = session.dataTaskWithURL(url) {
             data, response, error in
             if error != nil {
@@ -41,14 +40,12 @@ class HootAPI {
                 return
             } else {
                 // TODO: Handle proper response
-                self.products = ProductParser().parseProducts(data!)
-                
+                completionHandler(ProductParser().parseProducts(data!), nil)
             }
             
         }
         
         dataTask.resume()
-        return products
     }
     
 }
