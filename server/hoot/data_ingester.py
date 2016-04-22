@@ -1,5 +1,6 @@
 #! python3
 import json, gzip, time, random, argparse, os.path, rdflib, queries
+import html
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
@@ -88,7 +89,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     processed_dict = calculateVectorsForAllComments(product_dict, g)
 
     # create the summary
-    processed_dict["summary"] = return_summary(processed_dict)
+    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
