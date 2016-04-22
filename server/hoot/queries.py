@@ -117,6 +117,10 @@ def find_date_for_review(asin):
         dates.append(comment.comment_date)
     return dates
 
+def find_type_by_id(asin):
+    media = find_media_by_asin(asin)
+    return media.type
+
 def rollback():
     """" Resets the SQLAlchemy session
     Use this if an exception is thrown or else you cannot make subsequent

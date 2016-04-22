@@ -136,10 +136,10 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     for review in list_of_review_dicts:
         comment_dict = dict()
         # if these dont exist in some of them, then so help me god
-        comment_dict["rating"]   = review["overall"]
-        comment_dict["helpful"]  = review["helpful"]
+        comment_dict["rating"] = review["overall"]
+        comment_dict["helpful"] = review["helpful"]
         comment_dict["unixtime"] = int(review["unixReviewTime"])
-        comment_dict["text"]     = review["reviewText"]
+        comment_dict["text"] = review["reviewText"]
         product_dict["comments"].append(comment_dict)
 
     # now process this dict in comment_processing
