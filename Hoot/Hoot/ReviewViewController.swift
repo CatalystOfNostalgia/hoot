@@ -20,14 +20,17 @@ class ReviewViewController: UIViewController {
     @IBOutlet weak var relevancyLabel: UILabel!
     @IBOutlet weak var basicEmotionLabel: UILabel!
     @IBOutlet weak var complexEmotionLabel: UILabel!
+    @IBOutlet weak var productTitleLabel: UILabel!
     
     var comment: Comment?
+    var productTitle: String!
     
     override func viewDidLoad() {
         
         commentTextView.text = comment!.comment
         commentTextView.setContentOffset(CGPointZero, animated: false)
         
+        productTitleLabel.text = productTitle
         relevancyLabel.text = "Relevancy: \(comment!.relevancy)"
         basicEmotionLabel.text = comment?.emotions
         complexEmotionLabel.text = comment?.complexEmotions

@@ -31,6 +31,7 @@ class ProductViewController: UIViewController {
         if segue.identifier == "ShowReviews" {
             if let destination = segue.destinationViewController as? ReviewsViewController {
                 destination.comments = comments
+                destination.productTitle = product
             }
         }
     }

@@ -12,6 +12,7 @@ class ReviewsViewController: UITableViewController {
     
     var comments: [Comment]?
     var selectedComment: Comment?
+    var productTitle: String!
     
     // MARK: UITableViewController
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -41,6 +42,7 @@ class ReviewsViewController: UITableViewController {
         if segue.identifier == "GoToCommentSpecifics" {
             if let rvc = segue.destinationViewController as? ReviewViewController {
                 rvc.comment = selectedComment!
+                rvc.productTitle = productTitle
             }
         }
     }
