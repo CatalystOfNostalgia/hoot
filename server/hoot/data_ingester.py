@@ -82,6 +82,7 @@ def handleReview(asin, list_of_review_dicts, productapi, producttype):
     if product is not None:
         queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
     else:
+        queries.clean_media(product.media_id)
         queries.update_media(product.media_id, int(time.time()))
 
 
