@@ -26,25 +26,24 @@ class ReviewViewController: UIViewController {
     override func viewDidLoad() {
         
         commentTextView.text = comment!.comment
+        commentTextView.setContentOffset(CGPointZero, animated: false)
+        
         relevancyLabel.text = "Relevancy: \(comment!.relevancy)"
         basicEmotionLabel.text = comment?.emotions
         complexEmotionLabel.text = comment?.complexEmotions
+        
         var images = getImages()
         
-        firstStarView.image = images[0]
+        firstStarView.image  = images[0]
         secondStarView.image = images[1]
-        thirdStarView.image = images[2]
+        thirdStarView.image  = images[2]
         fourthStarView.image = images[3]
-        fifthStarView.image = images[4]
+        fifthStarView.image  = images[4]
     }
     
     
     func getImages() -> [UIImage] {
         var images = [UIImage](count: 5, repeatedValue: UIImage(named: "31x31_0")!)
-        
-//        for i in 0...4 {
-//            images[i] = UIImage(named: "31x31_0")!
-//        }
         
         print("rating \(comment!.rating)")
         switch(comment!.rating) {

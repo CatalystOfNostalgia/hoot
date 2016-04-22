@@ -41,7 +41,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHJ-DI-332">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHJ-DI-332">
                                                     <rect key="frame" x="81" y="-1" width="225" height="45"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -153,7 +153,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="KQU-91-DkG">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="KQU-91-DkG">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="2kj-qN-fNT"/>
@@ -449,7 +449,7 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rul-eN-eoO">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rul-eN-eoO">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -534,10 +534,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uvg-cy-f40">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uvg-cy-f40">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <variation key="widthClass=compact" ambiguous="YES">
@@ -559,7 +559,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ge-BEa">
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ge-BEa">
                                 <rect key="frame" x="0.0" y="109" width="250" height="50"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cGu-mq-yKp">
@@ -660,8 +660,9 @@
                             <constraint firstAttribute="trailingMargin" secondItem="sVm-ge-BEa" secondAttribute="trailing" constant="110" id="kVZ-Yb-Rm4"/>
                             <constraint firstItem="SWI-LD-KSP" firstAttribute="width" secondItem="txU-Vg-Y6o" secondAttribute="width" id="noM-lD-FSy"/>
                             <constraint firstAttribute="leadingMargin" secondItem="sVm-ge-BEa" secondAttribute="leading" id="pP0-dE-xjY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sVm-ge-BEa" secondAttribute="trailing" constant="86" id="ux9-9F-m41"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Hk3-M6-ZA5" secondAttribute="trailing" id="vqe-nc-TBu"/>
-                            <constraint firstItem="Uvg-cy-f40" firstAttribute="top" secondItem="mjU-k0-awr" secondAttribute="bottom" constant="8" id="zsS-Hc-O3L"/>
+                            <constraint firstItem="Uvg-cy-f40" firstAttribute="top" secondItem="mjU-k0-awr" secondAttribute="bottom" constant="15" id="zsS-Hc-O3L"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -674,30 +675,31 @@
                                 <exclude reference="Oaf-dG-6Gw"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="3zu-Fy-XX7"/>
-                                <exclude reference="73C-ez-2P6"/>
-                                <exclude reference="TZt-Ha-PZ9"/>
-                                <exclude reference="LMf-By-I5z"/>
-                                <exclude reference="iY9-4b-jt1"/>
-                                <exclude reference="vqe-nc-TBu"/>
-                                <exclude reference="DKe-mO-5YV"/>
-                                <exclude reference="Qnk-tF-qhj"/>
-                                <exclude reference="R7V-nN-iiz"/>
-                                <exclude reference="CGp-Yq-eAa"/>
-                                <exclude reference="GJd-EN-YpZ"/>
-                                <exclude reference="noM-lD-FSy"/>
-                                <exclude reference="6fe-gA-NGU"/>
-                                <exclude reference="Y2a-o6-d03"/>
-                                <exclude reference="a7c-jP-yJP"/>
-                                <exclude reference="HyB-Bs-gOg"/>
-                                <exclude reference="aVh-jO-Jok"/>
-                                <exclude reference="gpz-q6-Q9Q"/>
-                                <exclude reference="ZrW-VJ-iSw"/>
-                                <exclude reference="dHi-Cl-Xc5"/>
-                                <exclude reference="zsS-Hc-O3L"/>
                                 <exclude reference="XoD-Pf-WJk"/>
                                 <exclude reference="kVZ-Yb-Rm4"/>
                                 <exclude reference="pP0-dE-xjY"/>
+                                <exclude reference="ux9-9F-m41"/>
+                                <exclude reference="6fe-gA-NGU"/>
+                                <exclude reference="Y2a-o6-d03"/>
+                                <exclude reference="a7c-jP-yJP"/>
+                                <exclude reference="ZrW-VJ-iSw"/>
+                                <exclude reference="dHi-Cl-Xc5"/>
+                                <exclude reference="zsS-Hc-O3L"/>
+                                <exclude reference="LMf-By-I5z"/>
+                                <exclude reference="iY9-4b-jt1"/>
+                                <exclude reference="vqe-nc-TBu"/>
+                                <exclude reference="HyB-Bs-gOg"/>
+                                <exclude reference="aVh-jO-Jok"/>
+                                <exclude reference="gpz-q6-Q9Q"/>
+                                <exclude reference="CGp-Yq-eAa"/>
+                                <exclude reference="GJd-EN-YpZ"/>
+                                <exclude reference="noM-lD-FSy"/>
+                                <exclude reference="3zu-Fy-XX7"/>
+                                <exclude reference="73C-ez-2P6"/>
+                                <exclude reference="TZt-Ha-PZ9"/>
+                                <exclude reference="DKe-mO-5YV"/>
+                                <exclude reference="Qnk-tF-qhj"/>
+                                <exclude reference="R7V-nN-iiz"/>
                                 <exclude reference="Q2q-8R-Izp"/>
                             </mask>
                         </variation>
@@ -716,30 +718,31 @@
                                 <include reference="Oaf-dG-6Gw"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="3zu-Fy-XX7"/>
-                                <include reference="73C-ez-2P6"/>
-                                <include reference="TZt-Ha-PZ9"/>
-                                <include reference="LMf-By-I5z"/>
-                                <include reference="iY9-4b-jt1"/>
-                                <include reference="vqe-nc-TBu"/>
-                                <include reference="DKe-mO-5YV"/>
-                                <include reference="Qnk-tF-qhj"/>
-                                <include reference="R7V-nN-iiz"/>
-                                <include reference="CGp-Yq-eAa"/>
-                                <include reference="GJd-EN-YpZ"/>
-                                <include reference="noM-lD-FSy"/>
+                                <include reference="XoD-Pf-WJk"/>
+                                <exclude reference="kVZ-Yb-Rm4"/>
+                                <include reference="pP0-dE-xjY"/>
+                                <include reference="ux9-9F-m41"/>
                                 <include reference="6fe-gA-NGU"/>
                                 <include reference="Y2a-o6-d03"/>
                                 <include reference="a7c-jP-yJP"/>
-                                <include reference="HyB-Bs-gOg"/>
-                                <include reference="aVh-jO-Jok"/>
-                                <include reference="gpz-q6-Q9Q"/>
                                 <include reference="ZrW-VJ-iSw"/>
                                 <include reference="dHi-Cl-Xc5"/>
                                 <include reference="zsS-Hc-O3L"/>
-                                <include reference="XoD-Pf-WJk"/>
-                                <include reference="kVZ-Yb-Rm4"/>
-                                <include reference="pP0-dE-xjY"/>
+                                <include reference="LMf-By-I5z"/>
+                                <include reference="iY9-4b-jt1"/>
+                                <include reference="vqe-nc-TBu"/>
+                                <include reference="HyB-Bs-gOg"/>
+                                <include reference="aVh-jO-Jok"/>
+                                <include reference="gpz-q6-Q9Q"/>
+                                <include reference="CGp-Yq-eAa"/>
+                                <include reference="GJd-EN-YpZ"/>
+                                <include reference="noM-lD-FSy"/>
+                                <include reference="3zu-Fy-XX7"/>
+                                <include reference="73C-ez-2P6"/>
+                                <include reference="TZt-Ha-PZ9"/>
+                                <include reference="DKe-mO-5YV"/>
+                                <include reference="Qnk-tF-qhj"/>
+                                <include reference="R7V-nN-iiz"/>
                                 <include reference="Q2q-8R-Izp"/>
                             </mask>
                         </variation>
