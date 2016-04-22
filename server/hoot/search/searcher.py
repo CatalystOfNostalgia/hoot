@@ -28,12 +28,21 @@ def emotion_search(emotion, ix):
     """
     Find all products that match the emotion.
     """
-    qp = QueryParser('emotions', schema=SCHEMA)
+    qp = QueryParser('sentic_emotions', schema=SCHEMA)
     q = qp.parse(emotion)
 
     with ix.searcher() as s:
         results = s.search(q)
-        return build_json_from_results(results)
+        products = build_json_from_results(results)
+
+    qp = QueryParser('compound_emotions', schema=SCHEMA)
+    q = qp.parse(emotion)
+
+    with ix.searcher() as s:
+        results = s.search()
+        products.exten(build_json_from_results(results))
+
+    return products
 
 
 def product_name_search(product_name, ix, emotion=None):
