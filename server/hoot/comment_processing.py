@@ -79,7 +79,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
                                 comment["emotion_vector"]["sensitivity"],
                                 comment["emotion_vector"]["aptitude"],
                                 comment["emotion_vector"]["polarity"])
-
+                                
+        comment["text"] = html.unescape(comment["text"])
         processed_comments.append(comment)
 
     popular_compound_emotions = []
