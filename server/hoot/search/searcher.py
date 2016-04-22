@@ -4,9 +4,22 @@ from search.indexer import INDEX_DIR
 from search.indexer import SCHEMA
 
 from whoosh import index
+from whoosh.query import Every
 from whoosh.qparser import QueryParser
 
 PAGE_LENGTH = 15
+
+
+def most_popular_search():
+    """
+    Returns the 10 most popular products.
+    """
+    ix = index.open_dir(INDEX_DIR)
+    q = Every()
+
+    with ix.searcher() as s:
+        results = s.search(q, sortby='comment_number', reverse=True)
+        return build_json_from_results(results)
 
 
 def search(product_name=None, emotion=None, page=1):
