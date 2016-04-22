@@ -13,6 +13,7 @@ from operator import itemgetter
 from emotion_processing.comment_emotions import ConceptError
 
 class NoEmotionsFoundError(Exception):
+
     def __init__(self, value):
         self.value = value
     def __str__(self):
@@ -101,7 +102,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     popular_sentic_emotions = []
     if len(sentic_emotion_dict) == 0:
         raise NoEmotionsFoundError("No sentic emotions found")
-        
+
     for i in range(0, 3):
         popular_sentic = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
         popular_sentic_emotions.append(popular_sentic)
