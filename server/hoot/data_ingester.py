@@ -6,6 +6,7 @@ from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
 from summarize import get_summary
+from comment_processing import NoEmotionsFoundError
 
 print("parsing the sentic graph")
 f = open('../senticnet3.rdf.xml') # may need to adjust p
@@ -67,6 +68,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     try:
         product_dict = add_amazon_info_to_dict(asin, product_dict)
     except AmazonInfoNotFoundError:
+        print("Couldn't find amazon info for product", i, " skipping")
         return
     # add the ASIN to the dict
     product_dict["asin"] = asin
@@ -86,10 +88,13 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
 
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
-    processed_dict = calculateVectorsForAllComments(product_dict, g)
-
+    try:
+        processed_dict = calculateVectorsForAllComments(product_dict, g)
+    except NoEmotionsFoundError:
+        print("couldnt find any emotions for product: ", i, "Skipping")
+        return
     # create the summary
-    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
+    # processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
@@ -197,6 +202,12 @@ if __name__ == '__main__':
     skip = args['skip']
     amount = args['amount']
     producttype = args['producttype']
+
+    if skip is not None:
+        skip = int(skip)
+    if amount is not None:
+        amount = int(amount)
+
 
     startTime = datetime.now()
     print ("starting")
