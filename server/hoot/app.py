@@ -24,7 +24,6 @@ class EmotionAPI(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         args = parser.parse_args()
-        print("THIS IS WORKING!")
 
         f = open('senticnet3.rdf.xml')
         g = rdflib.Graph()
