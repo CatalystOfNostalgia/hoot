@@ -4,8 +4,6 @@ from search.indexer import INDEX_DIR
 from search.indexer import SCHEMA
 
 from whoosh import index
-from whoosh.query import Or
-from whoosh.query import Term
 from whoosh.qparser import QueryParser
 
 PAGE_LENGTH = 15
@@ -61,28 +59,23 @@ def product_name_search(product_name, ix, page, emotion=None):
     qp = QueryParser('product_name', schema=SCHEMA)
     q = qp.parse(product_name)
 
-    if emotion is not None:
-        emotion_filter = Or(
-            Term('sentic_emotions', emotion),
-            Term('compound_emotions', emotion)
-        )
-
     with ix.searcher() as s:
-        if emotion is not None:
-            results = s.search(q, filter=emotion_filter)
-        else:
-            results = s.search(q)
-
-        return build_json_from_results(results, page)
+        results = s.search(q)
+        return build_json_from_results(results, page, emotion)
 
 
-def build_json_from_results(results, page):
+def build_json_from_results(results, page, emotion=None):
     """
     Builds the JSON that will be returned from search. It will be a list
     of dictionaries that will be transformed into JSON.
     """
     return_value = []
     for result in results:
+        if emotion is not None and not (emotion in result['sentic_emotions'] or
+                                        emotion in result['compound_emotions']):
+            # emotion is not in result, skip
+            continue
+
         result_dict = {}
         result_dict['product_name'] = result['product_name']
         result_dict['sentic_values'] = convert_emotions_to_list(result['sentic_emotions'])
