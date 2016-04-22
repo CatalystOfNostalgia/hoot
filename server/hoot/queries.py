@@ -39,7 +39,7 @@ def insert_media_emotion(media_id, emotion):
     models.session.commit()
 
 def remove_media(asin):
-    media_objs = find_media_by_asin(asin)
+    media = find_media_by_asin(asin)
 
     clean_media(media.media_id)
     models.session.delete(media)
