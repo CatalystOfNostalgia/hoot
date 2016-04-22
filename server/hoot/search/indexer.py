@@ -60,19 +60,28 @@ def indexer():
             comment.pop('emotion_vector')
             comment['relevancy'] = float('%.2f' % comment['relevancy'])
             comment['sentic_emotions'] = [e.capitalize() for e in comment['sentic_emotions']]
-            comment['compound_emotion'] = {
-                e.capitalize(): comment['compound_emotions'][e] for e in comment['compound_emotion']
-            }
+            compound_emotions = []
+            for e in comment['compound_emotions']:
+                compound_emotions.append({
+                    'compound_emotion': e['compound_emotion'].capitalize(), 
+                    'strength': e['strength']
+                    })
+            comment['compound_emotions'] = compound_emotions
+
 
         # write to indexer
-        writer.add_document(
-            product_name=product.title,
-            sentic_emotions=sentic_values_string,
-            compound_emotions=compound_emotions_string,
-            image_url=s3_json['image_url'],
-            sumy=s3_json['summary'],
-            comments=json.dumps(comments),
-        )
+        try:
+            writer.add_document(
+                product_name=product.title,
+                sentic_emotions=sentic_values_string,
+                compound_emotions=compound_emotions_string,
+                image_url=s3_json['image_url'],
+                sumy=s3_json['summary'],
+                comments=json.dumps(comments),
+            )
+        except:
+            print('ERROR with {}'.format(product.title))
+            print(e)
         print('{} indexed'.format(product.title))
 
     writer.commit()
