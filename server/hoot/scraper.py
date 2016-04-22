@@ -28,7 +28,7 @@ class Scraper:
                  comment_dict["text"] = review.text
                  comment_dict["unixtime"] = int(review.date)
                  list_of_review_dicts.append(comment_dict)
-        return data_ingester(asin, list_of_review_dicts, product_api, type)
+        return data_ingester.handleReview(asin, list_of_review_dicts, product_api, type)
 
     def get_asins(self):
         """
