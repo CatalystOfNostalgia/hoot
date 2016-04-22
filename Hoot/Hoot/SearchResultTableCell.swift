@@ -17,7 +17,7 @@ class SearchResultTableCell: UITableViewCell {
     
     var product: Product?
     
-    func setValues(){
+    func setValues() {
         guard let _ = product where product != nil else {
             return
         }

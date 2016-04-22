@@ -91,15 +91,17 @@ def find_media_by_creator(creator):
 
     return media
 
-def find_emotions_for_media(media_id):
-    return models.session.query(models.MultimediaEmotions).get(media_id)
-
 def find_comments_for_media(media_id):
     """ Find all comments associated with a media """
     comments = models.session.query(models.Comments).\
         filter(models.Comments.item_id == media_id).all()
 
     return comments
+
+def find_comment_count_for_media(media_id):
+    """ Finds number of comments associated with a media. """
+    return models.session.query(models.Comments).filter(
+        models.Comments.item_id == media_id).count()
 
 def find_emotions_for_media(media_id):
     """ Finds all the emotions for a given media """
@@ -125,7 +127,7 @@ def find_date_for_review(asin):
 
 def find_type_by_id(asin):
     media = find_media_by_asin(asin)
-    return media.type
+    return media.media_type
 
 def rollback():
     """" Resets the SQLAlchemy session
