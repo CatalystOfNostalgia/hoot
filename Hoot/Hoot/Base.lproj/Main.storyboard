@@ -339,7 +339,6 @@
                                 <connections>
                                     <outlet property="relevancyLabel" destination="5I0-HJ-klp" id="te9-iR-kQg"/>
                                     <outlet property="reviewTextPreview" destination="Rul-eN-eoO" id="bcx-55-bOl"/>
-                                    <segue destination="pPj-so-pEY" kind="show" identifier="GoToCommentSpecifics" id="Kwd-Ze-kiP"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -349,15 +348,18 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="pyL-UM-QIr"/>
+                    <connections>
+                        <segue destination="pPj-so-pEY" kind="show" identifier="GoToCommentSpecifics" id="rXx-L6-V1E"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FkX-iz-HJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2925" y="474"/>
         </scene>
-        <!--View Controller-->
+        <!--Review View Controller-->
         <scene sceneID="mIB-D5-48t">
             <objects>
-                <viewController id="pPj-so-pEY" sceneMemberID="viewController">
+                <viewController id="pPj-so-pEY" customClass="ReviewViewController" customModule="Hoot" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RYn-hM-Iqe"/>
                         <viewControllerLayoutGuide type="bottom" id="VNB-K3-Jjv"/>
@@ -391,23 +393,23 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ge-BEa">
-                                <rect key="frame" x="0.0" y="109" width="296" height="85"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ge-BEa">
+                                <rect key="frame" x="0.0" y="109" width="250" height="50"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cGu-mq-yKp">
-                                        <rect key="frame" x="20" y="20" width="45" height="45"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cGu-mq-yKp">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nbb-wr-GLL">
-                                        <rect key="frame" x="73" y="20" width="45" height="45"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nbb-wr-GLL">
+                                        <rect key="frame" x="50" y="0.0" width="50" height="50"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tBR-jq-cpS">
-                                        <rect key="frame" x="126" y="20" width="45" height="45"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tBR-jq-cpS">
+                                        <rect key="frame" x="100" y="0.0" width="50" height="50"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ay2-T3-s6k">
-                                        <rect key="frame" x="178" y="20" width="45" height="45"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ay2-T3-s6k">
+                                        <rect key="frame" x="150" y="0.0" width="50" height="50"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xyc-wy-0lk">
-                                        <rect key="frame" x="231" y="20" width="45" height="45"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xyc-wy-0lk">
+                                        <rect key="frame" x="200" y="0.0" width="50" height="50"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -449,8 +451,9 @@
                                 <exclude reference="Hk3-M6-ZA5"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="kVZ-Yb-Rm4"/>
-                                <exclude reference="pP0-dE-xjY"/>
+                                <exclude reference="LMf-By-I5z"/>
+                                <exclude reference="iY9-4b-jt1"/>
+                                <exclude reference="vqe-nc-TBu"/>
                                 <exclude reference="6fe-gA-NGU"/>
                                 <exclude reference="Y2a-o6-d03"/>
                                 <exclude reference="a7c-jP-yJP"/>
@@ -459,9 +462,8 @@
                                 <exclude reference="e3d-H7-E9P"/>
                                 <exclude reference="sV7-4Z-f9l"/>
                                 <exclude reference="zsS-Hc-O3L"/>
-                                <exclude reference="LMf-By-I5z"/>
-                                <exclude reference="iY9-4b-jt1"/>
-                                <exclude reference="vqe-nc-TBu"/>
+                                <exclude reference="kVZ-Yb-Rm4"/>
+                                <exclude reference="pP0-dE-xjY"/>
                                 <exclude reference="Q2q-8R-Izp"/>
                             </mask>
                         </variation>
@@ -476,8 +478,9 @@
                                 <include reference="Hk3-M6-ZA5"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="kVZ-Yb-Rm4"/>
-                                <include reference="pP0-dE-xjY"/>
+                                <include reference="LMf-By-I5z"/>
+                                <include reference="iY9-4b-jt1"/>
+                                <include reference="vqe-nc-TBu"/>
                                 <include reference="6fe-gA-NGU"/>
                                 <include reference="Y2a-o6-d03"/>
                                 <include reference="a7c-jP-yJP"/>
@@ -486,13 +489,21 @@
                                 <include reference="e3d-H7-E9P"/>
                                 <include reference="sV7-4Z-f9l"/>
                                 <include reference="zsS-Hc-O3L"/>
-                                <include reference="LMf-By-I5z"/>
-                                <include reference="iY9-4b-jt1"/>
-                                <include reference="vqe-nc-TBu"/>
+                                <include reference="kVZ-Yb-Rm4"/>
+                                <include reference="pP0-dE-xjY"/>
                                 <include reference="Q2q-8R-Izp"/>
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="commentTextView" destination="Uvg-cy-f40" id="5uD-JG-o4q"/>
+                        <outlet property="fifthStarView" destination="xyc-wy-0lk" id="Hxn-8j-qCC"/>
+                        <outlet property="firstStarView" destination="cGu-mq-yKp" id="jo9-aR-IW5"/>
+                        <outlet property="fourthStarView" destination="ay2-T3-s6k" id="gx4-j6-a7C"/>
+                        <outlet property="relevancyLabel" destination="Hk3-M6-ZA5" id="Xsd-NV-n1H"/>
+                        <outlet property="secondStarView" destination="Nbb-wr-GLL" id="j4J-Zt-6df"/>
+                        <outlet property="thirdStarView" destination="tBR-jq-cpS" id="VGl-A3-fep"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QBp-pf-8iN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
