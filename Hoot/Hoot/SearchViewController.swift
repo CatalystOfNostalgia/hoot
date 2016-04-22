@@ -38,8 +38,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
-        searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
-        //hootAPI.getRealSuggestions(nil, emotionText: nil, )
+        searchSuggestionsTable.hidden = false
         hootAPI.getRealSuggestions(nil, emotionText: nil) {
             (result: [Product]?, error: NSError!) in
             if error != nil {
@@ -136,8 +135,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        
-        //updateProducts(searchBar)
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -244,6 +241,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         activityIndicator.startAnimating()
+        activityIndicator.layer.zPosition = 1
         hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
             if (error != nil) {
                 print("balala")
