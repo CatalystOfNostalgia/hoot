@@ -15,7 +15,7 @@ def search(product_name=None, emotion=None):
     """
     ix = index.open_dir(INDEX_DIR)
     if product_name is None and emotion is None:
-        return {}
+        return []
     elif product_name is None:
         return emotion_search(emotion, ix)
     elif emotion is None:
