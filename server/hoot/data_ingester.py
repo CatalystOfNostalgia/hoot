@@ -103,8 +103,8 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     # anything below 30 characters will probably be not descriptive at all
     if len(description) > 30:
         product_dict["description"] = description
-    else:
-        # if we dont have a description we don't want anything to do with this
+    #else:
+        #if we dont have a description we don't want anything to do with this
 
     try:
         product_dict = add_amazon_info_to_dict(asin, product_dict)
