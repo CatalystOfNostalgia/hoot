@@ -2,7 +2,8 @@ import sys, os, json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 from amazon_scraper import AmazonScraper
 import queries
-
+import aws_module
+import data_ingester
 
 class Scraper:
     #update all asins
@@ -13,21 +14,26 @@ class Scraper:
         p = amzn.lookup(ItemId=asin)
         reviews = p.reviews()
         dates = queries.find_date_for_review(asin)
+        type = queries.find_type_by_id(asin)
         date = max(dates)
         update = False
-        updateReviews = []
         for review in reviews:
-            if date > review.date:
+            if date < int(review.date):
                 update = True
         list_of_review_dicts =[]
         if(update):
              for review in reviews:
+                 product_api = aws_module.setup_product_api()
                  comment_dict = dict()
                  comment_dict["text"] = review.text
-                 comment_dict
-        return updateReviews
-    #gets all asins and calls update
+                 comment_dict["unixtime"] = int(review.date)
+                 list_of_review_dicts.append(comment_dict)
+        return data_ingester(asin, list_of_review_dicts, product_api, type)
+
     def get_asins(self):
+        """
+        gets all asins and calls update
+        """
         media = queries.get_all_media()
         asins = []
         for item in media:
