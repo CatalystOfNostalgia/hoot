@@ -97,6 +97,7 @@ def handleReview(asin, list_of_review_dicts, productapi, producttype):
 
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
+    process_dict = dict()
     try:
         processed_dict = calculateVectorsForAllComments(product_dict, g)
     except NoEmotionsFoundError:
