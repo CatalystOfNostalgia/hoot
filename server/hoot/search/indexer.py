@@ -59,6 +59,10 @@ def indexer():
             comment.pop('vector_space')
             comment.pop('emotion_vector')
             comment['relevancy'] = float('%.2f' % comment['relevancy'])
+            comment['sentic_emotions'] = [e.capitalize() for e in comment['sentic_emotions']]
+            comment['compound_emotion'] = {
+                e.capitalize(): comment['compound_emotions'][e] for e in comment['compound_emotion']
+            }
 
         # write to indexer
         writer.add_document(
