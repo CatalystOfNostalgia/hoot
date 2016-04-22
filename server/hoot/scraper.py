@@ -6,6 +6,7 @@ import calendar
 import queries
 import time
 import datetime
+import data_ingester
 
 def update_reviews(asin_list):
     for asin in asin_list:

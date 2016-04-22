@@ -6,6 +6,7 @@ from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
 from summarize import get_summary
+from comment_processing import NoEmotionsFoundError
 
 print("parsing the sentic graph")
 f = open('../senticnet3.rdf.xml') # may need to adjust p
@@ -17,6 +18,7 @@ print("done parsing")
 i = 0
 
 class AmazonInfoNotFoundError(Exception):
+
     def __init__(self, value):
         self.value = value
     def __str__(self):
@@ -46,6 +48,8 @@ def parse(path, skip, amount, productapi, producttype):
             if len(reviews_for_current_asin) > 5:
                 if (i < skip):
                     i = i + 1
+                    reviews_for_current_asin = list()
+                    current_asin = review["asin"]
                     continue
 
                 i = i + 1
@@ -59,62 +63,26 @@ def parse(path, skip, amount, productapi, producttype):
         reviews_for_current_asin.append(review)
 
 # takes our constructed JSON file and runs our processing methods on it
-def handleReview(asin, list_of_review_dicts, productapi, type):
+def handleReview(asin, list_of_review_dicts, productapi, producttype):
     global i
     product_dict = dict()
     product_dict["comments"] = list()
-    # lookup product asin and parse XML for product description and metadata
-    root = ET.fromstring(productapi.ItemLookup(ItemId=asin, ResponseGroup="EditorialReview,ItemAttributes,Images"))
-    namespace = root.tag[root.tag.find("{"): root.tag.find("}")+1]
-    item = root.find(namespace + "Items").find(namespace + "Item")
-
-    # if that doesnt work, this response is a bust. return
-    if item is None:
-        return
-    if item.find(namespace + "ItemAttributes") is None:
-        return
-
-    creator = "Unknown"
-    image_node = item.find(namespace + "LargeImage")
-    ean_node = item.find(namespace + "ItemAttributes").find(namespace + "EAN")
-    title_node = item.find(namespace + "ItemAttributes").find(namespace + "Title")
-    author_node = item.find(namespace + "ItemAttributes").find(namespace + "Author")
-    director_node = item.find(namespace + "ItemAttributes").find(namespace + "Director")
-    lead_actor_node = item.find(namespace + "ItemAttributes").find(namespace + "Actor")
-
-    # find the "best" desciption given for the product
-    description = ""
-    for child in root.findall(".//"+ namespace + "EditorialReview"):
-        # this node should always exist, since if there was no content there would be no review
-        review_node = child.find(namespace + "Content")
-        review = ""
-        if review_node is not None:
-            review = review_node.text
-        # I'm assuming that a longer editorial review will be better written / a synopsis of the product and its themes
-        if ( len(review) > len(description) ):
-            description = review
-
-    # check to see if these nodes actually exists, you never know
-    if title_node is not None:
-        product_dict["title"] = title_node.text
-    if ean_node is not None:
-        product_dict["ean"] = ean_node.text
-    # we want the description to be substantial, some editorial reviews are garbage
-    # anything below 30 characters will probably be not descriptive at all
-    if len(description) > 30:
-        product_dict["description"] = description
-    #else:
-        #if we dont have a description we don't want anything to do with this
 
     try:
         product_dict = add_amazon_info_to_dict(asin, product_dict)
     except AmazonInfoNotFoundError:
+        print("Couldn't find amazon info for product", i, " skipping")
         return
     # add the ASIN to the dict
     product_dict["asin"] = asin
-
+    product_dict["type"] = producttype
     # insert_media(title, creator, description, media_type, asin, date)
-    queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
+
+    product = queries.find_media_by_asin(asin)
+    if product is not None:
+        queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
+    else:
+        queries.update_media(product.media_id, int(time.time()))
 
 
     for review in list_of_review_dicts:
@@ -128,15 +96,20 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
 
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
-    processed_dict = calculateVectorsForAllComments(product_dict, g)
-
+    try:
+        processed_dict = calculateVectorsForAllComments(product_dict, g)
+    except NoEmotionsFoundError:
+        # REMOVE the media from the table since we don't want it anymore
+        queries.remove_media(asin)
+        print("couldnt find any emotions for product: ", i, "Skipping")
+        return
     # create the summary
-    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
+   processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
     print ("Adding product with asin: ", asin, "to S3 ---", i)
-    push_to_S3(filename, processed_json)
+   push_to_S3(filename, processed_json)
 
 # pass a list of the most relevant comment texts (above a relevancy threshold, or just the first 5)
 def return_summary(product_dict):
@@ -200,8 +173,10 @@ def add_amazon_info_to_dict(asin, product_dict):
             # if we dont have a description we don't want anything to do with this
             raise AmazonInfoNotFoundError("No description that's useful enough")
 
+
         # Find the Image url
         # check to see if LargeImage, if not check Medium, if not that check Small
+        product_dict["image_url"] = "None"
         if image_node is None:
             image_node = item.find(namespace + "MediumImage")
         if image_node is None:
@@ -212,8 +187,6 @@ def add_amazon_info_to_dict(asin, product_dict):
             if image_url_node is not None:
                 # add the image url to the json
                 product_dict["image_url"] = image_url_node.text
-            else:
-                product_dict["image_url"] = "None"
 
         if author_node is not None:
             creator = author_node.text
@@ -239,6 +212,12 @@ if __name__ == '__main__':
     skip = args['skip']
     amount = args['amount']
     producttype = args['producttype']
+
+    if skip is not None:
+        skip = int(skip)
+    if amount is not None:
+        amount = int(amount)
+
 
     startTime = datetime.now()
     print ("starting")
