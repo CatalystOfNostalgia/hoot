@@ -19,6 +19,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     sentic_emotion_dict = collections.defaultdict(int)
 
     processed_comments = list()
+    overall_rating = 0.0
 
     # the product model from the DB
     product = queries.find_media_by_asin(dictFromJSON["asin"])
@@ -65,6 +66,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         for sentic in comment["sentic_emotions"]:
             sentic_emotion_dict[sentic] += 1
 
+        overall_rating += float(comment["rating"])
+
         # add the comment to the database
         # insert_comment(item_id, relevancy, pleasantness, attention, sensitivity, aptitude, polarity, date)
         queries.insert_comment(product.media_id,
@@ -95,6 +98,9 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
     dictFromJSON["popular_compound_emotions"] = popular_compound_emotions
     dictFromJSON["popular_sentic_emotions"] = popular_sentic_emotions
+    
+    if len(processed_comments) > 0:
+        dictFromJSON["overall_rating"] = overall_rating / len(processed_comments)
 
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
 
