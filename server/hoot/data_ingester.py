@@ -91,7 +91,6 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     processed_dict["summary"] = return_summary(processed_dict)
 
     processed_json = json.dumps(processed_dict, indent=4)
-    print(processed_json)
 
     print ("Adding product with asin: ", asin, "to S3 ---", i)
     push_to_S3(filename, processed_json)
