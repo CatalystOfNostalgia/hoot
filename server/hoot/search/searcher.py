@@ -4,7 +4,8 @@ from search.indexer import INDEX_DIR
 from search.indexer import SCHEMA
 
 from whoosh import index
-from whoosh import query
+from whoosh.query import Or
+from whoosh.query import Term
 from whoosh.qparser import QueryParser
 
 
@@ -15,7 +16,7 @@ def search(product_name=None, emotion=None):
     """
     ix = index.open_dir(INDEX_DIR)
     if product_name is None and emotion is None:
-        return {}
+        return []
     elif product_name is None:
         return emotion_search(emotion, ix)
     elif emotion is None:
@@ -28,12 +29,21 @@ def emotion_search(emotion, ix):
     """
     Find all products that match the emotion.
     """
-    qp = QueryParser('emotions', schema=SCHEMA)
+    qp = QueryParser('sentic_emotions', schema=SCHEMA)
     q = qp.parse(emotion)
 
     with ix.searcher() as s:
         results = s.search(q)
-        return build_json_from_results(results)
+        products = build_json_from_results(results)
+
+    qp = QueryParser('compound_emotions', schema=SCHEMA)
+    q = qp.parse(emotion)
+
+    with ix.searcher() as s:
+        results = s.search()
+        products.exten(build_json_from_results(results))
+
+    return products
 
 
 def product_name_search(product_name, ix, emotion=None):
@@ -44,7 +54,10 @@ def product_name_search(product_name, ix, emotion=None):
     q = qp.parse(product_name)
 
     if emotion is not None:
-        emotion_filter = query.Term('emotions', emotion)
+        emotion_filter = Or(
+            Term('sentic_emotions', emotion),
+            Term('compound_emotions', emotion)
+        )
 
     with ix.searcher() as s:
         if emotion is not None:
@@ -78,4 +91,4 @@ def convert_emotions_to_list(emotions):
     """
     Converts the space deliminated list of emotions to a python list.
     """
-    return [emotion for emotion in emotions.split()]
+    return [emotion.capitalize() for emotion in emotions.split()]

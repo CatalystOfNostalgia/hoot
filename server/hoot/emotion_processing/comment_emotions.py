@@ -58,7 +58,8 @@ def find_concepts(comment, start):
     if len(output) == 0:
         raise ConceptError("no concepts found")
 
-    print('found {} concepts'.format(len(output)))
+    # for debugging
+    # print('found {} concepts'.format(len(output)))
     return output
 
 
@@ -144,7 +145,9 @@ def emotions(comment, g):
     scores = get_emotional_scores(concepts, g)
     average = calculate_average(scores)
     end = time.time()
-    print('time: {}'.format(end - start))
+
+    # for debugging
+    # print('time: {}'.format(end - start))
     return Emotion(average)
 
 

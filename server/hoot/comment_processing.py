@@ -66,8 +66,9 @@ def calculateVectorsForAllComments(dictFromJSON, g):
             sentic_emotion_dict[sentic] += 1
 
         # add the comment to the database
-        # insert_comment(item_id, relevancy, pleasantness, attention, sensitivity, aptitude, polarity)
+        # insert_comment(item_id, relevancy, pleasantness, attention, sensitivity, aptitude, polarity, date)
         queries.insert_comment(product.media_id,
+                                comment["unixtime"],
                                 comment["relevancy"],
                                 comment["emotion_vector"]["pleasantness"],
                                 comment["emotion_vector"]["attention"],
