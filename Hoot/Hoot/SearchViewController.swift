@@ -115,11 +115,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         navBar.title = "Hoot"
         super.viewDidLoad()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    // MARK: UISearchBarDelegate
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.enablesReturnKeyAutomatically = false 
@@ -135,27 +132,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        var query: String? = nil
-        var emotion: String? = nil
-        if category != "" {
-            emotion = category.lowercaseString
-        }
         
-        if searchBar.text != "" {
-            query = searchBar.text
-        }
-        
-        activityIndicator.startAnimating()
-        hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
-            self.suggestions = data
-            
-            //self.searchSuggestionsTable.reloadData()
-            dispatch_async(dispatch_get_main_queue(), {
-                    self.activityIndicator.stopAnimating()
-                    self.searchSuggestionsTable.reloadData()
-                })
-        })
-        
+        updateProducts(searchBar)
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        updateProducts(searchBar)
     }
     
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
@@ -183,9 +165,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-
-    }
+    // MARK: UITableViewDataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -204,6 +184,15 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         // TODO: Implement product view stuff
         return cell
     }
+    
+    // MARK: UITableViewDelegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedRow = indexPath.row
+        performSegueWithIdentifier("GoToProductPage", sender: self)
+    }
+    
+    // MARK: Helper Functions
     
     func changeSearchScope(index: Int) {
         let selectedTitle: String = selectedControl[index]
@@ -238,11 +227,32 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.selectedScopeButtonIndex = -1
         self.searchSuggestionsTable.reloadData()
     }
-
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedRow = indexPath.row
-        performSegueWithIdentifier("GoToProductPage", sender: self)
+    
+    func updateProducts(searchBar: UISearchBar) {
+        
+        var query: String? = nil
+        var emotion: String? = nil
+        if category != "" {
+            emotion = category.lowercaseString
+        }
+        
+        if searchBar.text != "" {
+            query = searchBar.text
+        }
+        
+        activityIndicator.startAnimating()
+        hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
+            self.suggestions = data
+            
+            //self.searchSuggestionsTable.reloadData()
+            dispatch_async(dispatch_get_main_queue(), {
+                self.activityIndicator.stopAnimating()
+                self.searchSuggestionsTable.reloadData()
+            })
+        })
     }
+    
+    // MARK: Navigation
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         return selectedRow != nil
