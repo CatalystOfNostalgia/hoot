@@ -26,11 +26,11 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     product = queries.find_media_by_asin(dictFromJSON["asin"])
 
     # get rid of escaped html characters in description
-    dictFromJSON["description"] = html.unescape(comment["text"])
+    dictFromJSON["description"] = html.unescape(dictFromJSON["description"])
 
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
-        comment["text"] = html.unescape(dictFromJSON["description"])
+        comment["text"] = html.unescape(comment["text"])
         vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
         vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
         comment["vector_space"] = vectorized_comment
