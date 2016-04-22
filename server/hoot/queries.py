@@ -107,6 +107,16 @@ def find_emotions_for_media(media_id):
 
     return emotions
 
+
+def find_date_for_review(asin):
+    media = find_media_by_asin(asin)
+    item_id = media.media_id
+    comments = find_comments_for_media(item_id)
+    dates = []
+    for comment in comments:
+        dates.append(comment.comment_date)
+    return dates
+
 def rollback():
     """" Resets the SQLAlchemy session
     Use this if an exception is thrown or else you cannot make subsequent
