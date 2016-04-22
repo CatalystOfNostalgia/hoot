@@ -27,6 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var loathingCategory: [String]!
     var rageCategory: [String]!
     var terrorCategory: [String]!
+    
     var vigilanceCategory: [String]!
     var selectedControl: [String]!
     

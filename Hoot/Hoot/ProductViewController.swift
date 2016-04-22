@@ -29,10 +29,8 @@ class ProductViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowReviews" {
-            print("balala") 
             if let destination = segue.destinationViewController as? ReviewsViewController {
                 destination.comments = comments
-                print("woo")
             }
         }
     }

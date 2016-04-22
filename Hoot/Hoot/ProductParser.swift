@@ -21,6 +21,9 @@ class ProductParser {
     let COMMENT_SENTIC_EMOTIONS_KEY = "sentic_emotions"
     let COMMENT_RATING_KEY = "rating"
     
+    let COMPOUND_EMOTION_EMOTION_KEY = "compound_emotion"
+    let COMPOUND_EMOTION_STRENGTH_KEY = "strength"
+    
     func parseProducts(data: NSData) -> [Product] {
         var products:[Product] = []
         
@@ -64,19 +67,34 @@ class ProductParser {
             if let commentJson = comment as? [String: AnyObject] {
                 if let relevancy = commentJson[COMMENT_RELEVANCY_KEY] as? Double {
                     if let commentText = commentJson[COMMENT_DATA_KEY] as? String {
-                        //if let compoundEmotions = commentJson[COMMENT_COMPOUND_EMOTIONS_KEY] as? [String] {
+                        if let compoundEmotions = commentJson[COMMENT_COMPOUND_EMOTIONS_KEY] as? NSArray {
                             if let senticEmotions = commentJson[COMMENT_SENTIC_EMOTIONS_KEY] as? [String] {
                                 if let commentRating = commentJson[COMMENT_RATING_KEY] as? Double {
-                                    //var allEmotions = compoundEmotions.joinWithSeparator(",")
-                                    var allEmotions = senticEmotions.joinWithSeparator(",")
-                                    parsed_comments.append(Comment(emotions: allEmotions, comment: commentText, relevancy: relevancy, rating: commentRating))
+                                    let complexEmotions = processComplexEmotions(compoundEmotions)
+                                    let basicEmotions = senticEmotions.joinWithSeparator(",")
+                                    parsed_comments.append(Comment(emotions: basicEmotions, comment: commentText, relevancy: relevancy, rating: commentRating, complexEmotions: complexEmotions))
                                 }
                             }
-                        //}
+                        }
                     }
                 }
             }
         }
         return parsed_comments
+    }
+    
+    func processComplexEmotions(complexComments: NSArray) -> String {
+        var complexEmotionString: [String] = []
+        for complexEmotion in complexComments {
+            if let emotionDict = complexEmotion as? [String: AnyObject] {
+                if let emotionString = emotionDict[COMPOUND_EMOTION_EMOTION_KEY] as? String {
+                    if let emotionStrength = emotionDict[COMPOUND_EMOTION_STRENGTH_KEY] as? String {
+                        complexEmotionString.append(emotionStrength + " " + emotionString)
+                    }
+                }
+            }
+        }
+        
+        return complexEmotionString.joinWithSeparator(", ")
     }
 }
