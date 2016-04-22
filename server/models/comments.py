@@ -13,7 +13,7 @@ class Comments(Base):
                           autoincrement=True, nullable=False)
     comment_date = Column(Integer, nullable=False)
     item_id      = Column(Integer, nullable=False)
-    relevancy    = Column(Integer, nullable=False)
+    relevancy    = Column(DOUBLE, nullable=False)
     pleasantness = Column(DOUBLE, nullable=False)
     attention    = Column(DOUBLE, nullable=False)
     sensitivity  = Column(DOUBLE, nullable=False)

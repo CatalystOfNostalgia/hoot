@@ -1,5 +1,6 @@
 import nltk
 import string
+import html
 import json
 import math
 import queries
@@ -19,6 +20,7 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     sentic_emotion_dict = collections.defaultdict(int)
 
     processed_comments = list()
+    overall_rating = 0.0
 
     # the product model from the DB
     product = queries.find_media_by_asin(dictFromJSON["asin"])
@@ -65,6 +67,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         for sentic in comment["sentic_emotions"]:
             sentic_emotion_dict[sentic] += 1
 
+        overall_rating += float(comment["rating"])
+
         # add the comment to the database
         # insert_comment(item_id, relevancy, pleasantness, attention, sensitivity, aptitude, polarity, date)
         queries.insert_comment(product.media_id,
@@ -75,7 +79,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
                                 comment["emotion_vector"]["sensitivity"],
                                 comment["emotion_vector"]["aptitude"],
                                 comment["emotion_vector"]["polarity"])
-
+                                
+        comment["text"] = html.unescape(comment["text"])
         processed_comments.append(comment)
 
     popular_compound_emotions = []
@@ -83,7 +88,6 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         popular_emotion = max(compound_emotion_dict, key=compound_emotion_dict.get)
         popular_compound_emotions.append(popular_emotion)
         compound_emotion_dict.pop(popular_emotion)
-
 
     popular_sentic_emotions = []
     for i in range(0, 3):
@@ -96,7 +100,15 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     dictFromJSON["popular_compound_emotions"] = popular_compound_emotions
     dictFromJSON["popular_sentic_emotions"] = popular_sentic_emotions
 
+    if len(processed_comments) > 0:
+        rating = overall_rating / len(processed_comments)
+        rating = float("{0:.2f}".format(rating))
+        dictFromJSON["overall_rating"] = rating
+
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
+
+    # get rid of escaped html characters in description
+    dictFromJSON["description"] = html.unescape(dictFromJSON["description"])
 
     return dictFromJSON
 

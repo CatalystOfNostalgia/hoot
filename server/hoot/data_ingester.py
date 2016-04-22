@@ -1,5 +1,6 @@
 #! python3
 import json, gzip, time, random, argparse, os.path, rdflib, queries
+import html
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
@@ -14,6 +15,12 @@ print("done parsing")
 
 # just for counting the # of products posted to S3
 i = 0
+
+class AmazonInfoNotFoundError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 # for parsing the UCSD zipfiles
 def parse(path, skip, amount, productapi, producttype):
@@ -30,7 +37,7 @@ def parse(path, skip, amount, productapi, producttype):
     reviews_for_current_asin = list()
     for reviewText in allReviews:
         review = json.loads(reviewText.decode())
-        # # if this is the first iteration of a new product, then set the current asin
+        # if this is the first iteration of a new product, then set the current asin
         if (current_asin == ""):
             current_asin = review["asin"]
         # if we've reached a new set of reviews, process the set of previous reviews, keep track of current asin
@@ -56,7 +63,6 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     global i
     product_dict = dict()
     product_dict["comments"] = list()
-    print("i'm here")
     # lookup product asin and parse XML for product description and metadata
     root = ET.fromstring(productapi.ItemLookup(ItemId=asin, ResponseGroup="EditorialReview,ItemAttributes,Images"))
     namespace = root.tag[root.tag.find("{"): root.tag.find("}")+1]
@@ -99,38 +105,16 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
         product_dict["description"] = description
     else:
         # if we dont have a description we don't want anything to do with this
+
+    try:
+        product_dict = add_amazon_info_to_dict(asin, product_dict)
+    except AmazonInfoNotFoundError:
         return
-
-    # Find the Image url
-    # check to see if LargeImage, if not check Medium, if not that check Small
-    if image_node is None:
-        image_node = item.find(namespace + "MediumImage")
-    if image_node is None:
-        image_node = item.find(namespace + "SmallImage")
-
-    if image_node is not None:
-        image_url_node = image_node.find(namespace + "URL")
-        if image_url_node is not None:
-            # add the image url to the json
-            product_dict["image_url"] = image_url_node.text
-        else:
-            product_dict["image_url"] = "None"
-
-    if author_node is not None:
-        creator = author_node.text
-    elif director_node is not None:
-        creator = director_node.text
-    elif lead_actor_node is not None:
-        creator = lead_actor_node.text
-
-    # add the creator to the dict
-    product_dict["creator"] = creator
-
     # add the ASIN to the dict
     product_dict["asin"] = asin
 
-    #insert_media(title, creator, description, media_type, asin, date)
-    queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin, int(time.time()))
+    # insert_media(title, creator, description, media_type, asin, date)
+    queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
 
 
     for review in list_of_review_dicts:
@@ -147,7 +131,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     processed_dict = calculateVectorsForAllComments(product_dict, g)
 
     # create the summary
-    processed_dict["summary"] = return_summary(processed_dict)
+    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
@@ -170,6 +154,78 @@ def return_summary(product_dict):
             comment_texts.append(comment["text"])
 
     return get_summary(comment_texts)
+
+def add_amazon_info_to_dict(asin, product_dict):
+        # lookup product asin and parse XML for product description and metadata
+        root = ET.fromstring(productapi.ItemLookup(ItemId=asin, ResponseGroup="EditorialReview,ItemAttributes,Images"))
+        namespace = root.tag[root.tag.find("{"): root.tag.find("}")+1]
+        item = root.find(namespace + "Items").find(namespace + "Item")
+
+        # if that doesnt work, this response is a bust. return
+        if item is None:
+            raise AmazonInfoNotFoundError("Can't retrieve data from Amazon Product API")
+        if item.find(namespace + "ItemAttributes") is None:
+            raise AmazonInfoNotFoundError("Can't get the namespace from the response XML")
+
+        creator = "Unknown"
+        image_node = item.find(namespace + "LargeImage")
+        ean_node = item.find(namespace + "ItemAttributes").find(namespace + "EAN")
+        title_node = item.find(namespace + "ItemAttributes").find(namespace + "Title")
+        author_node = item.find(namespace + "ItemAttributes").find(namespace + "Author")
+        director_node = item.find(namespace + "ItemAttributes").find(namespace + "Director")
+        lead_actor_node = item.find(namespace + "ItemAttributes").find(namespace + "Actor")
+
+        # find the "best" desciption given for the product
+        description = ""
+        for child in root.findall(".//"+ namespace + "EditorialReview"):
+            # this node should always exist, since if there was no content there would be no review
+            review_node = child.find(namespace + "Content")
+            review = ""
+            if review_node is not None:
+                review = review_node.text
+            # I'm assuming that a longer editorial review will be better written / a synopsis of the product and its themes
+            if ( len(review) > len(description) ):
+                description = review
+
+        # check to see if these nodes actually exists, you never know
+        if title_node is not None:
+            product_dict["title"] = title_node.text
+        if ean_node is not None:
+            product_dict["ean"] = ean_node.text
+        # we want the description to be substantial, some editorial reviews are garbage
+        # anything below 30 characters will probably be not descriptive at all
+        if len(description) > 30:
+            product_dict["description"] = description
+        else:
+            # if we dont have a description we don't want anything to do with this
+            raise AmazonInfoNotFoundError("No description that's useful enough")
+
+        # Find the Image url
+        # check to see if LargeImage, if not check Medium, if not that check Small
+        if image_node is None:
+            image_node = item.find(namespace + "MediumImage")
+        if image_node is None:
+            image_node = item.find(namespace + "SmallImage")
+
+        if image_node is not None:
+            image_url_node = image_node.find(namespace + "URL")
+            if image_url_node is not None:
+                # add the image url to the json
+                product_dict["image_url"] = image_url_node.text
+            else:
+                product_dict["image_url"] = "None"
+
+        if author_node is not None:
+            creator = author_node.text
+        elif director_node is not None:
+            creator = director_node.text
+        elif lead_actor_node is not None:
+            creator = lead_actor_node.text
+
+        # add the creator to the dict
+        product_dict["creator"] = creator
+
+        return product_dict
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Pass in UCSD review collection filename, amt of products to skip, and amt of products to upload')
