@@ -48,7 +48,7 @@ def get_date(d):
     unix_time = calendar.timegm(d.utctimetuple())
     return unix_time
 
-def get_asins(self):
+def get_asins():
     """
     gets all asins and calls update
     """
@@ -61,6 +61,6 @@ def get_asins(self):
 
 if __name__ == '__main__':
     get_asins()
-    #Scraper.get_asins()
+
 
 

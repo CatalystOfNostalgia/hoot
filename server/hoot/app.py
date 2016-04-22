@@ -16,18 +16,16 @@ class MultimediaAPI(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('product', type=str)
         parser.add_argument('emotion', type=str)
+        parser.add_argument('page', type=int)
         args = parser.parse_args()
-        return search(args['product'], args['emotion'])
+        return search(args['product'], args['emotion'], args['page'])
 
 
 class EmotionAPI(Resource):
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument('text', location='form', required=True)
         args = parser.parse_args()
-
-        f = open('senticnet3.rdf.xml')
-        g = rdflib.Graph()
-        g.parse(f)
 
         emotion = comment_emotions.emotions(args['text'], g)
         sentic_values = emotion.get_all_sentic_values()
@@ -45,6 +43,10 @@ class EmotionAPI(Resource):
 @app.route('/', methods=['GET'])
 def index():
     return 'You are being greeted by hoot!'
+
+f = open('/var/www/html/hoot/senticnet3.rdf.xml')
+g = rdflib.Graph()
+g.parse(f)
 
 api.add_resource(MultimediaAPI, '/search', endpoint='search')
 api.add_resource(EmotionAPI, '/emotions', endpoint='emotions')

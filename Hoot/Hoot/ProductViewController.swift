@@ -11,7 +11,7 @@ import UIKit
 class ProductViewController: UIViewController {
 
 
-    @IBOutlet weak var productName: UITextView!
+    @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var summary: UITextView!
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var emotions: UILabel!
@@ -29,10 +29,8 @@ class ProductViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowReviews" {
-            print("balala") 
             if let destination = segue.destinationViewController as? ReviewsViewController {
                 destination.comments = comments
-                print("woo")
             }
         }
     }
@@ -47,7 +45,6 @@ class ProductViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         self.summary.setContentOffset(CGPointZero, animated: false)
-        self.productName.setContentOffset(CGPointZero, animated: false)
     }
     
 }
