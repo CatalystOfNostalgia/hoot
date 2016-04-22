@@ -87,7 +87,6 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         popular_compound_emotions.append(popular_emotion)
         compound_emotion_dict.pop(popular_emotion)
 
-
     popular_sentic_emotions = []
     for i in range(0, 3):
         popular_sentic = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
@@ -98,9 +97,11 @@ def calculateVectorsForAllComments(dictFromJSON, g):
 
     dictFromJSON["popular_compound_emotions"] = popular_compound_emotions
     dictFromJSON["popular_sentic_emotions"] = popular_sentic_emotions
-    
+
     if len(processed_comments) > 0:
-        dictFromJSON["overall_rating"] = overall_rating / len(processed_comments)
+        rating = overall_rating / len(processed_comments)
+        rating = float("{0:.2f}".format(rating))
+        dictFromJSON["overall_rating"] = rating
 
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
 

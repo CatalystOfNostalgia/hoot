@@ -36,7 +36,7 @@ def parse(path, skip, amount, productapi, producttype):
     reviews_for_current_asin = list()
     for reviewText in allReviews:
         review = json.loads(reviewText.decode())
-        # # if this is the first iteration of a new product, then set the current asin
+        # if this is the first iteration of a new product, then set the current asin
         if (current_asin == ""):
             current_asin = review["asin"]
         # if we've reached a new set of reviews, process the set of previous reviews, keep track of current asin
@@ -71,7 +71,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     product_dict["asin"] = asin
 
     # insert_media(title, creator, description, media_type, asin, date)
-    queries.insert_media(product_dict["title"], creator, product_dict["description"], producttype, asin, int(time.time()))
+    queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
 
 
     for review in list_of_review_dicts:
