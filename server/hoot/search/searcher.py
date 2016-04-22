@@ -18,8 +18,8 @@ def most_popular_search():
     q = Every()
 
     with ix.searcher() as s:
-        results = s.search(q, sortby='comment_number', reverse=True)
-        return build_json_from_results(results)
+        results = s.search(q, sortedby='comment_number', reverse=True)
+        return build_json_from_results(results, 1)
 
 
 def search(product_name=None, emotion=None, page=1):
@@ -33,7 +33,7 @@ def search(product_name=None, emotion=None, page=1):
         page = 1
 
     if product_name is None and emotion is None:
-        return []
+        return most_popular_search()
     elif product_name is None:
         return emotion_search(emotion, ix, page)
     elif emotion is None:
