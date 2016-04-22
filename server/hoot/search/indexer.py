@@ -64,7 +64,7 @@ def indexer():
             for e in comment['compound_emotions']:
                 compound_emotions.append({
                     'compound_emotion': e['compound_emotion'].capitalize(), 
-                    'strength': e['strength']
+                    'strength': e['strength'].capitalize()
                     })
             comment['compound_emotions'] = compound_emotions
 
