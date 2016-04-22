@@ -9,10 +9,11 @@
 import Foundation
 
 class Comment {
-    var emotions: String?
-    var comment: String?
-    var relevancy: Double?
-    var rating: Double?
+    var emotions: String
+    var comment: String
+    var relevancy: Double
+    var rating: Double
+    
     init(emotions: String, comment: String, relevancy: Double, rating: Double) {
         self.emotions = emotions
         self.comment = comment
