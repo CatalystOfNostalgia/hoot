@@ -67,6 +67,48 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     global i
     product_dict = dict()
     product_dict["comments"] = list()
+    # lookup product asin and parse XML for product description and metadata
+    root = ET.fromstring(productapi.ItemLookup(ItemId=asin, ResponseGroup="EditorialReview,ItemAttributes,Images"))
+    namespace = root.tag[root.tag.find("{"): root.tag.find("}")+1]
+    item = root.find(namespace + "Items").find(namespace + "Item")
+
+    # if that doesnt work, this response is a bust. return
+    if item is None:
+        return
+    if item.find(namespace + "ItemAttributes") is None:
+        return
+
+    creator = "Unknown"
+    image_node = item.find(namespace + "LargeImage")
+    ean_node = item.find(namespace + "ItemAttributes").find(namespace + "EAN")
+    title_node = item.find(namespace + "ItemAttributes").find(namespace + "Title")
+    author_node = item.find(namespace + "ItemAttributes").find(namespace + "Author")
+    director_node = item.find(namespace + "ItemAttributes").find(namespace + "Director")
+    lead_actor_node = item.find(namespace + "ItemAttributes").find(namespace + "Actor")
+
+    # find the "best" desciption given for the product
+    description = ""
+    for child in root.findall(".//"+ namespace + "EditorialReview"):
+        # this node should always exist, since if there was no content there would be no review
+        review_node = child.find(namespace + "Content")
+        review = ""
+        if review_node is not None:
+            review = review_node.text
+        # I'm assuming that a longer editorial review will be better written / a synopsis of the product and its themes
+        if ( len(review) > len(description) ):
+            description = review
+
+    # check to see if these nodes actually exists, you never know
+    if title_node is not None:
+        product_dict["title"] = title_node.text
+    if ean_node is not None:
+        product_dict["ean"] = ean_node.text
+    # we want the description to be substantial, some editorial reviews are garbage
+    # anything below 30 characters will probably be not descriptive at all
+    if len(description) > 30:
+        product_dict["description"] = description
+    #else:
+        #if we dont have a description we don't want anything to do with this
 
     try:
         product_dict = add_amazon_info_to_dict(asin, product_dict)
