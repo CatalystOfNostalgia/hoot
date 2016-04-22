@@ -16,8 +16,9 @@ class MultimediaAPI(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('product', type=str)
         parser.add_argument('emotion', type=str)
+        parser.add_argument('page', type=int)
         args = parser.parse_args()
-        return search(args['product'], args['emotion'])
+        return search(args['product'], args['emotion'], args['page'])
 
 
 class EmotionAPI(Resource):

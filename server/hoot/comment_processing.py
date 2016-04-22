@@ -12,6 +12,13 @@ from emotion_processing.comment_emotions import emotions
 from operator import itemgetter
 from emotion_processing.comment_emotions import ConceptError
 
+class NoEmotionsFoundError(Exception):
+
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 # dictFromJSON: a dictionary from json.loads that follows our Product JSON structure
 # adds relevancy rating (and eventually emotional rating) for all comments in the dict
 # returns the modified dictionary
@@ -79,17 +86,23 @@ def calculateVectorsForAllComments(dictFromJSON, g):
                                 comment["emotion_vector"]["sensitivity"],
                                 comment["emotion_vector"]["aptitude"],
                                 comment["emotion_vector"]["polarity"])
-                                
+
         comment["text"] = html.unescape(comment["text"])
         processed_comments.append(comment)
 
     popular_compound_emotions = []
+    if len(compound_emotion_dict) == 0:
+        raise NoEmotionsFoundError("No compound emotions found")
+
     for i in range(0, 3):
         popular_emotion = max(compound_emotion_dict, key=compound_emotion_dict.get)
         popular_compound_emotions.append(popular_emotion)
         compound_emotion_dict.pop(popular_emotion)
 
     popular_sentic_emotions = []
+    if len(sentic_emotion_dict) == 0:
+        raise NoEmotionsFoundError("No sentic emotions found")
+
     for i in range(0, 3):
         popular_sentic = max(sentic_emotion_dict, key=sentic_emotion_dict.get)
         popular_sentic_emotions.append(popular_sentic)

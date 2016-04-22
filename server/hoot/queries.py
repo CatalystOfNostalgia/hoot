@@ -38,6 +38,12 @@ def insert_media_emotion(media_id, emotion):
     models.session.add(new_emotion)
     models.session.commit()
 
+def remove_media(asin):
+    media_objs = find_media_by_asin(asin)
+
+    clean_media(media.media_id)
+    models.session.delete(media)
+
 def clean_media(media_id):
     """ removes all the associated comments and emotions for a media """
     media_emotions = find_emotions_for_media(media_id)

@@ -6,6 +6,7 @@ from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
 from summarize import get_summary
+from comment_processing import NoEmotionsFoundError
 
 print("parsing the sentic graph")
 f = open('../senticnet3.rdf.xml') # may need to adjust p
@@ -17,6 +18,7 @@ print("done parsing")
 i = 0
 
 class AmazonInfoNotFoundError(Exception):
+    
     def __init__(self, value):
         self.value = value
     def __str__(self):
@@ -46,6 +48,8 @@ def parse(path, skip, amount, productapi, producttype):
             if len(reviews_for_current_asin) > 5:
                 if (i < skip):
                     i = i + 1
+                    reviews_for_current_asin = list()
+                    current_asin = review["asin"]
                     continue
 
                 i = i + 1
@@ -67,6 +71,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     try:
         product_dict = add_amazon_info_to_dict(asin, product_dict)
     except AmazonInfoNotFoundError:
+        print("Couldn't find amazon info for product", i, " skipping")
         return
     # add the ASIN to the dict
     product_dict["asin"] = asin
@@ -86,8 +91,13 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
 
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
-    processed_dict = calculateVectorsForAllComments(product_dict, g)
-
+    try:
+        processed_dict = calculateVectorsForAllComments(product_dict, g)
+    except NoEmotionsFoundError:
+        # REMOVE the media from the table since we don't want it anymore
+        queries.remove_media(asin)
+        print("couldnt find any emotions for product: ", i, "Skipping")
+        return
     # create the summary
     processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
@@ -158,8 +168,10 @@ def add_amazon_info_to_dict(asin, product_dict):
             # if we dont have a description we don't want anything to do with this
             raise AmazonInfoNotFoundError("No description that's useful enough")
 
+
         # Find the Image url
         # check to see if LargeImage, if not check Medium, if not that check Small
+        product_dict["image_url"] = "None"
         if image_node is None:
             image_node = item.find(namespace + "MediumImage")
         if image_node is None:
@@ -170,8 +182,6 @@ def add_amazon_info_to_dict(asin, product_dict):
             if image_url_node is not None:
                 # add the image url to the json
                 product_dict["image_url"] = image_url_node.text
-            else:
-                product_dict["image_url"] = "None"
 
         if author_node is not None:
             creator = author_node.text
@@ -197,6 +207,12 @@ if __name__ == '__main__':
     skip = args['skip']
     amount = args['amount']
     producttype = args['producttype']
+
+    if skip is not None:
+        skip = int(skip)
+    if amount is not None:
+        amount = int(amount)
+
 
     startTime = datetime.now()
     print ("starting")
