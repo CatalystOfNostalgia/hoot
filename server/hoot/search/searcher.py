@@ -54,7 +54,7 @@ def emotion_search(emotion, ix, page):
     return products
 
 
-def product_name_search(product_name, ix, emotion=None, page):
+def product_name_search(product_name, ix, page, emotion=None):
     """
     Find all products that match the product_name.
     """
@@ -106,7 +106,7 @@ def paginate(comments, page):
     """
     Gets the correct page of comments.
     """
-    comment_length = len(coments)
+    comment_length = len(comments)
     page_start = page * PAGE_LENGTH
     page_end = page * PAGE_LENGTH + PAGE_LENGTH
 
