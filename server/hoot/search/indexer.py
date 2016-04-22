@@ -9,12 +9,14 @@ os.sys.path.insert(0, parentdir)
 from aws_module import retrieve_from_S3
 from queries import get_all_media
 from queries import find_emotions_for_media
+from queries import find_comment_count_for_media
 
 
 from whoosh import index
 from whoosh.fields import Schema
 from whoosh.fields import TEXT
 from whoosh.fields import KEYWORD
+from whoosh.fields import NUMERIC
 from whoosh.fields import STORED
 
 INDEX_DIR = '/home/ubuntu/hoot/server/index'
@@ -23,6 +25,7 @@ SCHEMA = Schema(
     product_name=TEXT(stored=True),
     sentic_emotions=KEYWORD(stored=True, scorable=True),
     compound_emotions=KEYWORD(stored=True, scorable=True),
+    comment_number=NUMERIC(sortable=True),
     image_url=STORED,
     sumy=STORED,
     comments=STORED,
@@ -63,7 +66,7 @@ def indexer():
             compound_emotions = []
             for e in comment['compound_emotions']:
                 compound_emotions.append({
-                    'compound_emotion': e['compound_emotion'].capitalize(), 
+                    'compound_emotion': e['compound_emotion'].capitalize(),
                     'strength': e['strength'].capitalize()
                     })
             comment['compound_emotions'] = compound_emotions
@@ -75,6 +78,7 @@ def indexer():
                 product_name=product.title,
                 sentic_emotions=sentic_values_string,
                 compound_emotions=compound_emotions_string,
+                comment_number=find_comment_count_for_media(product.media_id),
                 image_url=s3_json['image_url'],
                 sumy=s3_json['summary'],
                 comments=json.dumps(comments),
