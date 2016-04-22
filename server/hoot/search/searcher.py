@@ -26,7 +26,7 @@ def search(product_name=None, emotion=None, page=1):
     elif emotion is None:
         return product_name_search(product_name, ix, page)
 
-    return product_name_search(product_name, ix, emotion, page)
+    return product_name_search(product_name, ix, page, emotion)
 
 
 def emotion_search(emotion, ix, page):
@@ -58,6 +58,8 @@ def product_name_search(product_name, ix, page, emotion=None):
     """
     qp = QueryParser('product_name', schema=SCHEMA)
     q = qp.parse(product_name)
+
+    print(emotion)
 
     with ix.searcher() as s:
         results = s.search(q)
