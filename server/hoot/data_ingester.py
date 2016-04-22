@@ -18,6 +18,7 @@ print("done parsing")
 i = 0
 
 class AmazonInfoNotFoundError(Exception):
+    
     def __init__(self, value):
         self.value = value
     def __str__(self):
@@ -93,10 +94,12 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     try:
         processed_dict = calculateVectorsForAllComments(product_dict, g)
     except NoEmotionsFoundError:
+        # REMOVE the media from the table since we don't want it anymore
+        queries.remove_media(asin)
         print("couldnt find any emotions for product: ", i, "Skipping")
         return
     # create the summary
-    # processed_dict["summary"] = html.unescape(return_summary(processed_dict))
+    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
