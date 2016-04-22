@@ -78,4 +78,4 @@ def convert_emotions_to_list(emotions):
     """
     Converts the space deliminated list of emotions to a python list.
     """
-    return [emotion for emotion in emotions.split()]
+    return [emotion.capitalize() for emotion in emotions.split()]
