@@ -30,7 +30,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var vigilanceCategory: [String]!
     var selectedControl: [String]!
     
-    var suggestions: [Product] = TestData.getTestData()
+    var suggestions: [Product]!
     var category: String = ""
     var selectedRow: Int?
     
@@ -39,7 +39,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
         searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
-        suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
+        //suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
+        suggestions = [Product]()
         
         emotionCategories = [
             EmotionClasses().admirationClass.name,

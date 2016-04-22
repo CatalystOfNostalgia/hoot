@@ -71,7 +71,7 @@ class ProductParser {
                             if let senticEmotions = commentJson[COMMENT_SENTIC_EMOTIONS_KEY] as? [String] {
                                 if let commentRating = commentJson[COMMENT_RATING_KEY] as? Double {
                                     let complexEmotions = processComplexEmotions(compoundEmotions)
-                                    let basicEmotions = senticEmotions.joinWithSeparator(",")
+                                    let basicEmotions = senticEmotions.joinWithSeparator(", ")
                                     parsed_comments.append(Comment(emotions: basicEmotions, comment: commentText, relevancy: relevancy, rating: commentRating, complexEmotions: complexEmotions))
                                 }
                             }
