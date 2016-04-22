@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="liP-kw-ErY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="liP-kw-ErY">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="92" width="600" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K9Y-1I-gMa" id="UHY-Ix-mfb">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="567" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHJ-DI-332">
@@ -37,7 +37,7 @@
                                                         <rect key="frame" x="87" y="-2" width="225" height="43.5"/>
                                                     </variation>
                                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="87" y="-2" width="225" height="43.5"/>
+                                                        <rect key="frame" x="87" y="-3" width="225" height="45"/>
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="csC-GX-YOE">
@@ -49,7 +49,7 @@
                                                         <rect key="frame" x="87" y="42" width="225" height="29.5"/>
                                                     </variation>
                                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="87" y="42" width="225" height="29.5"/>
+                                                        <rect key="frame" x="87" y="42" width="225" height="30"/>
                                                     </variation>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L9Q-p3-VnK">
@@ -58,7 +58,7 @@
                                                         <rect key="frame" x="8" y="-8" width="71" height="79.5"/>
                                                     </variation>
                                                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="8" y="-8" width="71" height="79.5"/>
+                                                        <rect key="frame" x="8" y="-9" width="71" height="81"/>
                                                     </variation>
                                                 </imageView>
                                             </subviews>
@@ -73,9 +73,6 @@
                                 <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
                                     <rect key="frame" x="0.0" y="108" width="400" height="460"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="108" width="400" height="460"/>
-                                </variation>
                             </tableView>
                             <searchBar contentMode="redraw" text="" placeholder="Hoot" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b7y-cw-P4g">
                                 <rect key="frame" x="0.0" y="64" width="600" height="44"/>
@@ -85,11 +82,25 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="b7y-cw-P4g" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="BLt-lx-KNP"/>
+                            <constraint firstItem="OxM-zN-ubK" firstAttribute="top" secondItem="b7y-cw-P4g" secondAttribute="bottom" id="OhG-Me-2kc"/>
                             <constraint firstAttribute="trailing" secondItem="b7y-cw-P4g" secondAttribute="trailing" id="Sc7-Ar-Y6x"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="OxM-zN-ubK" secondAttribute="bottom" id="cSq-3I-41M"/>
                             <constraint firstAttribute="trailing" secondItem="OxM-zN-ubK" secondAttribute="trailing" id="t98-Jb-Bd2"/>
                             <constraint firstItem="b7y-cw-P4g" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ycC-Xm-tdz"/>
                             <constraint firstItem="OxM-zN-ubK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="zMF-jw-SlS"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="OhG-Me-2kc"/>
+                                <exclude reference="cSq-3I-41M"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="OhG-Me-2kc"/>
+                                <include reference="cSq-3I-41M"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="bcG-vy-10i"/>
                     <connections>
@@ -118,7 +129,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="1160.625" y="474.2957746478873"/>
+            <point key="canvasLocation" x="1159.5" y="474"/>
         </scene>
         <!--Product View Controller-->
         <scene sceneID="ex5-wg-u9V">
@@ -259,7 +270,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="126"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BsW-aN-ceK" id="lLc-fH-fYF">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="125.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Relevancy: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5I0-HJ-klp">
