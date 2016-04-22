@@ -25,12 +25,8 @@ def calculateVectorsForAllComments(dictFromJSON, g):
     # the product model from the DB
     product = queries.find_media_by_asin(dictFromJSON["asin"])
 
-    # get rid of escaped html characters in description
-    dictFromJSON["description"] = html.unescape(dictFromJSON["description"])
-
     tokenized_docs = buildListOfTokenizedDocuments(dictFromJSON)
     for comment in dictFromJSON["comments"]:
-        comment["text"] = html.unescape(comment["text"])
         vectorized_comment = calculateVector(tokenizeDocument(comment["text"]), tokenized_docs)
         vectorized_desc = calculateVector(tokenizeDocument(dictFromJSON["description"]), tokenized_docs)
         comment["vector_space"] = vectorized_comment
@@ -109,6 +105,9 @@ def calculateVectorsForAllComments(dictFromJSON, g):
         dictFromJSON["overall_rating"] = rating
 
     dictFromJSON["comments"] = sort_list_of_dicts(processed_comments)
+
+    # get rid of escaped html characters in description
+    dictFromJSON["description"] = html.unescape(dictFromJSON["description"])
 
     return dictFromJSON
 
