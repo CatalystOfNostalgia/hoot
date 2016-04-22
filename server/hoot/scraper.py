@@ -40,3 +40,6 @@ class Scraper:
             asins.append(item.asin)
         for asin in asins:
             Scraper.update_reviews(asin)
+
+if __name__ == '__main__':
+    Scraper.get_asins()

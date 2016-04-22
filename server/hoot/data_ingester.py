@@ -56,7 +56,7 @@ def handleReview(asin, list_of_review_dicts, productapi, type):
     global i
     product_dict = dict()
     product_dict["comments"] = list()
-
+    print("i'm here")
     # lookup product asin and parse XML for product description and metadata
     root = ET.fromstring(productapi.ItemLookup(ItemId=asin, ResponseGroup="EditorialReview,ItemAttributes,Images"))
     namespace = root.tag[root.tag.find("{"): root.tag.find("}")+1]
