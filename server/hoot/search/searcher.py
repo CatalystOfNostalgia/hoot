@@ -4,7 +4,8 @@ from search.indexer import INDEX_DIR
 from search.indexer import SCHEMA
 
 from whoosh import index
-from whoosh import query
+from whoosh.query import Or
+from whoosh.query import Term
 from whoosh.qparser import QueryParser
 
 
@@ -53,7 +54,10 @@ def product_name_search(product_name, ix, emotion=None):
     q = qp.parse(product_name)
 
     if emotion is not None:
-        emotion_filter = query.Term('emotions', emotion)
+        emotion_filter = Or(
+            Term('sentic_emotions', emotion),
+            Term('compound_emotions', emotion)
+        )
 
     with ix.searcher() as s:
         if emotion is not None:
