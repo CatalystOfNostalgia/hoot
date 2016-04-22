@@ -32,6 +32,8 @@ def emotion_search(emotion, ix):
     qp = QueryParser('sentic_emotions', schema=SCHEMA)
     q = qp.parse(emotion)
 
+    products = []
+
     with ix.searcher() as s:
         results = s.search(q)
         products = build_json_from_results(results)
@@ -40,8 +42,8 @@ def emotion_search(emotion, ix):
     q = qp.parse(emotion)
 
     with ix.searcher() as s:
-        results = s.search()
-        products.exten(build_json_from_results(results))
+        results = s.search(q)
+        products.extend(build_json_from_results(results))
 
     return products
 
