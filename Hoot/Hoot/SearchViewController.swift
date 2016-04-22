@@ -11,6 +11,7 @@ import UIKit
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchSuggestionsTable: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var navBar: UINavigationItem!
@@ -29,7 +30,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var vigilanceCategory: [String]!
     var selectedControl: [String]!
     
-    var suggestions: [Product] = TestData.getTestData()
+    var suggestions: [Product]!
     var category: String = ""
     var selectedRow: Int?
     
@@ -37,8 +38,17 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
-        searchSuggestionsTable.hidden = true // TODO: Set this to false when we are ready to deploy
-        suggestions = hootAPI.getSuggestions(nil, emotionText: nil)
+        searchSuggestionsTable.hidden = false // TODO: Set this to false when we are ready to deploy
+        //hootAPI.getRealSuggestions(nil, emotionText: nil, )
+        hootAPI.getRealSuggestions(nil, emotionText: nil) {
+            (result: [Product], error: NSError!) in
+            if error != nil {
+                self.suggestions = result
+                self.searchSuggestionsTable.reloadData()
+            }
+        }
+        
+        suggestions = [Product]()
         
         emotionCategories = [
             EmotionClasses().admirationClass.name,
@@ -105,29 +115,29 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         navBar.title = "Hoot"
         super.viewDidLoad()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    // MARK: UISearchBarDelegate
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        searchSuggestionsTable.hidden = false
+        searchBar.enablesReturnKeyAutomatically = false 
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchSuggestionsTable.hidden = true
+        
+        updateProducts(searchBar)
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        updateProducts(searchBar)
     }
     
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
@@ -155,21 +165,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        var query: String? = nil
-        var emotion: String? = nil
-        if category != "" {
-            emotion = category
-        }
-        
-        if searchText != "" {
-            query = searchText
-        }
-        
-        suggestions = hootAPI.getSuggestions(query, emotionText: emotion) // Otherwise try to do useful things
-        
-        self.searchSuggestionsTable.reloadData()
-    }
+    // MARK: UITableViewDataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -180,12 +176,23 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let start = NSDate()
         let cell = searchSuggestionsTable.dequeueReusableCellWithIdentifier("Cell")! as! SearchResultTableCell;
         cell.product = suggestions[indexPath.row]
         cell.setValues()
-        // TODO: Implement product view stuff 
+        // TODO: Implement product view stuff
         return cell
     }
+    
+    // MARK: UITableViewDelegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedRow = indexPath.row
+        performSegueWithIdentifier("GoToProductPage", sender: self)
+    }
+    
+    // MARK: Helper Functions
     
     func changeSearchScope(index: Int) {
         let selectedTitle: String = selectedControl[index]
@@ -220,11 +227,32 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.selectedScopeButtonIndex = -1
         self.searchSuggestionsTable.reloadData()
     }
-
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedRow = indexPath.row
-        performSegueWithIdentifier("GoToProductPage", sender: self)
+    
+    func updateProducts(searchBar: UISearchBar) {
+        
+        var query: String? = nil
+        var emotion: String? = nil
+        if category != "" {
+            emotion = category.lowercaseString
+        }
+        
+        if searchBar.text != "" {
+            query = searchBar.text
+        }
+        
+        activityIndicator.startAnimating()
+        hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
+            self.suggestions = data
+            
+            //self.searchSuggestionsTable.reloadData()
+            dispatch_async(dispatch_get_main_queue(), {
+                self.activityIndicator.stopAnimating()
+                self.searchSuggestionsTable.reloadData()
+            })
+        })
     }
+    
+    // MARK: Navigation
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         return selectedRow != nil
