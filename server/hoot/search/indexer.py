@@ -58,7 +58,7 @@ def indexer():
         for comment in comments:
             comment.pop('vector_space')
             comment.pop('emotion_vector')
-            comment['relevancy'] = float('%2.f' % comment['relevancy'])
+            comment['relevancy'] = float('%.2f' % comment['relevancy'])
 
         # write to indexer
         writer.add_document(
