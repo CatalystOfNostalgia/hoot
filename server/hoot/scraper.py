@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 from amazon_scraper import AmazonScraper
 import queries
@@ -6,7 +6,9 @@ import queries
 
 class Scraper:
     def update_reviews(asin):
-        amzn = AmazonScraper("AKIAIEMJ7S7X7VTJNMKQ", "cV2hx5IEzshw71oPyJml7i+fG1aisZKbrmhuL0Ui", "hoot06-20")
+        f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
+        configs = json.loads(f.read())
+        amzn = AmazonScraper(configs["aws_public_key"], configs["aws_secret_key"], configs["product_api_tag"])
         p = amzn.lookup(ItemId=asin)
         reviews = p.reviews()
         dates = queries.find_date_for_review(asin)
@@ -20,7 +22,3 @@ class Scraper:
              for review in reviews:
                  updateReviews.append(review.text)
         return updateReviews
-
-
-if __name__ == '__main__':
-    Scraper.update_reviews('B000GRFTPS')
