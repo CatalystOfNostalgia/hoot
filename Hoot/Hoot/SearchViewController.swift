@@ -30,7 +30,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var vigilanceCategory: [String]!
     var selectedControl: [String]!
     
-    var suggestions: [Product]!
+    var suggestions: [Product] = []
     var category: String = ""
     var selectedRow: Int?
     
@@ -43,7 +43,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             (result: [Product]?, error: NSError!) in
             if error != nil {
                 if (result != nil) {
-                    self.suggestions = result
+                    self.suggestions = result!
                 } else {
                     self.suggestions = [] 
                 }
@@ -51,7 +51,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         
-        suggestions = [Product]()
         
         emotionCategories = [
             EmotionClasses().admirationClass.name,
@@ -244,7 +243,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         activityIndicator.layer.zPosition = 1
         hootAPI.getRealSuggestions(query, emotionText: emotion, completionHandler: {data, error -> Void in
             if (error != nil) {
-                print("balala")
                 dispatch_async(dispatch_get_main_queue(), {
                     self.activityIndicator.stopAnimating()
                     let alertController = UIAlertController(title: "Error",
@@ -256,7 +254,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                     self.presentViewController(alertController, animated: true, completion: nil)
                 })
             } else {
-                self.suggestions = data
+                self.suggestions = data!
                 //self.searchSuggestionsTable.reloadData()
                 dispatch_async(dispatch_get_main_queue(), {
                     self.activityIndicator.stopAnimating()
