@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from aws_module import push_to_S3, setup_product_api
 from comment_processing import calculateVectorsForAllComments
-# from summarize import get_summary
+from summarize import get_summary
 from comment_processing import NoEmotionsFoundError
 
 print("parsing the sentic graph")
