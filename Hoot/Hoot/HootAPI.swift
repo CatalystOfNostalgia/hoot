@@ -29,10 +29,12 @@ class HootAPI {
         } else {
             searchString = searchString + "?" + APIConfigs().emotionKey + "=" + emotionText! + "&" + APIConfigs().queryKey + "=" + searchText!
         }
+        
         let url: NSURL = NSURL(string: searchString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)!
         let sessionConfiguartion: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         let session: NSURLSession = NSURLSession(configuration: sessionConfiguartion)
         print(url.description)
+        
         let dataTask = session.dataTaskWithURL(url) {
             data, response, error in
             if error != nil {
@@ -42,6 +44,7 @@ class HootAPI {
                 return
             } else {
                 // TODO: Handle proper response
+                print("got a response")
                 completionHandler(ProductParser().parseProducts(data!), nil)
             }
             

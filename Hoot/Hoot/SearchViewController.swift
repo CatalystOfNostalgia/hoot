@@ -120,8 +120,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     self.searchSuggestionsTable.reloadData()
+                    print("table reloaded")
                 })
             }
+            print("got an error")
         }
     }
     
