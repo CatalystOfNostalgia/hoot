@@ -7,6 +7,7 @@ import queries
 import time
 import datetime
 import data_ingester
+import aws_module
 
 def update_reviews(asin_list):
     for asin in asin_list:
@@ -31,18 +32,12 @@ def update_reviews(asin_list):
         if(update):
             all_reviews = list(reviews)
             for review in all_reviews:
-                print(asin)
-                print(review.url)
-                d = review.date
-                unix_time = calendar.timegm(d.utctimetuple())
-                print(unix_time)
-                print(url_scrape.parser(review.url))
-                 # product_api = aws_module.setup_product_api()
-                 # comment_dict = dict()
-                 # comment_dict["text"] = review.text
-                 # comment_dict["unixtime"] = int(review.date)
-                 # list_of_review_dicts.append(comment_dict)
-        #return data_ingester.handleReview(asin, list_of_review_dicts, product_api, media_type)
+                 product_api = aws_module.setup_product_api()
+                 comment_dict = dict()
+                 comment_dict["text"] = url_scrape.parser(review.url)
+                 comment_dict["unixtime"] = int(review.date)
+                 list_of_review_dicts.append(comment_dict)
+        return data_ingester.handleReview(asin, list_of_review_dicts, product_api, media_type)
 
 def get_date(d):
     unix_time = calendar.timegm(d.utctimetuple())
