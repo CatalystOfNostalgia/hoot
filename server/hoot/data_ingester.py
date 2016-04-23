@@ -77,7 +77,13 @@ def handleReview(asin, list_of_review_dicts, productapi, producttype):
     product_dict["asin"] = asin
     product_dict["type"] = producttype
     # insert_media(title, creator, description, media_type, asin, date)
-    queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
+
+    product = queries.find_media_by_asin(asin)
+    if product is not None:
+        queries.insert_media(product_dict["title"], product_dict["creator"], product_dict["description"], producttype, asin, int(time.time()))
+    else:
+        queries.clean_media(product.media_id)
+        queries.update_media(product.media_id, int(time.time()))
 
 
     for review in list_of_review_dicts:
@@ -91,6 +97,8 @@ def handleReview(asin, list_of_review_dicts, productapi, producttype):
 
     # now process this dict in comment_processing
     filename = product_dict["title"] + "$$$" + asin
+
+    processed_dict_dict = dict()
     try:
         processed_dict = calculateVectorsForAllComments(product_dict, g)
     except NoEmotionsFoundError:
@@ -98,13 +106,13 @@ def handleReview(asin, list_of_review_dicts, productapi, producttype):
         queries.remove_media(asin)
         print("couldnt find any emotions for product: ", i, "Skipping")
         return
-    # create the summary
-   processed_dict["summary"] = html.unescape(return_summary(processed_dict))
+    #create the summary
+    processed_dict["summary"] = html.unescape(return_summary(processed_dict))
 
     processed_json = json.dumps(processed_dict, indent=4)
 
     print ("Adding product with asin: ", asin, "to S3 ---", i)
-   push_to_S3(filename, processed_json)
+    push_to_S3(filename, processed_json)
 
 # pass a list of the most relevant comment texts (above a relevancy threshold, or just the first 5)
 def return_summary(product_dict):
