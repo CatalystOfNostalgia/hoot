@@ -110,9 +110,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewWillAppear(animated: Bool) {
         hootAPI.getRealSuggestions(nil, emotionText: nil) {
-            (result: [Product]?, error: NSError!) in
-            if error != nil {
-                print("got top 10")
+            (result: [Product]?, error: NSError?) in
+            if error == nil {
                 if (result != nil) {
                     self.suggestions = result
                 } else {
@@ -120,10 +119,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     self.searchSuggestionsTable.reloadData()
-                    print("table reloaded")
                 })
+                
             }
-            print("got an error")
         }
     }
     

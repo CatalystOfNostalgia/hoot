@@ -16,7 +16,7 @@ class HootAPI {
     }
     
     // TODO: Replace current geSuggestions() with this once this is ready.
-    func getRealSuggestions(searchText: String?, emotionText: String?, completionHandler: (([Product]?, NSError!) -> Void)!) -> Void {
+    func getRealSuggestions(searchText: String?, emotionText: String?, completionHandler: (([Product]?, NSError?) -> Void)!) -> Void {
         var searchString = APIConfigs().baseURL + APIConfigs().searchEndPoint
         
         // Determiens what kind of search we should do
@@ -38,13 +38,11 @@ class HootAPI {
         let dataTask = session.dataTaskWithURL(url) {
             data, response, error in
             if error != nil {
-                completionHandler(nil, error)
                 print("Error retrieveing from server")
+                completionHandler(nil, error)
                 print(error?.code)
                 return
             } else {
-                // TODO: Handle proper response
-                print("got a response")
                 completionHandler(ProductParser().parseProducts(data!), nil)
             }
             
