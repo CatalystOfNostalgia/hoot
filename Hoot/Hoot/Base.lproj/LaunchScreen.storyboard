@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,11 +22,21 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HOOT.png" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-pl-svY">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="28" width="360" height="364"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="G0C-pl-svY" secondAttribute="height" multiplier="90:91" id="UjX-Ay-vmn"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="UjX-Ay-vmn"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="UjX-Ay-vmn"/>
+                                    </mask>
                                 </variation>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hoot" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuz-xo-d7i">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Hoot" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuz-xo-d7i">
                                 <rect key="frame" x="192" y="222" width="216" height="156"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="100"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -31,20 +44,44 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="92" y="222" width="216" height="156"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="92" y="361" width="216" height="156"/>
-                                </variation>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nuz-xo-d7i" firstAttribute="top" secondItem="G0C-pl-svY" secondAttribute="bottom" constant="-10" id="Ngu-Dh-K14"/>
+                            <constraint firstItem="G0C-pl-svY" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="VU3-KX-hGO"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="nuz-xo-d7i" secondAttribute="leading" id="dYd-jU-SdA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="G0C-pl-svY" secondAttribute="trailing" id="eG1-FC-cuK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nuz-xo-d7i" secondAttribute="trailing" id="sbL-PT-9Pk"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="G0C-pl-svY" secondAttribute="leading" id="wP9-eU-hEl"/>
+                            <constraint firstItem="G0C-pl-svY" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="8" id="x4p-BR-Qoa"/>
+                        </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="G0C-pl-svY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="VU3-KX-hGO"/>
+                                <exclude reference="eG1-FC-cuK"/>
+                                <exclude reference="wP9-eU-hEl"/>
+                                <exclude reference="x4p-BR-Qoa"/>
+                                <exclude reference="Ngu-Dh-K14"/>
+                                <exclude reference="dYd-jU-SdA"/>
+                                <exclude reference="sbL-PT-9Pk"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="G0C-pl-svY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="VU3-KX-hGO"/>
+                                <include reference="eG1-FC-cuK"/>
+                                <include reference="wP9-eU-hEl"/>
+                                <include reference="x4p-BR-Qoa"/>
+                                <include reference="Ngu-Dh-K14"/>
+                                <include reference="dYd-jU-SdA"/>
+                                <include reference="sbL-PT-9Pk"/>
                             </mask>
                         </variation>
                     </view>

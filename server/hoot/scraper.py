@@ -14,7 +14,10 @@ def update_reviews(asin_list):
         f = open(os.path.dirname(os.path.realpath(__file__)) + "/keys/aws_keys.json")
         configs = json.loads(f.read())
         amzn = AmazonScraper(configs["aws_public_key"], configs["aws_secret_key"], configs["product_api_tag"])
-        p = amzn.lookup(ItemId=asin)
+        try:
+            p = amzn.lookup(ItemId=asin)
+        except amazon.api.AsinNotFound as e:
+            continue
         reviews = p.reviews()
         dates = queries.find_date_for_review(asin)
         media_type = queries.find_type_by_id(asin)
@@ -51,11 +54,10 @@ def get_asins():
     asins = []
     for item in media:
         asins.append(item.asin)
-    update_reviews(asins)
-
+    for asin in asins:
+        asins.pop()
+        update_reviews(asins)
 
 if __name__ == '__main__':
     get_asins()
-
-
-
+    #Scraper.get_asins()
