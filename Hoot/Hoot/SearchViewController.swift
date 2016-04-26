@@ -39,6 +39,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchSuggestionsTable.dataSource = self
         searchBar.delegate = self
         searchSuggestionsTable.hidden = false
+        
+        hootAPI.getRealSuggestions(nil, emotionText: nil) {
+            (result: [Product]?, error: NSError?) in
+            if error == nil {
+                if (result != nil) {
+                    self.suggestions = result!
+                } else {
+                    self.suggestions = []
+                }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.searchSuggestionsTable.reloadData()
+                })
+                
+            }
+        }
 
         emotionCategories = [
             EmotionClasses().admirationClass.name,
@@ -66,7 +81,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             "Back",
             "Ecstasy",
             "Joy",
-            "Security"]
+            "Serenity"]
         
         griefCategory = [
             "Back",
@@ -104,23 +119,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.selectedScopeButtonIndex = -1
         navBar.title = "Hoot"
         super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        hootAPI.getRealSuggestions(nil, emotionText: nil) {
-            (result: [Product]?, error: NSError?) in
-            if error == nil {
-                if (result != nil) {
-                    self.suggestions = result!
-                } else {
-                    self.suggestions = []
-                }
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.searchSuggestionsTable.reloadData()
-                })
-                
-            }
-        }
     }
     
     // MARK: UISearchBarDelegate
