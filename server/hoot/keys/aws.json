@@ -1,5 +1,0 @@
-{
-    "aws_public_key" : "FILL IN THE PUB KEY HERE",
-    "aws_secret_key" : "FILL IN THE PRIVATE KEY HERE",
-    "product_api_tag" : "FILL IN THE AMAZON AFFILIATE TAG HERE"
-}

@@ -1,5 +1,5 @@
 {
-    "aws_public_key" : "AKIAIEMJ7S7X7VTJNMKQ",
-    "aws_secret_key" : "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",
-    "product_api_tag" : "hoot06-20"
+    "aws_public_key" : "FILL IN THE PUB KEY HERE",
+    "aws_secret_key" : "FILL IN THE PRIVATE KEY HERE",
+    "product_api_tag" : "FILL IN THE AMAZON AFFILIATE TAG HERE"
 }
