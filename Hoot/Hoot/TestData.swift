@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Use this for test data when testing the app independently of the server 
 class TestData {
     static func getTestData() -> [Product] {
         var products: [Product] = []

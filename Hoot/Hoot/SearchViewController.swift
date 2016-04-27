@@ -34,6 +34,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var category: String = ""
     var selectedRow: Int?
     
+    // MARK: View setup 
     override func viewDidLoad() {
         searchSuggestionsTable.delegate = self
         searchSuggestionsTable.dataSource = self
@@ -55,6 +56,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
 
+        // Creates the hour glass of emotions for the user
         emotionCategories = [
             EmotionClasses().admirationClass.name,
             EmotionClasses().amazementClass.name,
@@ -196,6 +198,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: Helper Functions
     
+    // Handles a change in the emotion selector
     func changeSearchScope(index: Int) {
         let selectedTitle: String = selectedControl[index]
         switch selectedTitle {
@@ -230,6 +233,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         self.searchSuggestionsTable.reloadData()
     }
     
+    // Handles a re-search by the user
     func updateProducts(searchBar: UISearchBar) {
         
         var query: String? = nil
