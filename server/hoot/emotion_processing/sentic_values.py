@@ -4,6 +4,9 @@ from enum import unique
 
 @unique
 class SenticValue(Enum):
+    """
+    Enum class that represents all possible sentic values.
+    """
     # pleasantness values
     grief = 1
     sadness = 2

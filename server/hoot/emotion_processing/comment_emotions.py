@@ -1,15 +1,22 @@
-import sys, os, time
+import sys
+import os
+import time
+
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 import string
 import emotion_processing.senticnet as senticnet
 
 from emotion_processing.emotion import Emotion
 
+
 class ConceptError(Exception):
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
+
 
 def concept_search(query, start):
     """Search for a concept given a certain string."""
@@ -104,8 +111,8 @@ def calculate_average(scores):
 
         for emotion in sentics:
             if sentics[emotion] != 0 and score['polarity'] != 0:
-                weighted[emotion] = sentics[emotion]  * abs(score['polarity'])
-                average[emotion]  = average[emotion]  + weighted[emotion]
+                weighted[emotion] = sentics[emotion] * abs(score['polarity'])
+                average[emotion] = average[emotion] + weighted[emotion]
                 polarity[emotion] = polarity[emotion] + abs(score['polarity'])
 
         polarity_sum = polarity_sum + score['polarity']
