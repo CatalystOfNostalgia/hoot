@@ -12,4 +12,4 @@ Hoot is a full feature engine which analyzes the comments and reviews left on pr
   * XCode 
 * Instructions 
 
-Navigate to the Hoot folder and open the xcode project. Click on the "run" button in the top left corner of XCode.  
+ Navigate to the Hoot folder and open the xcode project. Click on the "run" button in the top left corner of XCode.  
