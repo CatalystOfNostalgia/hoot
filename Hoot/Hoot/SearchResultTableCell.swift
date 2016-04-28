@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 
+// The table cell for a  search result
 class SearchResultTableCell: UITableViewCell {
     
     @IBOutlet weak var secondaryLabel: UILabel! // Used for displaying meta data
@@ -17,18 +18,20 @@ class SearchResultTableCell: UITableViewCell {
     
     var product: Product?
     
+    // Handles creation of the cell 
     func setValues() {
         guard let _ = product where product != nil else {
             return
         }
-        
+
         mainLabel.text = product?.name
         secondaryLabel.text = product?.description
         let url = NSURL(string: (product?.imageURL)!)
         downloadImage(url!)
-        
     }
     
+    
+    // MARK: Image downloading
     func getData(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
         NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
             completion(data: data, response: response, error: error)

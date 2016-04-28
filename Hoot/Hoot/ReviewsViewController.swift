@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Handles control of the reviews view which shows the list of reviews for a product 
 class ReviewsViewController: UITableViewController {
     
     var comments: [Comment]?

@@ -82,6 +82,8 @@ class Emotion:
     def get_compound_emotion(self):
         """
         Finds and returns any compound emotions associated with the vector.
+        Returns a list of tuples, where each tuple is
+        in the form (compound emotion, strength)
         """
         pleasantness = self.emotion_vector['pleasantness']
         sensitivity = self.emotion_vector['sensitivity']
@@ -164,6 +166,10 @@ class Emotion:
 
     def get_compound_emotion_from_value(self, value1, value2,
                                         pos_emotion, neg_emotion):
+        """
+        Helper function for get_compound_emotion.
+        Returns a tuple in the form (compound emotion, strength).
+        """
         cutoff = 1 / 3
         max_value = max(abs(value1), abs(value2))
 
