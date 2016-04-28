@@ -8,6 +8,7 @@ import time
 import datetime
 import data_ingester
 import aws_module
+import amazon
 
 def update_reviews(asin_list):
     for asin in asin_list:
@@ -27,14 +28,14 @@ def update_reviews(asin_list):
         date = max(unix_dates)
         update = False
         for review in reviews:
-            if date < int(review.date):
+            if date < int(review.date):  #check if asin needs updating
                 print("needs updating")
                 update = True
         list_of_review_dicts =[]
         #if the product has new reviews get them from amazon
         if(update):
             all_reviews = list(reviews)
-            for review in all_reviews:
+            for review in all_reviews:  #get all reviews and add in values into the dictionary
                  product_api = aws_module.setup_product_api()
                  comment_dict = dict()
                  comment_dict["text"] = url_scrape.parser(review.url)
