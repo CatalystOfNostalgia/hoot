@@ -7,9 +7,10 @@ def get_summary(reviewList):
     reviews = ' '.join(reviewList)
     parser = sumy.parsers.plaintext.PlaintextParser.from_string(reviews, Tokenizer("english"))
     stemmer = Stemmer("english")
-    summarizer = LuhnSummarizer(stemmer)
-    summary = summarizer(parser.document, 6)
+    summarizer = LuhnSummarizer(stemmer)  #used luhn summarization algorithm
+    summary = summarizer(parser.document, 6)  #6 line summary
     s = ""
     for sentence in summary:
         s+=str(sentence)
+        s+=" "
     return s
