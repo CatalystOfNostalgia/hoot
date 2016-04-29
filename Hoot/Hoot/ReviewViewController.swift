@@ -25,6 +25,7 @@ class ReviewViewController: UIViewController {
     var comment: Comment?
     var productTitle: String!
     
+    // MARK: Overall view control 
     override func viewDidLoad() {
         
         commentTextView.text = comment!.comment
@@ -44,6 +45,7 @@ class ReviewViewController: UIViewController {
         fifthStarView.image  = images[4]
     }
     
+    // MARK: Star rating control
     
     func getImages() -> [UIImage] {
         var images = [UIImage](count: 5, repeatedValue: UIImage(named: "31x31_0")!)

@@ -8,11 +8,12 @@
 
 import Foundation
 
+// Useful configs for using the API 
 class APIConfigs {
     
     // General configs useful for making an API request
     let baseURL: String = "http://ec2-54-201-56-22.us-west-2.compute.amazonaws.com"
-    let searchEndPoint: String = "/search" // TODO: Fill this in once we know what this will be
-    let emotionKey: String = "emotion" // TODO: Fill this in once we know what this will be
-    let queryKey: String = "product"  // TODO: Fill this in once we know what this will be
+    let searchEndPoint: String = "/search"
+    let emotionKey: String = "emotion"
+    let queryKey: String = "product"
 }   

@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Represents a single product (i.e. a book or movie).
 class Product {
     var name: String?
     var description: String?

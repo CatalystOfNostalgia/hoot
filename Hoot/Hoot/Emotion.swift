@@ -33,6 +33,7 @@ class Emotion {
     }
 }
 
+// The basic emotions from the hour glass of emotions
 struct Emotions {
     // Rage class 
     let rage = Emotion(color: UIColor.redColor(), name: "Rage")
@@ -75,6 +76,7 @@ struct Emotions {
     let apprehension = Emotion(color: UIColor.init(red: 0.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 0.4), name: "Apprehension")
 }
 
+// The classes from the hour glass of emotions 
 struct EmotionClasses {
     let rageClass = EmotionClass(backgroundColor: UIColor.redColor(), name: "\u{1F620}", emotions: [Emotions().rage, Emotions().anger, Emotions().annoyance])
     let vigilanceClass = EmotionClass(backgroundColor: UIColor.orangeColor(), name: "\u{1F914}", emotions: [Emotions().vigilance, Emotions().anticipation, Emotions().interest])

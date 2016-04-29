@@ -20,8 +20,7 @@ class Senticnet(object):
         g must be a parsed RDF graph containing the sentic values.
         """
         if (None, None, concept) not in g:
-            # debug statement
-            #print("{} not found in database!".format(concept))
+            # Not found in database, skip concept
             return {}
 
         result = {'sentics': {}}
@@ -29,6 +28,7 @@ class Senticnet(object):
         # find the subject, the return generator will always have 1 object
         subject = next(g.subjects(URIRef(BASE_URI + 'text'), concept))
 
+        # Convert returned rdf into dict
         for s, p, o in g.triples((subject, None, None)):
             value = o.toPython()
             if p == URIRef(BASE_URI + 'pleasantness'):

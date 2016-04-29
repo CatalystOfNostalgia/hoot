@@ -8,6 +8,7 @@
 
 import UIKit
 
+// The view for a single row of the reviews view controller 
 class ReviewTableCell: UITableViewCell {
     @IBOutlet weak var relevancyLabel: UILabel!
     @IBOutlet weak var reviewTextPreview: UITextView!

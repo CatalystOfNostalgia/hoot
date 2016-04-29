@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Represents a single comment on a product 
 class Comment {
     var emotions: String
     var complexEmotions: String

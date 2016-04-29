@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Controls the detailed view for a single product
 class ProductViewController: UIViewController {
 
 
@@ -21,12 +22,8 @@ class ProductViewController: UIViewController {
     var productImage: UIImage?
     var emotionText: String?
     var product: String?
-
     
-    @IBAction func viewComments(sender: AnyObject) {
-        // Currently is do nothing 
-    }
-    
+    // MARK: Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowReviews" {
             if let destination = segue.destinationViewController as? ReviewsViewController {
@@ -36,6 +33,7 @@ class ProductViewController: UIViewController {
         }
     }
     
+    // MARK: Controlling the view
     override func viewDidLoad() {
 
         self.summary.text = summaryText
@@ -46,6 +44,10 @@ class ProductViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         self.summary.setContentOffset(CGPointZero, animated: false)
+    }
+    
+    @IBAction func viewComments(sender: AnyObject) {
+        // Unnecessary to implement this function because of below functions.
     }
     
 }
